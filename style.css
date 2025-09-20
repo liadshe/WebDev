@@ -46,15 +46,32 @@ body {
 .profiles {
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   flex-wrap: wrap;
-  margin-top: 30px;
-  gap: 30px;
+  gap: 40px;
 }
+
 .profile {
+  display: flex;
+  flex-direction: column; /* stack image above name */
+  align-items: center;
+  text-align: center;
+  font-family: 'verdana';
   text-decoration: none;
+
+}
+
+.profile-name {
+  background: transparent;
+  border: none;
   color: grey;
   font-family: 'verdana';
   font-size: 20px;
+  text-align: center;
+  margin-top: 10px;
+  width: 100%;
+  outline: none;
+  cursor: text;
 }
 .profile img {
   width: 150px;
