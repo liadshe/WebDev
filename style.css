@@ -89,7 +89,7 @@ body {
 /* Main Page */
 .top-menu {
   background: linear-gradient(90deg, #141414, #1f1f1f, #141414); /* sleek gradient */
-  padding: 15px 40px;
+  padding: 12px 30px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.5);
   position: sticky;
   top: 0;
@@ -101,26 +101,45 @@ body {
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: center;
-  gap: 30px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .top-menu li {
-  position: relative;
+  margin-right: 20px;
+}
+
+.top-menu li:last-child {
+  margin-right: 0;
+}
+
+.top-menu li.switch-profile {
+  margin-left: auto; 
 }
 
 .top-menu a {
   color: #fff;
   text-decoration: none;
-  font-weight: bold;
-  padding: 8px 12px;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  padding: 6px 10px;
   border-radius: 6px;
   transition: all 0.3s ease;
+  opacity: 0.9;
 }
+
+.top-menu a.active {
+  font-weight: 700; /* bold */
+  opacity: 1; /* make it stand out */
+}
+
 
 .top-menu a:hover {
   background: pink;
   color: white;
+  opacity: 1;
   box-shadow: 0 2px 6px rgba(255,0,0,0.4);
 }
 
