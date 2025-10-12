@@ -1,0 +1,27 @@
+{
+  "name": "webdevproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon settings.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liadshe/WebDev.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liadshe/WebDev/issues"
+  },
+  "homepage": "https://github.com/liadshe/WebDev#readme",
+  "dependencies": {
+    "mongoose": "^8.19.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
