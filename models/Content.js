@@ -12,4 +12,4 @@ const ContentSchema = new mongoose.Schema({
   dateAdded: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("Content", ContentSchema)
+module.exports = mongoose.model("Content", ContentSchema);
