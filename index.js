@@ -24,6 +24,9 @@ const PORT = parseInt(process.env.PORT);
 
 // views routes
 app.use("/main", express.static("main.html"));
+app.use("/login", (req, res) => {
+  res.render("login");
+});
 app.use("/profiles", express.static("profiles.html"));
 app.use("/settings", settingsViewRouter);
 app.get("/statistics", (req, res) => {
