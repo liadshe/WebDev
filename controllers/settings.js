@@ -9,8 +9,14 @@ const profileService = require("../services/profilesService");
   
 async function getAllProfiles(req,res) {
     try {
-            const profiles = await profileService.getAllProfiles();
-            res.json(profiles)
+        const profiles = await profileService.getAllProfiles();
+        // Map profiles to match EJS expectations
+        const mappedProfiles = profiles.map(profile => ({
+            name: profile.name,
+            displayName: profile.userName,
+            image: profile.profilePicture ? `/public/images/${profile.profilePicture}` : '/public/images/default.jpg'
+        }));
+        res.render("settings", { profiles: mappedProfiles });
     } catch(err) {
         console.error(err);
         res.status(500).send("Server error");

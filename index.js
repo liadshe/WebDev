@@ -22,7 +22,16 @@ mongoose.connect(process.env.DB_CONNECTION, {
 
 const PORT = parseInt(process.env.PORT);
 
+// views routes
+app.use("/main", express.static("main.html"));
+app.use("/profiles", express.static("profiles.html"));
 app.use("/settings", settingsViewRouter);
+app.get("/statistics", (req, res) => {
+  res.render("statistics");
+});
+
+
+// api routes
 app.use("/api/profiles", profilesApirouter);
 
 app.listen(PORT, () => {
