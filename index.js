@@ -1,17 +1,19 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const session = require("express-session");
 
+const loginViewRouter = require("./routes/views/login");
 const settingsViewRouter = require("./routes/views/settings");
-const profilesApirouter = require("./routes/api/profiles");
+const profilesApiRouter = require("./routes/api/profiles");
 
 dotenv.config();
 const app = express();
 app.use(express.static("public"));
 app.use(express.json());
 app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: true }));
 
-// Use mongoDB
 // Connect to MongoDB
 mongoose.connect(process.env.DB_CONNECTION, {
   useNewUrlParser: true,
@@ -20,20 +22,27 @@ mongoose.connect(process.env.DB_CONNECTION, {
 .then(() => console.log("MongoDB connected"))
 .catch(err => console.error("MongoDB connection error:", err));
 
-const PORT = parseInt(process.env.PORT);
+// Session middleware
+app.use(
+  session({
+    secret: "yourSecretKey",
+    resave: false,
+    saveUninitialized: false,
+  }));
 
 // views routes
 app.use("/main", express.static("main.html"));
+app.use("/login",loginViewRouter);
 app.use("/profiles", express.static("profiles.html"));
 app.use("/settings", settingsViewRouter);
 app.get("/statistics", (req, res) => {
   res.render("statistics");
 });
 
-
 // api routes
-app.use("/api/profiles", profilesApirouter);
+app.use("/api/profiles", profilesApiRouter);
 
+const PORT = parseInt(process.env.PORT);
 app.listen(PORT, () => {
     console.log("Server is running");
 });
