@@ -45,6 +45,10 @@ app.get("/statistics", (req, res) => {
 // api routes
 app.use("/api/profiles", profilesApiRouter);
 
+app.post("/test", (req, res) => {
+  res.send("POST /test works");
+});
+
 const PORT = parseInt(process.env.PORT);
 app.listen(PORT, () => {
     console.log("Server is running");

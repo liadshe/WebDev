@@ -23,7 +23,7 @@
   </header>
   <main class="add-content-page">
     <h1>Add New Content</h1>
-<form id="addContentForm" class="add-content-form" action="/content" method="POST" enctype="multipart/form-data">
+<form class="add-content-form" action="/content" method="POST" enctype="multipart/form-data">
 
   <div class="form-row">
     <label for="title">Title</label>
@@ -43,8 +43,7 @@
   <div class="form-row">
     <label>Genre</label>
     <div class="checkbox-group">
-      <% genres = ["Action", "Comedy", "Drama"];
-        if (Array.isArray(genres) && genres.length) { %>
+        <% if (Array.isArray(genres) && genres.length) { %>
         <% genres.forEach(function(genre) { %>
           <label><input type="checkbox" name="genre" value="<%= genre %>"> <%= genre %></label>
         <% }); %>
@@ -65,8 +64,8 @@
   </div>
 
   <div class="form-row">
-    <label for="coverImage">Cover Image</label>
-    <input type="file" id="coverImage" name="coverImage" accept="image/*">
+    <label for="coverImageFile">Cover Image</label>
+    <input type="file" id="coverImageFile" name="coverImageFile" accept="image/*">
   </div>
 
   <div class="form-row">

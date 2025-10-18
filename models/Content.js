@@ -5,11 +5,12 @@ const ContentSchema = new mongoose.Schema({
   description: { type: String },
   genre: [{ type: String, index: true }],
   cast: [{ type: String, index: true }],
+  director: { type: String },
   releaseYear: { type: Number },
   durationMinutes: { type: Number },
   rating: { type: String }, // from IMDB or similar
-  videoUrl: { type: String },
-  dateAdded: { type: Date, default: Date.now },
+  videoPath: { type: String },
+  coverImagePath: { type: String }
 });
 
 module.exports = mongoose.model("Content", ContentSchema);
