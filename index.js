@@ -2,10 +2,12 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const path = require("path");
 
 const loginViewRouter = require("./routes/views/login");
 const settingsViewRouter = require("./routes/views/settings");
 const profilesApiRouter = require("./routes/api/profiles");
+const contentViewRouter = require("./routes/views/content");
 
 dotenv.config();
 const app = express();
@@ -35,6 +37,7 @@ app.use("/main", express.static("main.html"));
 app.use("/login",loginViewRouter);
 app.use("/profiles", express.static("profiles.html"));
 app.use("/settings", settingsViewRouter);
+app.use("/content", contentViewRouter);
 app.get("/statistics", (req, res) => {
   res.render("statistics");
 });
