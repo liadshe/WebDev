@@ -21,8 +21,8 @@
       <% profiles.forEach(function(profile) { %>
         <li class="profile-item" onclick="editProfile('<%= profile.name %>')">
           <div class="profile-left">
-              <img src="<%= profile.image.replace('/public', '') %>" alt="<%= profile.name %>">
-              <span class="name"><%= profile.displayName %></span>
+          <img src=<%= profile.picture %> alt="<%= profile.name %>">
+              <span class="name"><%= profile.name %></span>
           </div>
           <div class="profile-right">
               <span class="arrow">&gt;</span>

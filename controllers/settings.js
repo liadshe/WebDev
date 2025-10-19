@@ -16,11 +16,11 @@ async function renderSettingsPage(req, res) {
     // map for display
     const mappedProfiles = profiles.map(profile => ({
       name: profile.name,
-      displayName: profile.userName,
-      image: profile.profilePicture
-        ? `/public/images/${profile.profilePicture}`
-        : '/public/images/default.jpg'
+      picture: profile.picture
+        ? `/images/${profile.picture}`    
+        : '/images/default.jpg'
     }));
+    console.log("Mapped Profiles:", mappedProfiles);
 
     res.render("settings", {
       username: req.session.username, 
