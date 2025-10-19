@@ -3,6 +3,3 @@ node_modules/
 
 # Env file
 .env
-
-# Test users creation script
-createTestUsers.js

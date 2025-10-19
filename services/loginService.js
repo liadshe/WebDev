@@ -10,7 +10,14 @@ const getUserByEmail = async (email) => {
     return user;
 }
 
+const getUserProfiles = async (_id) => {
+    const user = await User.findOne( _id );
+    console.log("User profiles fetched:", user.profiles);
+    return user.profiles;
+}
+
 module.exports = {
     getUserByUsername,
-    getUserByEmail
+    getUserByEmail,
+    getUserProfiles
 };

@@ -10,14 +10,13 @@
   <div class="sidebar">
     <a href="/main" class="back-link">
         ← Back to main page
-    </a>
+    </a> 
     <a href="/settings"  class="active">Manage Profiles</a>
     <a href="/statistics">Statistics</a>
   </div>
-
   <!-- Manage Profiles Page -->
  <div class="manage-profiles">
-    <h1>Manage Profiles</h1>
+    <h2 style="text-align: left;">Welcome, <%= username %>!</h2>
     <ul class="profile-list">
       <% profiles.forEach(function(profile) { %>
         <li class="profile-item" onclick="editProfile('<%= profile.name %>')">
@@ -31,6 +30,6 @@
         </li>
       <% }); %>
     </ul>
-  </div>
+  </div>  
 </body>
 </html>

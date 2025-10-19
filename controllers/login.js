@@ -28,6 +28,7 @@ async function handleLogin(req,res) {
 
     // Create session
     req.session.userId = user._id;
+    req.session.username = user.username; 
     console.log("User logged in:", user.username);
 
     // Redirect to main page after login
