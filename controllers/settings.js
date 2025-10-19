@@ -32,4 +32,19 @@ async function renderSettingsPage(req, res) {
   }
 }
 
-module.exports = { renderSettingsPage };
+async function renderEditProfile(req, res) {
+  try {
+    const userId = req.session.userId;
+    if (!userId) return res.redirect('/login');
+    const profileName = req.params.profileName;
+    const profiles = await loginService.getUserProfiles({ _id: userId });
+    const profile = profiles.find(p => p.name === profileName);
+    if (!profile) return res.status(404).send('Profile not found');
+    res.render('editProfile', { profile });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+}
+
+module.exports = { renderSettingsPage, renderEditProfile };
