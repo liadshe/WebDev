@@ -9,11 +9,11 @@ function renderLoginPage(req, res){
 };
 
 async function handleLogin(req,res) {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     
     try {
     // Find user by username
-    const user = await loginService.getUserByUsername({ username });
+    const user = await loginService.getUserByEmail({ email });
     if (!user) {
         req.session.error = "User not found";
       return res.redirect("/login"); // redirect instead of render
