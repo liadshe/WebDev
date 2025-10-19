@@ -5,6 +5,20 @@ const getUserByUsername = async (userName) => {
     return user;
 }
 
+const getUserByEmail = async (email) => {
+    const user = await User.findOne( email );
+    return user;
+}
+
+const getUserProfiles = async (_id) => {
+    const user = await User.findOne( {_id} );
+    console.log("User profiles fetched:", user.profiles);
+    console.log("profile picture ",user.profiles[0].picture);
+    return user.profiles;
+}
+
 module.exports = {
-    getUserByUsername
+    getUserByUsername,
+    getUserByEmail,
+    getUserProfiles
 };

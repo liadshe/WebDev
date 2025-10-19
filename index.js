@@ -40,7 +40,7 @@ app.get("/statistics", (req, res) => {
 });
 
 // api routes
-app.use("/api/profiles", profilesApiRouter);
+//app.use("/api/profiles", profilesApiRouter);
 
 const PORT = parseInt(process.env.PORT);
 app.listen(PORT, () => {

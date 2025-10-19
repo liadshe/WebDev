@@ -4,5 +4,5 @@ node_modules/
 # Env file
 .env
 
-# Test users creation script
+# Dummy DB data script
 createTestUsers.js

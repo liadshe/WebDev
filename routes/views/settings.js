@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
-//const { render } = require("../../controllers/settings");
-const { getAllProfiles } = require("../../controllers/settings");
+const ensureAuth = require("../../middlewares/authMiddleware");
+const { renderSettingsPage } = require("../../controllers/settings");
 
-router.get("/", getAllProfiles);
+router.get("/", ensureAuth, renderSettingsPage);
+
 
 module.exports = router;
