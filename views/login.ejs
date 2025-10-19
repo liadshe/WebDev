@@ -6,8 +6,19 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body class="login-page">
-    <!-- need to style this!!! -->
-    <% if (error) { %> <p style="color:red;"><%= error %></p> <% } %> 
+    <% if (error) { %>
+      <div id="error-banner" class="popup-banner"><%= error %></div>
+      <script>
+        window.onload = function() {
+          var banner = document.getElementById('error-banner');
+          if (banner) {
+            setTimeout(function() {
+              banner.style.display = 'none';
+            }, 2000);
+          }
+        };
+      </script>
+    <% } %>
 
   <div class="login-box">
     <h1>Welcome</h1>
