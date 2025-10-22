@@ -22,7 +22,7 @@
         <li class="profile-item">
           <div class="profile-left">
             <img src="<%= profile.picture %>" alt="<%= profile.name %>">
-            <span class="name"><a class="profile-link" href="/settings/edit/<%= encodeURIComponent(profile.name) %>"><%= profile.name %></a></span>
+            <span class="name"><a class="profile-link" href="/settings/edit/<%= profile.id %>"><%= profile.name %></a></span>
           </div>
           <div class="profile-right">
             <span class="arrow">&gt;</span>

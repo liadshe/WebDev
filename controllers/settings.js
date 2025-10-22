@@ -4,7 +4,7 @@ const loginService = require("../services/loginService");
 
 async function renderSettingsPage(req, res) {
   try {
-    const userId = req.session.userId; // ✅ use session, not req.user
+    const userId = req.session.userId; 
 
     if (!userId) {
       return res.redirect("/login");
@@ -13,8 +13,9 @@ async function renderSettingsPage(req, res) {
     // get user profiles from your service
     const profiles = await loginService.getUserProfiles({ _id: userId });
 
-    // map for display
+    // map for display (include id so links render correctly)
     const mappedProfiles = profiles.map(profile => ({
+      id: profile._id,
       name: profile.name,
       picture: profile.picture
         ? `/images/${profile.picture}`    
@@ -34,11 +35,11 @@ async function renderSettingsPage(req, res) {
 
 async function renderEditProfile(req, res) {
   try {
-    const userId = req.session.userId;
-    if (!userId) return res.redirect('/login');
-    const profileName = req.params.profileName;
-    const profiles = await loginService.getUserProfiles({ _id: userId });
-    const profile = profiles.find(p => p.name === profileName);
+  const userId = req.session.userId;
+  if (!userId) return res.redirect('/login');
+  const profileId = req.params.profileId;
+  const profiles = await loginService.getUserProfiles({ _id: userId });
+  const profile = profiles.find(p => String(p._id) === String(profileId));
     if (!profile) return res.status(404).send('Profile not found');
     res.render('editProfile', { profile });
   } catch (err) {

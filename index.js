@@ -30,6 +30,10 @@ app.use(
     saveUninitialized: false,
   }));
 
+  app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.url}`);
+  next();
+});
 // views routes
 app.use("/main", express.static("main.html"));
 app.use("/login",loginViewRouter);
@@ -40,7 +44,7 @@ app.get("/statistics", (req, res) => {
 });
 
 // api routes
-//app.use("/api/profiles", profilesApiRouter);
+app.use("/api/profiles", profilesApiRouter);
 
 const PORT = parseInt(process.env.PORT);
 app.listen(PORT, () => {

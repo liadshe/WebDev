@@ -4,7 +4,7 @@ const ensureAuth = require("../../middlewares/authMiddleware");
 const { renderSettingsPage, renderEditProfile } = require("../../controllers/settings");
 
 router.get("/", ensureAuth, renderSettingsPage);
-router.get('/edit/:profileName', ensureAuth, renderEditProfile);
+router.get('/edit/:profileId', ensureAuth, renderEditProfile);
 
 
 module.exports = router;

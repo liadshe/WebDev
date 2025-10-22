@@ -5,7 +5,7 @@ const ProfileSchema = new mongoose.Schema({
   picture: { type: String },
   genrePreferences: [{ type: String }],
   likedContent: [{ type: mongoose.Schema.Types.ObjectId, ref: "Content" }],
-}, { _id: false });
+});
 
 const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true, index: true },

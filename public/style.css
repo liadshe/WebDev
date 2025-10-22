@@ -73,7 +73,7 @@ body {
 
 .profile {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column; /* stack image above name */
   align-items: center;
   text-align: center;
   font-family: 'verdana';
@@ -277,14 +277,28 @@ body {
   text-decoration: underline;
 }
 
+/* edit profile page */
 .edit-profile-page {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   border-radius: 8px;
+  display: flex;
+    justify-content: center;
+
 }
 
-/* edit profile page */
+body.edit-profile-page > a {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  z-index: 1000; 
+}
+
 .flex-container {
     display: flex;
     flex-direction: column;
@@ -300,6 +314,13 @@ body {
 @media (min-width: 640px) { 
     .card-bg {
         padding: 2.5rem;
+    }
+}
+
+
+@media (min-width: 640px) {
+    .title-h1 {
+        font-size: 3rem; /* sm:text-5xl */
     }
 }
 
