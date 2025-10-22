@@ -34,6 +34,7 @@ app.use(
   console.log(`[${req.method}] ${req.url}`);
   next();
 });
+
 // views routes
 app.use("/main", express.static("main.html"));
 app.use("/login",loginViewRouter);

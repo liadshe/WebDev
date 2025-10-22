@@ -55,14 +55,18 @@
 
     <!-- scrollable box -->
     <div class="pref-box">
-      <% availablePreferences.forEach(pref => { %>
+      <% genres.forEach(genre => { %>
         <label class="pref-label">
-          <input type="checkbox" name="preferences" value="<%= pref %>" 
-                 <%= currentPreferences.includes(pref) ? 'checked' : '' %>>
-          <span class="text-sm font-medium text-white"><%= pref %></span>
+          <input
+            type="checkbox"
+            name="preferences"
+            value="<%= genre %>"
+            <%= profile.genrePreferences.includes(genre) ? 'checked' : '' %>>
+          <span class="text-sm font-medium text-white"><%= genre %></span>
         </label>
-      <% }); %>
+      <% }) %>
     </div>
+
 
     <button type="submit" class="btn" style="align-self: flex-start;">
       Save Preferences
