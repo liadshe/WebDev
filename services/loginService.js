@@ -12,8 +12,6 @@ const getUserByEmail = async (email) => {
 
 const getUserProfiles = async (_id) => {
     const user = await User.findOne( {_id} );
-    console.log("User profiles fetched:", user.profiles);
-    console.log("profile picture ",user.profiles[0].picture);
     return user.profiles;
 }
 

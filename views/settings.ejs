@@ -19,13 +19,13 @@
     <h2 style="text-align: left;">Welcome, <%= username %>!</h2>
     <ul class="profile-list">
       <% profiles.forEach(function(profile) { %>
-        <li class="profile-item" onclick="editProfile('<%= profile.name %>')">
+        <li class="profile-item">
           <div class="profile-left">
-          <img src=<%= profile.picture %> alt="<%= profile.name %>">
-              <span class="name"><%= profile.name %></span>
+            <img src="<%= profile.picture %>" alt="<%= profile.name %>">
+            <span class="name"><a class="profile-link" href="/settings/edit/<%= profile.id %>"><%= profile.name %></a></span>
           </div>
           <div class="profile-right">
-              <span class="arrow">&gt;</span>
+            <span class="arrow">&gt;</span>
           </div>
         </li>
       <% }); %>
