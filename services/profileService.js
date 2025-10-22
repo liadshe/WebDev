@@ -28,8 +28,17 @@ const updateProfilePicture = async (userId, profileId, newPicture) => {
         { new: true }
     );}
 
+// Delete profile 
+const deleteProfile = async (userId, profileId) => {
+    const user = await User.findById(userId);
+    const profile = user.profiles.id(profileId);
+    profile.deleteOne();
+    await user.save();
+};
+
 module.exports = {
     updateProfileName,
     updateProfilePreferences,
-    updateProfilePicture
+    updateProfilePicture,
+    deleteProfile
 };

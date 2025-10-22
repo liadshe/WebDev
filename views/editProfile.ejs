@@ -77,7 +77,7 @@
         </div>
 
         <div>
-            <form action="/profile/delete/<%= profile._id %>" method="POST" onsubmit="return confirmDelete()" style="display: inline-block;">
+            <form action="/api/profiles/delete/<%= profile._id %>" method="POST" onsubmit="return confirmDelete()" style="display: inline-block;">
                  <input type="hidden" name="action" value="delete_profile">
                 <button type="submit" class="btn-danger">
                     Permanently delete this profile and its viewing history
@@ -119,16 +119,11 @@
 </div>
 
 <script>
-    // *** Client-Side Scripting for Interactivity ***
-
-    // Simple confirmation before deleting the profile
     function confirmDelete() {
-        // As per instructions, using a prompt for deletion confirmation.
         const isConfirmed = window.prompt("To confirm deletion, type 'DELETE' in the box below:");
         return isConfirmed === 'DELETE';
     }
 
-    // Modal Logic for Profile Picture Selection
     const pictureModal = document.getElementById('picture-modal');
     const openModalBtn = document.getElementById('open-picture-modal');
     const closeModalBtn = document.getElementById('close-picture-modal');
