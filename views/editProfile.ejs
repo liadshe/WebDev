@@ -44,16 +44,14 @@
      <input type="hidden" name="action" value="update_preferences">
 
     <% 
-      const availablePreferences = [
-        'G', 'PG', 'PG-13', 'R', 
-        'Spanish Subtitles', 'English Subtitles', 
-        'Audio Descriptions', 'Action', 'Comedy', 'Drama', 
-        'Thriller', 'Horror', 'Sci-Fi', 'Romance'
-      ];
-      const currentPreferences = profile.preferences || [];
+    const sortedGenres = genres.sort((a,b) => {
+        const aChecked = profile.genrePreferences.includes(a);
+        const bChecked = profile.genrePreferences.includes(b);
+        return bChecked - aChecked;
+    });
     %>
 
-    <!-- scrollable box -->
+
     <div class="pref-box">
       <% genres.forEach(genre => { %>
         <label class="pref-label">
