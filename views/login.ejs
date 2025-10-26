@@ -1,32 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Login Page</title>
-  <link rel="stylesheet" href="/style.css">
-</head>
-<body class="login-page">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body class="login-page">
     <% if (error) { %>
-      <div id="error-banner" class="popup-banner"><%= error %></div>
-      <script>
-        window.onload = function() {
-          var banner = document.getElementById('error-banner');
-          if (banner) {
-            setTimeout(function() {
-              banner.style.display = 'none';
-            }, 2000);
-          }
-        };
-      </script>
+    <div id="error-banner" class="popup-banner"><%= error %></div>
+    <script>
+      window.onload = function () {
+        var banner = document.getElementById("error-banner");
+        if (banner) {
+          setTimeout(function () {
+            banner.style.display = "none";
+          }, 2000);
+        }
+      };
+    </script>
     <% } %>
 
-  <div class="login-box">
-    <h1>Welcome</h1>
-    <form method="POST" action="/login">
-    <input type="email" name="email" placeholder="Email" required />
-    <input type="password" name="password" placeholder="Password" required />
-    <button type="submit" class="btn">Login</button>
-  </form>
-  </div>
-</body>
+    <div class="login-box">
+      <h1>Welcome</h1>
+      <form method="POST" action="/login">
+        <input type="email" name="email" placeholder="Email" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit" class="btn">Login</button>
+      </form>
+
+      <div class="register-section">
+        <p>Don’t have an account?</p>
+        <form action="/register" method="GET">
+          <button type="submit" class="btn secondary">Register</button>
+        </form>
+      </div>
+    </div>
+  </body>
 </html>
