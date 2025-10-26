@@ -20,13 +20,20 @@ body {
   background: #222;
   border-radius: 10px;
 }
-.login-box input {
+.login-box input[type="text"],
+.login-box input[type="email"],
+.login-box input[type="password"] {
   width: 90%;
   padding: 10px;
-  margin: 10px 0;
+  margin: 10px auto;
   border: none;
   border-radius: 5px;
+  background: white;
+  color: black;
+  display: block;
+  box-sizing: border-box;
 }
+
 .btn {
   display: inline-block;
   padding: 10px 20px;
