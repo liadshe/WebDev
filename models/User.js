@@ -18,4 +18,18 @@ const UserSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+// if this is a brand-new user and they have no profiles yet so creating a default profile
+UserSchema.pre("save", function (next) {
+  if (this.isNew && (!this.profiles || this.profiles.length === 0)) {
+    this.profiles = [
+      {
+        name: this.username, // default profile name
+        picture: "cow.jpg", // optional default picture
+        genrePreferences: [],
+        likedContent: [],
+      },
+    ];
+  }
+  next();
+});
 module.exports = mongoose.model("User", UserSchema);
