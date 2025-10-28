@@ -2,11 +2,14 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const loginService = require("../services/loginService");
 
-function renderLoginPage(req, res){
-    const error = req.session.error;
-    delete req.session.error;
-    res.render("login", { error });
-};
+function renderLoginPage(req, res) {
+  const error = req.session.error;
+  const showRegister = req.session.showRegister || false;
+  delete req.session.error;
+  delete req.session.showRegister;
+  res.render("login", { error, showRegister });
+}
+
 
 async function handleLogin(req,res) {
     const { email, password } = req.body;

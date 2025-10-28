@@ -1,11 +1,12 @@
 const User = require("../models/User");
 
-async function createUser({ username, email, passwordHash }) {
+async function createUser({ username, email, passwordHash, profiles = [] }) {
   try {
     const user = new User({
       username,
       email,
       passwordHash,
+      profiles
     });
 
     await user.save();
@@ -16,6 +17,11 @@ async function createUser({ username, email, passwordHash }) {
   }
 }
 
+async function getUserByUsername({ username }) {
+  return await User.findOne({ username });
+}
+
 module.exports = {
   createUser,
+  getUserByUsername,
 };

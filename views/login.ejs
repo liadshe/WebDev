@@ -36,7 +36,6 @@
           id="usernameField"
           placeholder="Username"
           style="display: none"
-          required
         />
 
         <button id="submitBtn" type="submit" class="btn">Login</button>
@@ -60,11 +59,11 @@
 
       toggleBtn.addEventListener("click", function () {
         isRegister = !isRegister;
-        console.log("aaaaaaa");
         console.log(isRegister);
         if (isRegister) {
           // Switch to register mode
           usernameField.style.display = "block";
+          usernameField.required = true;
           form.action = "/register";
           submitBtn.textContent = "Register";
           toggleBtn.textContent = "Login";
@@ -73,6 +72,7 @@
         } else {
           // Switch to login mode
           usernameField.style.display = "none";
+          usernameField.required = false;
           form.action = "/login";
           submitBtn.textContent = "Login";
           toggleBtn.textContent = "Register";
@@ -81,5 +81,16 @@
         }
       });
     </script>
+
+    <% if (showRegister) { %>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const toggleBtn = document.getElementById("toggleBtn");
+        if (toggleBtn) {
+          toggleBtn.click(); // switch automatically to register mode
+        }
+      });
+    </script>
+    <% } %>
   </body>
 </html>
