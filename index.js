@@ -6,7 +6,9 @@ const session = require("express-session");
 const loginViewRouter = require("./routes/views/login");
 const registerViewRouter = require("./routes/views/register");
 const settingsViewRouter = require("./routes/views/settings");
+const statisticsViewRouter = require("./routes/views/statistics");
 const profilesApiRouter = require("./routes/api/profiles");
+const statisticsApiRouter = require("./routes/api/statistics");
 
 dotenv.config();
 const app = express();
@@ -45,12 +47,11 @@ app.use("/login", loginViewRouter);
 app.use("/register", registerViewRouter);
 app.use("/profiles", express.static("profiles.html"));
 app.use("/settings", settingsViewRouter);
-app.get("/statistics", (req, res) => {
-  res.render("statistics");
-});
+app.use("/statistics", statisticsViewRouter);
 
 // api routes
 app.use("/api/profiles", profilesApiRouter);
+app.use("/api/statistics", statisticsApiRouter);
 
 const PORT = parseInt(process.env.PORT);
 app.listen(PORT, () => {
