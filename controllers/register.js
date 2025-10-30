@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const registerService = require("../services/registerService");
 const loginService = require("../services/loginService"); // reuse email check
+const logService = require("../services/logService");
 
 async function handleRegister(req, res) {
   const { username, email, password } = req.body;
@@ -37,9 +38,16 @@ async function handleRegister(req, res) {
     });
     req.session.userId = newUser._id;
     req.session.username = newUser.username;
+    await logService.createLog({
+      level: "INFO",
+      service: "Auth",
+      message: `New user registered: '${newUser.username}'.`,
+      userId: newUser._id,
+    });
     console.log("User registered:", newUser.username);
     res.redirect("/main");
   } catch (err) {
+    logService.createLog({ level: "ERROR", service: "Auth", message: `Registration error: ${err.message}.` });
     console.error("Registration error:", err);
     req.session.error = "Something went wrong during registration";
     req.session.showRegister = true;
