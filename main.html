@@ -1,29 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Main Page</title>
-  <link rel="stylesheet" href="/style.css">
-</head>
-<body class="main-page">
-  <header class="top-menu">
-    <nav>
-      <ul>
-        <li><a href="main" class="active">Home</a></li>
-        <li><a href="#">TV Shows</a></li>
-        <li><a href="#">Movies</a></li>
-        <li><a href="#">Games</a></li>
-        <li><a href="#">New & Popular</a></li>
-        <li><a href="#">My List</a></li>
-        <li><a href="#">Browse by Languages</a></li>
-        <li class="switch-profile"><a href="profiles">Switch Profile</a></li>
-        <li><a href="settings">&#9881;</a></li>
-      </ul>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Main Page</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/cover.css" />
+  </head>
+  <body class="main-page">
+    <header class="top-menu">
+      <nav>
+        <ul>
+          <li><a href="main" class="active">Home</a></li>
+          <li><a href="#">TV Shows</a></li>
+          <li><a href="#">Movies</a></li>
+          <li><a href="#">Games</a></li>
+          <li><a href="#">New & Popular</a></li>
+          <li><a href="#">My List</a></li>
+          <li><a href="#">Browse by Languages</a></li>
+          <li class="switch-profile"><a href="profiles">Switch Profile</a></li>
+          <li><a href="settings">&#9881;</a></li>
+        </ul>
+      </nav>
+    </header>
 
-  <main>
-    <h1>To be continued... </h1>
-  </main>
-</body>
+    <main>
+      <h1>To be continued...</h1>
+
+      <!-- Cover that becomes the video player on click -->
+      <div class="cover" id="ariCover" aria-label="Play Ari video">
+        <img src="./uploads/ari.jpeg" alt="Ari cover" class="cover-image" />
+        <button class="play-overlay" aria-hidden="true">▶</button>
+
+        <video
+          class="cover-video"
+          id="ariVideo"
+          src="./uploads/ari.mp4"
+          preload="metadata"
+          controls
+          playsinline
+        ></video>
+      </div>
+    </main>
+
+    <script>
+      // Simple transition: click image or overlay to reveal + play video
+      (function () {
+        const cover = document.getElementById("ariCover");
+        const img = cover.querySelector(".cover-image");
+        const btn = cover.querySelector(".play-overlay");
+        const video = document.getElementById("ariVideo");
+
+        function playTransition() {
+          // Add class to trigger CSS transitions
+          cover.classList.add("playing");
+
+          // ensure the video element is visible for browsers that may delay painting
+          video.style.visibility = "visible";
+
+          // reset to start (optional)
+          try {
+            video.currentTime = 0;
+          } catch (e) {}
+
+          // Start playback after a short delay so transition looks smooth
+          // Autoplay often requires muted; keep controls available and start muted, then allow user to unmute
+          video.muted = true;
+
+          // Use requestAnimationFrame to give the browser a paint chance after adding the class
+          requestAnimationFrame(() => {
+            video.play().catch(() => {
+              // If autoplay blocked, leave controls visible and let user press play
+              video.muted = false;
+              video.controls = true;
+            });
+          });
+        }
+
+        img.addEventListener("click", playTransition);
+        btn.addEventListener("click", playTransition);
+
+        // Optional: when user actually presses play via controls, unmute as they interacted
+        video.addEventListener("play", () => {
+          // no-op here; user can unmute via controls
+        });
+      })();
+    </script>
+  </body>
 </html>

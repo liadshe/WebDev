@@ -8,9 +8,9 @@ body {
 }
 
 /* Login Page */
-.login-page{
-    background: url('images/login-bg.jpg') no-repeat center center fixed;
-    background-size: cover;
+.login-page {
+  background: url("images/login-bg.jpg") no-repeat center center fixed;
+  background-size: cover;
 }
 .login-box {
   width: 300px;
@@ -40,7 +40,7 @@ body {
 .profiles-page h1 {
   margin-top: 50px;
   font-size: 80px;
-  font-family: 'verdana';
+  font-family: "verdana";
 }
 .profiles {
   display: flex;
@@ -55,7 +55,7 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  font-family: 'verdana';
+  font-family: "verdana";
   text-decoration: none;
 }
 
@@ -63,7 +63,7 @@ body {
   background: transparent;
   border: none;
   color: grey;
-  font-family: 'verdana';
+  font-family: "verdana";
   font-size: 20px;
   text-align: center;
   margin-top: 10px;
@@ -87,7 +87,7 @@ body {
 .top-menu {
   background: linear-gradient(90deg, #141414, #1f1f1f, #141414);
   padding: 12px 30px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -112,7 +112,7 @@ body {
 }
 
 .top-menu li.switch-profile {
-  margin-left: auto; 
+  margin-left: auto;
 }
 
 .top-menu a {
@@ -136,13 +136,13 @@ body {
   background: pink;
   color: white;
   opacity: 1;
-  box-shadow: 0 2px 6px rgba(255,0,0,0.4);
+  box-shadow: 0 2px 6px rgba(255, 0, 0, 0.4);
 }
 
 /* Settings page */
 .settings-page {
   margin: 0;
-  font-family: 'verdana';
+  font-family: "verdana";
   height: 100vh;
   background: #111;
   color: white;
@@ -252,7 +252,7 @@ main.add-content-page {
   padding: 30px;
   background-color: #1f1f1f;
   border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   text-align: left;
 }
 
@@ -261,7 +261,7 @@ main.add-content-page h1 {
   color: #ff6b6b;
   margin-bottom: 30px;
   font-size: 2.2rem;
-  text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 /* Form Fields */
@@ -289,10 +289,9 @@ main.add-content-page h1 {
 .add-content-form .form-row {
   display: flex;
   flex-direction: column; /* stack label above input */
-  margin-bottom: 20px;   /* space between rows */
+  margin-bottom: 20px; /* space between rows */
   width: 100%;
 }
-
 
 .add-content-form textarea {
   resize: vertical;
@@ -353,3 +352,4 @@ main.add-content-page h1 {
     padding: 20px;
   }
 }
+

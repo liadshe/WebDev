@@ -1,0 +1,89 @@
+/* ...existing code... */
+
+/* Cover / poster styles */
+.cover {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16/9;
+  margin: 1.25rem auto;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #000;
+  cursor: pointer;
+}
+
+.cover-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 450ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 350ms ease;
+  z-index: 2;
+}
+
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 34px;
+  border: none;
+  display: grid;
+  place-items: center;
+  transition: background 200ms ease, transform 200ms ease, opacity 200ms ease;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.cover-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.03);
+  transition: opacity 600ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    transform 600ms cubic-bezier(0.2, 0.9, 0.2, 1);
+  z-index: 5;
+  background: #000;
+}
+
+.cover.playing .cover-image {
+  opacity: 0;
+  transform: scale(1.06);
+  z-index: 1;
+  pointer-events: none;
+}
+.cover.playing .play-overlay {
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+}
+.cover.playing .cover-video {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition-delay: 120ms;
+}
+
+/* Responsive tweaks */
+@media (max-width: 640px) {
+  .play-overlay {
+    width: 64px;
+    height: 64px;
+    font-size: 24px;
+  }
+  .cover {
+    max-width: 100%;
+  }
+}
+
+/* ...existing code... */
