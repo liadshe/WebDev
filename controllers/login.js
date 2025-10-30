@@ -15,7 +15,6 @@ async function handleLogin(req,res) {
     const { email, password } = req.body;
     
     try {
-    // Find user by username
     const user = await loginService.getUserByEmail({ email });
     if (!user) {
         req.session.error = "User not found";

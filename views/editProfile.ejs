@@ -128,14 +128,14 @@
     const savePictureBtn = document.getElementById('save-picture-btn');
     const newPictureInput = document.getElementById('new-picture-input');
     const avatarSelectors = document.querySelectorAll('.avatar-select');
-    let selectedPicture = "<%= profile.picture %>"; // Initialize with current picture
+    let selectedPicture = "<%= profile.picture %>"; 
 
     // Open Modal
     openModalBtn.addEventListener('click', () => {
         pictureModal.classList.remove('hidden');
         pictureModal.classList.add('flex');
-        savePictureBtn.disabled = true; // Disable until a new picture is selected
-        newPictureInput.value = ""; // Clear selection on opening
+        savePictureBtn.disabled = true; 
+        newPictureInput.value = ""; 
     });
 
     // Close Modal
@@ -149,7 +149,6 @@
         img.addEventListener('click', () => {
             const pictureName = img.dataset.pictureName;
             
-            // Remove 'selected' class and border from all, then add to the selected one
             avatarSelectors.forEach(i => {
                 i.classList.remove('selected');
                 i.style.borderColor = 'transparent';
@@ -170,7 +169,6 @@
         const currentPictureName = "<%= profile.picture %>";
         const currentImg = document.querySelector(`.avatar-select[data-picture-name="${currentPictureName}"]`);
         if (currentImg) {
-            // Ensure the current image has the selection style on load
             currentImg.classList.add('selected');
             currentImg.style.borderColor = 'var(--color-red-600)';
         }

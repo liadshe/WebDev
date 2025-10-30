@@ -1,21 +1,19 @@
-const bcrypt = require("bcrypt");
-const User = require("../models/User");
 const profileService = require("../services/profileService");
+const loginService = require("../services/loginService");
 const genreService = require("../services/genreService");
-const Genre = require("../models/Genres");
 
 async function renderEditProfilePage(req, res) {
   try {
     const { profileId } = req.params;
     const userId = req.session.userId;
 
-    const user = await User.findById(userId);
+    const user = await loginService.getUserById(userId);
     if (!user) return res.status(404).send("User not found");
 
     const profile = user.profiles.id(profileId);
     if (!profile) return res.status(404).send("Profile not found");
 
-    const genres = await Genre.find({});
+    const genres = await genreService.getAllGenres();
     const genreNames = genres.map(g => g.name); 
 
     res.render("editProfile", {
@@ -56,12 +54,11 @@ async function updateProfile(req, res) {
 }
 
 async function deleteProfile(req, res) {
-    console.log("in delete profile controller");
   try {
     const { profileId } = req.params;
     const userId = req.session.userId;
 
-    const user = await User.findById(userId);
+    const user = await loginService.getUserById(userId);
     if (!user) return res.status(404).send("User not found");
 
     const profile = user.profiles.id(profileId);
@@ -78,13 +75,12 @@ async function deleteProfile(req, res) {
 }
 
 async function createProfile(req, res) {
-    console.log("in create profile controller");
   try {
     const userId = req.session.userId;
 
     if (!userId) return res.status(401).send('Not authenticated');
 
-    const user = await User.findById(userId);
+    const user = await loginService.getUserById(userId);
     if (!user) return res.status(404).send("User not found");
 
     // enforce max profiles (schema also validates)
@@ -105,7 +101,6 @@ async function createProfile(req, res) {
       return req.session.save(() => res.redirect('/settings'));
     }
 
-    // push new profile into user's embedded profiles array
     user.profiles.push({
       name: displayName,
       picture: picture,
@@ -125,14 +120,13 @@ async function createProfile(req, res) {
 
 async function renderProfileCreationPage(req,res) {
     try {
-      console.log("!!!!!!!!!!!!!!!!!!! in render profile creation !!!!!!!!!!!!!!!!!!!!!1")
     const userId = req.session.userId;
 
-    const user = await User.findById(userId);
+    const user = await loginService.getUserById(userId);
     if (!user) return res.status(404).send("User not found");
 
-    const genres = await Genre.find({});
-    const genreNames = genres.map(g => g.name); 
+    const genres = await genreService.getAllGenres();
+    const genreNames = genres.map(g => g.name);
 
     const profilesCount = user.profiles ? user.profiles.length : 0;
 

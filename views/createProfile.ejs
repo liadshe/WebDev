@@ -28,43 +28,41 @@
         </button>                                
 </div>
 <div class="col-right">
-    <!-- Single form to create profile: name, preferences, picture -->
     <form id="create-profile-form" action="/api/profiles/createProfile" method="POST">
         <input type="hidden" name="action" value="create_profile">
-    <section style="text-align: left;">
+        <section style="text-align: left;">
             <h3>Profile Name</h3>
-                    <input type="text" id="displayName" name="displayName" 
-                                    value="" 
-                                    required minlength="2" maxlength="50"
-                                    placeholder="Enter new display name">
-    </section>
+            <input type="text" id="displayName" name="displayName" 
+                                value="" 
+                                required minlength="2" maxlength="50"
+                                placeholder="Enter new display name">
+        </section>
 
-    <section style="text-align: left; margin-top:1rem;">
-        <h3>Genres Preferences</h3>
+        <section style="text-align: left; margin-top:1rem;">
+            <h3>Genres Preferences</h3>
             <div class="pref-box">
                 <% genres.forEach(genre => { %>
                     <label class="pref-label">
-                        <input
-                            type="checkbox"
-                            name="preferences"
-                            value="<%= genre %>">
-                        <span class="text-sm font-medium text-white"><%= genre %></span>
-                    </label>
-                <% }) %>
-            </div>
-    </section>
+                    <input
+                        type="checkbox"
+                        name="preferences"
+                        value="<%= genre %>">
+                    <span class="text-sm font-medium text-white"><%= genre %></span>
+                </label>
+            <% }) %>
+        </div>
+</section>
 
-    <!-- Hidden inputs for selected picture (modal will set these) -->
-    <input type="hidden" name="newPicture" id="new-picture-input">
-    <input type="hidden" name="picture" id="picture-input">
+<input type="hidden" name="newPicture" id="new-picture-input">
+<input type="hidden" name="picture" id="picture-input">
 
-    <div style="margin-top:1rem;">
-            <% if (typeof profilesCount !== 'undefined' && profilesCount >= 5) { %>
-                <button type="submit" class="btn" disabled title="Maximum profiles reached">Create Profile</button>
-            <% } else { %>
-                <button type="submit" class="btn">Create Profile</button>
-            <% } %>
-    </div>
+<div style="margin-top:1rem;">
+        <% if (typeof profilesCount !== 'undefined' && profilesCount >= 5) { %>
+            <button type="submit" class="btn" disabled title="Maximum profiles reached">Create Profile</button>
+        <% } else { %>
+            <button type="submit" class="btn">Create Profile</button>
+        <% } %>
+</div>
 
     </form>
 </div>
@@ -110,8 +108,8 @@ let selectedPicture = '';
 openModalBtn.addEventListener('click', () => {
     pictureModal.classList.remove('hidden');
     pictureModal.classList.add('flex');
-    savePictureBtn.disabled = true; // Disable until a new picture is selected
-    newPictureInput.value = ""; // Clear selection on opening
+    savePictureBtn.disabled = true; 
+    newPictureInput.value = ""; 
 });
 
 
@@ -126,7 +124,6 @@ avatarSelectors.forEach(img => {
     img.addEventListener('click', () => {
         const pictureName = img.dataset.pictureName;
 
-        // Remove 'selected' class and border from all, then add to the selected one
         avatarSelectors.forEach(i => {
             i.classList.remove('selected');
             i.style.borderColor = 'transparent';
@@ -135,21 +132,16 @@ avatarSelectors.forEach(img => {
         img.classList.add('selected');
         img.style.borderColor = '#f58799';
 
-
-        // Update selection and enable Save button
         selectedPicture = pictureName;
         newPictureInput.value = pictureName;
         savePictureBtn.disabled = false;
     });
 });
 
-// Save-picture button now just closes modal and leaves newPicture input set
 savePictureBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    // newPictureInput already set when user clicked an avatar
     pictureModal.classList.add('hidden');
     pictureModal.classList.remove('flex');
-    // update preview image in the form
     if (selectedPicture) {
         const preview = document.getElementById('current-profile-picture');
         if (preview) preview.src = '/images/' + selectedPicture;

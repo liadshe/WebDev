@@ -2,8 +2,8 @@ const genres = require("../models/Genres");
 
 // Get all genres from DB
 const getAllGenres = async () => {
-    const genres = await genres.find({});
-    const genreNames = genres.map(g => g.name); 
+    const Genres = await genres.find({});
+    const genreNames = Genres.map(g => g.name);
     return genreNames
 }
 
