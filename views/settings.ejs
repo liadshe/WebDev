@@ -31,8 +31,15 @@
       <% }); %>
     </ul>
     <div class="profile-left">
-            <span class="name"><a class="profile-link" href="/settings/createProfile">Create New Profile</a></span>
-          </div>
+      <% if (!profiles || profiles.length < 5) { %>
+        <span class="name"><a class="profile-link" href="/settings/createProfile">Create New Profile</a></span>
+      <% } else { %>
+        <span class="name">
+          <button class="profile-link disabled" disabled title="Maximum of 5 profiles reached">Create New Profile (limit reached)</button>
+        </span>
+        <div class="hint" style="color:var(--color-gray-300); font-size:0.9rem; margin-top:0.5rem;">You have reached the maximum of 5 profiles. Delete an existing profile to create a new one.</div>
+      <% } %>
+    </div>
   </div>  
 </body>
 </html>

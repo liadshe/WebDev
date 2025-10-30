@@ -7,7 +7,7 @@ const ContentSchema = new mongoose.Schema({
   cast: [{ type: String, index: true }],
   releaseYear: { type: Number },
   durationMinutes: { type: Number },
-  rating: { type: String }, // from IMDB or similar
+  rating: { type: String }, 
   videoUrl: { type: String },
   dateAdded: { type: Date, default: Date.now },
 });
