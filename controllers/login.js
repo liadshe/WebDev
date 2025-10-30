@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const loginService = require("../services/loginService");
+const logService = require("../services/logService");
 
 function renderLoginPage(req, res) {
   const error = req.session.error;
@@ -17,26 +18,48 @@ async function handleLogin(req,res) {
     try {
     const user = await loginService.getUserByEmail({ email });
     if (!user) {
+        await logService.createLog({
+          level: "WARN",
+          service: "Auth",
+          message: `Failed login attempt: User not found for email '${email}'.`,
+        });
         req.session.error = "User not found";
-      return res.redirect("/login"); // redirect instead of render
+      return res.redirect("/login"); 
     }
 
     // Compare passwords
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
+      await logService.createLog({
+        level: "WARN",
+        service: "Auth",
+        message: `Failed login attempt: Invalid password for user '${user.username}'.`,
+        userId: user._id,
+      });
       req.session.error = "Invalid password";
       return res.redirect("/login");
     }
 
     // Create session
     req.session.userId = user._id;
-    req.session.username = user.username; 
+    req.session.username = user.username;
+    await logService.createLog({
+      level: "INFO",
+      service: "Auth",
+      message: `User '${user.username}' logged in successfully.`,
+      userId: user._id,
+    });
     console.log("User logged in:", user.username);
 
     // Redirect to main page after login
     res.redirect("/main");
 
   } catch (err) {
+    await logService.createLog({
+      level: "ERROR",
+      service: "Auth",
+      message: `Login error: ${err.message}.`,
+    });
     console.error("Login error:", err);
     req.session.error = "Something went wrong";
     res.redirect("/login");
