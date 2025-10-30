@@ -33,7 +33,6 @@ const getUserGenrePopularity = async (userId) => {
                 }
             }
         ]);
-        console.log("Aggregation result:", genreData);
         return genreData;
     } catch (error) {
         console.error("Error during genre popularity aggregation:", error);

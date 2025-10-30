@@ -14,19 +14,21 @@
     <a href="/settings">Manage Profiles</a>
     <a href="/statistics" class="active">Statistics</a>
   </div>
-  <h2 style="text-align: left;">📊 Genres Popularity</h2>
+  <div style="margin: auto;">
+    <h2>profiles genres preferences</h2>
+    <canvas id="genrePopularityChart"></canvas>
+    <p id="no-data-message" style="display: none; text-align: center; color: var(--color-gray-300);">
+      No genre data available to display.
+    </p>
+  </div>
 
-  <div style="display: block;">
-      <canvas id="genrePopularityChart"></canvas>
-      <p id="no-data-message" style="display: none; text-align: center; color: var(--color-gray-300);">
-        No genre data available to display.
-      </p>
+  <div style="margin: auto;">
+      <h1>next graph here</h1>
   </div>
 
   <script>
-    // Safely inject genre data from server (escaped to prevent parsing errors)
     const chartData = <%- JSON.stringify(genreData || []) %>;
-
+    console.log(chartData);
     if (chartData.length > 0) {
         const labels = chartData.map(item => item.label);
         const dataValues = chartData.map(item => item.value);
@@ -51,7 +53,7 @@
             data: {
                 labels,
                 datasets: [{
-                    label: 'Genre Frequency',
+                    label: 'Profiles',
                     data: dataValues,
                     backgroundColor: backgroundColors,
                     hoverOffset: 4
@@ -60,10 +62,10 @@
             options: {
                 responsive: true,
                 plugins: {
-                    legend: { position: 'bottom' },
+                    legend: { position: 'left' },
                     title: {
-                        display: true,
-                        text: 'Favorite Genre Popularity Across User Profiles'
+                        display: false,
+                        text: 'Your profiles preferences'
                     }
                 }
             }
