@@ -77,8 +77,51 @@ async function deleteProfile(req, res) {
 });
 }
 
+async function createProfile(req, res) {
+    console.log("in create profile controller");
+  try {
+    const userId = req.session.userId;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).send("User not found");
+
+
+
+
+  } catch (err) {
+    console.error("Error loading edit profile page:", err);
+    res.status(500).send("Server error");
+  }
+  req.session.save(() => {
+  res.redirect("/settings");
+});
+}
+
+async function renderProfileCreationPage(req,res) {
+    try {
+      console.log("!!!!!!!!!!!!!!!!!!! in render profile creation !!!!!!!!!!!!!!!!!!!!!1")
+    const userId = req.session.userId;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).send("User not found");
+
+    const genres = await Genre.find({});
+    const genreNames = genres.map(g => g.name); 
+
+    res.render("createProfile", {
+      genres: genreNames
+    });
+  } catch (err) {
+    console.error("Error loading edit profile page:", err);
+    res.status(500).send("Server error");
+  }
+
+}
+
 module.exports = {
   updateProfile,
   renderEditProfilePage, 
-  deleteProfile
+  deleteProfile,
+  createProfile,
+  renderProfileCreationPage
 };
