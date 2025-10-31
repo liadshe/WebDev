@@ -1,4 +1,4 @@
-/* Cover styles */
+/* === COVER CONTAINER === */
 .cover {
   position: relative;
   width: 100%;
@@ -15,7 +15,7 @@
   display: none;
 }
 
-/* --- IMAGE / PLAY ICON --- */
+/* === IMAGE & PLAY ICON === */
 .cover-image {
   position: absolute;
   inset: 0;
@@ -44,6 +44,7 @@
   cursor: pointer;
 }
 
+/* Fade out cover and play button when playing */
 .cover.playing .cover-image,
 .cover.playing .play-overlay {
   opacity: 0;
@@ -51,7 +52,7 @@
   pointer-events: none;
 }
 
-/* --- VIDEO --- */
+/* === VIDEO WRAPPER === */
 .video-wrapper {
   position: relative;
   width: 100%;
@@ -65,9 +66,10 @@
   display: block;
   background: #000;
   border-radius: 6px;
+  cursor: pointer;
 }
 
-/* --- CONTROLS --- */
+/* === CONTROLS === */
 .controls {
   position: absolute;
   bottom: 12px;
@@ -83,12 +85,23 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 10;
+  pointer-events: none;
 }
 
+/* === Hover to show === */
+.cover:hover .controls,
 .controls.show {
   opacity: 1;
+  pointer-events: auto;
 }
 
+/* === Keep visible when paused === */
+.cover.paused .controls {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Buttons */
 .controls button {
   background: none;
   border: none;
@@ -97,20 +110,57 @@
   cursor: pointer;
 }
 
+/* === TIMELINE SLIDER === */
 .timeline {
   flex: 1;
   cursor: pointer;
-  accent-color: red;
+  appearance: none;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
 }
 
-/* Responsive tweaks */
+/* Red progress bar */
+.timeline::-webkit-slider-thumb {
+  appearance: none;
+  width: 0;
+  height: 0;
+}
+
+.timeline::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to right,
+    red var(--progress, 0%),
+    rgba(255, 255, 255, 0.3) var(--progress, 0%)
+  );
+  height: 4px;
+  border-radius: 4px;
+}
+
+/* === RESPONSIVE === */
 @media (max-width: 640px) {
   .play-overlay {
     width: 64px;
     height: 64px;
     font-size: 24px;
   }
+
   .cover {
     max-width: 100%;
   }
+
+  .controls {
+    font-size: 14px;
+    gap: 6px;
+    padding: 6px 8px;
+  }
+}
+/* Time display (current / total) */
+.time-display {
+  color: #fff;
+  font-size: 14px;
+  font-family: monospace;
+  min-width: 95px;
+  text-align: right;
 }
