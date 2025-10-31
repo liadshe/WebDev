@@ -15,22 +15,46 @@
       <% movies.forEach(movie => { %>
       <div class="cover" id="<%= movie._id %>">
         <img
-          src="<%= movie.coverImage %>"
+          src="<%= movie.coverImagePath %>"
           alt="<%= movie.title %>"
           class="cover-image"
         />
         <button class="play-overlay">▶</button>
-        <video
-          class="cover-video"
-          src="<%= movie.trailerUrl %>"
-          preload="metadata"
-          controls
-          playsinline
-        ></video>
+
+        <div class="video-wrapper hidden">
+          <video
+            class="cover-video"
+            src="<%= movie.videoPath %>"
+            preload="metadata"
+            playsinline
+          ></video>
+
+          <div class="controls">
+            <button class="backward">« 10s</button>
+            <button class="playPause">▶</button>
+            <button class="forward">10s »</button>
+
+            <input
+              type="range"
+              class="timeline"
+              min="0"
+              max="100"
+              value="0"
+              step="0.1"
+            />
+
+            <button class="fullscreen">⛶</button>
+          </div>
+        </div>
       </div>
       <% }) %>
     </main>
 
+    <script>
+      const CURRENT_USER_ID = "<%= user ? user._id : 'guest' %>";
+      const CURRENT_PROFILE =
+        "<%= activeProfile ? activeProfile.name : 'Default' %>";
+    </script>
     <script src="/js/cover.js"></script>
   </body>
 </html>

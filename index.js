@@ -7,8 +7,10 @@ const path = require("path");
 const mainViewRouter = require("./routes/views/main");
 const loginViewRouter = require("./routes/views/login");
 const settingsViewRouter = require("./routes/views/settings");
-const profilesApiRouter = require("./routes/api/profiles");
 const contentViewRouter = require("./routes/views/content");
+
+const profilesApiRouter = require("./routes/api/profiles");
+const watchApiRouter = require("./routes/api/watch");
 
 dotenv.config();
 const app = express();
@@ -43,13 +45,13 @@ app.use("/profiles", express.static("profiles.html"));
 app.use("/settings", settingsViewRouter);
 app.use("/content", contentViewRouter);
 
-
 app.get("/statistics", (req, res) => {
   res.render("statistics");
 });
 
 // api routes
 app.use("/api/profiles", profilesApiRouter);
+app.use("/api/watch", express.json(), watchApiRouter);
 
 app.post("/test", (req, res) => {
   res.send("POST /test works");
