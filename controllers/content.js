@@ -1,4 +1,11 @@
 const addContentService = require("../services/addContentService");
+const dotenv = require("dotenv"); // to load OMDb API key
+const axios = require("axios"); // to call external OMDb API
+const { getVideoDurationInSeconds } = require("get-video-duration"); // to get video duration
+const path = require("path"); // to handle file paths
+
+
+dotenv.config();
 
 // render add-content page by ejs file named content.ejs
 async function renderAddConentPage(req, res){
@@ -7,33 +14,71 @@ async function renderAddConentPage(req, res){
         if (!genres) {
             console.log("No genres found, using empty array");
         }
-        res.render("content", { genres });
-    } catch (err) {
+        res.render("content", { genres,
+            success:  req.query.success == '1',
+            error: req.query.error == '1'
+         });
+    }
+    catch (err) {
         console.error("Error fetching genres:", err);
     }
+
 };
+
+
+// fetch rating from OMDb API by title, if not found return null
+async function getRating(title) {
+    try {
+        const apiKey = process.env.OMDB_API_KEY;
+        const response = await axios.get(`https://www.omdbapi.com/`, {
+            params: { t: title, apikey: apiKey },
+        });
+
+        if (response.data.Response === "False") {
+            console.log("Movie not found");
+        }
+    return response.data.imdbRating;
+    } catch (err) {
+        console.error("Error fetching rating from OMDb:", err);
+    }
+    return null;
+
+};
+
+// get video duration in seconds
+async function getVideoDuration(videoPath) {
+  try {
+    const absolutePath = path.resolve(videoPath);
+    const durationSeconds = await getVideoDurationInSeconds(absolutePath);
+    return durationSeconds;
+  } catch (err) {
+    console.error("Error reading video duration:", err);
+    return null;
+  }
+}
 
 async function handleContentSubmission(req, res) {
     try {
-    // TO ADD - get rating
-    const rating = 5;
+    const title = req.body.title;
+    if (!title) return res.status(400).json({ error: "Missing title parameter" });
 
-    // TO ADD - get durationMinutes
-    const durationMinutes = 100;
+    const rating = await getRating(req.body.title);
 
     // use uploaded files from multer (router uses upload.fields)
     const files = req.files || {};
     const coverFile = files.coverImageFile && files.coverImageFile[0];
     const videoFile = files.videoFile && files.videoFile[0];
-
-    // public URLs (public/ is served as root)
-    const coverImagePath = `/uploads/${coverFile.filename}`;
-    const videoPath = `/uploads/${videoFile.filename}`;
     
+    // public URLs (public/ is served as root)
+    const coverImagePath = path.join("public", "uploads", coverFile.filename);
+    const videoPath = path.join("public", "uploads", videoFile.filename);
+    
+    const durationMinutes = await getVideoDuration(videoPath);
+
     // normalize incoming fields
     const genre = Array.isArray(req.body.genre) ? req.body.genre : (req.body.genre ? [req.body.genre] : []);
     const cast = typeof req.body.cast === 'string' ? req.body.cast.split(',').map(s => s.trim()).filter(Boolean) : [];
-
+    
     const contentData = {
         title: req.body.title || 'Untitled',
         description: req.body.description || '',
@@ -50,13 +95,12 @@ async function handleContentSubmission(req, res) {
     await addContentService.addContent(contentData);
 
     // redirect back to the add form (or you can send JSON)
-    res.redirect("/content");
-    // TO ADD - send a banner of success to the user
+    res.redirect("/content?success=1");
 
     }
     catch (err) {
         console.log("Error in handleContentSubmission:", err);
-        res.status(500).send("Server error - controller");
+        res.redirect("/content?error=1");
 }
 };
 
