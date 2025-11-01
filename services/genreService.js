@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const getAllGenres = async () => {
     const genres = await Genres.find({});
     const genreNames = genres.map(g => g.name);
+    console.log("genreNames:", genreNames);
     return genreNames
 }
 

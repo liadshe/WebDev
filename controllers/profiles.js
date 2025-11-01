@@ -14,11 +14,10 @@ async function renderEditProfilePage(req, res) {
     if (!profile) return res.status(404).send("Profile not found");
 
     const genres = await genreService.getAllGenres();
-    const genreNames = genres.map(g => g.name); 
 
     res.render("editProfile", {
       profile,
-      genres: genreNames // 👈 Pass to EJS
+      genres
     });
   } catch (err) {
     console.error("Error loading edit profile page:", err);
