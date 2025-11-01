@@ -1,7 +1,7 @@
-const Content = require("../models/Content");
+const genreService = require("../services/genreService");
+const addContentService = require("../services/addContentService");
 
 async function renderMainPage(req, res) {
-  console.log("************************");
   try {
     // Check if user is logged in
     if (!req.session.user) {
@@ -9,23 +9,26 @@ async function renderMainPage(req, res) {
       return res.redirect("/login");
     }
 
+    // Fetch genres from the DB
+    const genres = await genreService.getAllGenres();
+    
     // Fetch movies from the DB
-    const movies = await Content.find({}).lean();
+    const movies = await addContentService.getAllContent();
 
-    // Pull data from session
-    const user = req.session.user;
-    const activeProfile = req.session.activeProfile || {
-      name: "Default Profile",
-    };
-    console.log("Session user:", user);
-    console.log(
-      `Rendering main page for user: ${user.username}, profile: ${activeProfile.name}`
-    );
-    console.log("Movies fetched:", movies.length);
-    console.log("Movies fetched:", movies);
+    // Group movies by genre
+    const moviesByGenre = {};
+    genres.forEach((g) => {
+      moviesByGenre[g] = movies.filter((movie) => movie.genre.includes(g));
+    });
+
+    console.log("Movies by genre:", Object.keys(moviesByGenre));
+
 
     // Render the main page
-    res.render("main", { movies, user, activeProfile });
+    res.render("main", { moviesByGenre: moviesByGenre,
+                         user: req.session.user,
+                         activeProfile: req.session.activeProfile || { name: "Default Profile" }
+                       });
   } catch (err) {
     console.error("Error fetching movies:", err);
     res.status(500).send("Failed to load movies");
