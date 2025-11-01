@@ -1,4 +1,4 @@
-const Content = require("../models/content");
+const Content = require("../models/Content");
 
 async function renderMainPage(req, res) {
   try {

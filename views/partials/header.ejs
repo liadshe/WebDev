@@ -7,6 +7,10 @@
       <li><a href="#">Games</a></li>
       <li><a href="#">New & Popular</a></li>
       <li><a href="#">My List</a></li>
+      <% if (user.username == 'admin') { %>
+        <li><a href="content">Add Content</a></li>
+  <% } %>
+
       <li><a href="#">Browse by Languages</a></li>
       <li class="switch-profile"><a href="profiles">Switch Profile</a></li>
       <li><a href="settings">&#9881;</a></li>

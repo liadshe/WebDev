@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 
 // views routes
 app.use("/", loginViewRouter);
-app.use("/main", express.static("main.html"));
+app.use("/main", mainViewRouter);
 app.use("/login", loginViewRouter);
 app.use("/register", registerViewRouter);
 app.use("/profiles", express.static("profiles.html"));

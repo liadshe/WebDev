@@ -423,3 +423,86 @@ main.add-content-page h1 {
   margin-top: 10px;
   display: block;
 }
+
+/* Forbidden Page */
+.forbidden-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+  color: white;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.forbidden-container {
+  background-color: #222;
+  padding: 50px 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.7);
+  max-width: 400px;
+  width: 90%;
+}
+
+.forbidden-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: shake 0.8s ease-in-out infinite;
+}
+
+.forbidden-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #ff6b6b;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.forbidden-container p {
+  font-size: 1.1rem;
+  color: #ccc;
+  margin-bottom: 25px;
+}
+
+.forbidden-btn {
+  display: inline-block;
+  padding: 12px 25px;
+  background: linear-gradient(90deg, #ff6b6b, #f06595);
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.forbidden-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 107, 107, 0.5);
+}
+
+/* Shake animation for icon */
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  50% { transform: rotate(10deg); }
+  75% { transform: rotate(-10deg); }
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .forbidden-container {
+    padding: 30px 20px;
+  }
+
+  .forbidden-icon {
+    font-size: 60px;
+  }
+
+  .forbidden-container h1 {
+    font-size: 2rem;
+  }
+}
+
+
+
