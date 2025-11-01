@@ -26,9 +26,6 @@ async function renderAddContentPage(req, res) {
       success: req.query.success == "1",
       error: req.query.error == "1",
     });
-  } catch (err) {
-    console.error("Error fetching genres:", err);
-  }
 }
 
 // fetch rating from OMDb API by title, if not found return null

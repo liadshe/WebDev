@@ -18,4 +18,8 @@ const addContent = async (contentData) => {
     return saved;
 };
 
-module.exports = { getAllGenres, addContent };
+const getAllContent = async () => {
+    const contents = await Content.find().populate("genre").lean();
+    return contents;
+}
+module.exports = { getAllGenres, addContent, getAllContent };
