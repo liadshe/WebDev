@@ -8,9 +8,9 @@
   </head>
   <body class="main-page">
     <%- include('partials/header') %>
-
+    
     <main>
-      <h1>To be continued...</h1>
+      <h1> Hello, <%= user.username %></h1>
 
       <% movies.forEach(movie => { %>
       <div class="cover" id="<%= movie._id %>">

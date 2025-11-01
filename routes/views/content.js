@@ -2,7 +2,8 @@ const express = require("express");
 const multer = require("multer");
 const path = require('path');
 const fs = require('fs');
-const { renderAddConentPage, handleContentSubmission } = require("../../controllers/content");
+const { renderAddContentPage, handleContentSubmission } = require("../../controllers/content");
+const checkAdmin = require("../../middlewares/checkAdmin");
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-router.get("/", renderAddConentPage);
+router.get("/", checkAdmin, renderAddContentPage);
 
 // accept both files (coverImageFile and videoFile)
 router.post("/", upload.fields([{ name: 'coverImageFile', maxCount: 1 }, { name: 'videoFile', maxCount: 1 }]), handleContentSubmission);
