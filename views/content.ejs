@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add New Content</title>
+  <link rel="stylesheet" href="/style.css">
+</head> 
+<body>
+  <header class="top-menu">
+    <nav class=>
+      <ul>
+        <li><a href="main" class="active">Home</a></li>
+        <li><a href="#">TV Shows</a></li>
+        <li><a href="#">Movies</a></li>
+        <li><a href="#">Games</a></li>
+        <li><a href="#">New & Popular</a></li>
+        <li><a href="#">My List</a></li>
+        <li><a href="#">Browse by Languages</a></li>
+        <li class="switch-profile"><a href="profiles">Switch Profile</a></li>
+        <li><a href="settings">&#9881;</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="add-content-page">
+    <h1>Add New Content</h1>
+
+    <% if (success) { %>
+    <div class="banner success">
+    ✅ Content uploaded successfully!
+    </div>
+  <% } %>
+
+  <% if (error) { %>
+    <div class="banner error">
+      ❌ There was an error uploading the content. Please try again.
+    </div>
+  <% } %>
+
+<form class="add-content-form" action="/content" method="POST" enctype="multipart/form-data">
+
+  <div class="form-row">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" required>
+  </div>
+
+  <div class="form-row">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" required></textarea>
+  </div>
+
+  <div class="form-row">
+    <label for="releaseYear">Year</label>
+    <input type="number" id="releaseYear" name="releaseYear" min="1800" max="2100">
+  </div>
+
+  <div class="form-row">
+    <label>Genre</label>
+    <div class="checkbox-group">
+        <% if (Array.isArray(genres) && genres.length) { %>
+        <% genres.forEach(function(genre) { %>
+          <label><input type="checkbox" name="genre" value="<%= genre %>"> <%= genre %></label>
+        <% }); %>
+      <% } else { %>
+        <p>No genres available.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <label for="actors">Actors (comma separated)</label>
+    <input type="text" id="actors" name="cast">
+  </div>
+
+  <div class="form-row">
+    <label for="director">Director</label>
+    <input type="text" id="director" name="director">
+  </div>
+
+  <div class="form-row">
+    <label for="coverImageFile">Cover Image</label>
+    <input type="file" id="coverImageFile" name="coverImageFile" accept="image/*">
+  </div>
+
+  <div class="form-row">
+    <label for="videoFile">Video File</label>
+    <input type="file" id="videoFile" name="videoFile" accept="video/*">
+  </div>
+
+  <div class="form-row">
+    <button type="submit">Add Content</button>
+  </div>
+
+</form>
+  </div>
+
+  </main>
+
+  <script>
+
+  // script to hide upload status banner after few seconds
+  setTimeout(() => {
+    const banner = document.querySelector('.banner');
+    if (banner) banner.style.display = 'none';
+  }, 4000); // hide after 4 seconds
+
+
+// script for previewing the cover image before upload
+  const coverInput = document.getElementById('coverImageFile');
+  const coverPreview = document.createElement('img');
+  coverPreview.id = 'coverPreview';
+  coverInput.parentNode.insertBefore(coverPreview, coverInput.nextSibling);
+
+  coverInput.addEventListener('change', function(){
+    const file = this.files[0];
+    if(file){
+      const reader = new FileReader();
+      reader.onload = function(e){
+        coverPreview.src = e.target.result;
+      }
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+
+  
+</body>
+</html>

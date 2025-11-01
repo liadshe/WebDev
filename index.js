@@ -2,12 +2,17 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const path = require("path");
 
+const mainViewRouter = require("./routes/views/main");
 const loginViewRouter = require("./routes/views/login");
 const registerViewRouter = require("./routes/views/register");
 const settingsViewRouter = require("./routes/views/settings");
+const contentViewRouter = require("./routes/views/content");
 const statisticsViewRouter = require("./routes/views/statistics");
+
 const profilesApiRouter = require("./routes/api/profiles");
+const watchApiRouter = require("./routes/api/watch");
 const statisticsApiRouter = require("./routes/api/statistics");
 
 dotenv.config();
@@ -35,6 +40,7 @@ app.use(
   })
 );
 
+
 app.use((req, res, next) => {
   console.log(`[${req.method}] ${req.url}`);
   next();
@@ -48,10 +54,11 @@ app.use("/register", registerViewRouter);
 app.use("/profiles", express.static("profiles.html"));
 app.use("/settings", settingsViewRouter);
 app.use("/statistics", statisticsViewRouter);
-
+app.use("/content", contentViewRouter);
 // api routes
 app.use("/api/profiles", profilesApiRouter);
 app.use("/api/statistics", statisticsApiRouter);
+app.use("/api/watch", express.json(), watchApiRouter);
 
 const PORT = parseInt(process.env.PORT);
 app.listen(PORT, () => {

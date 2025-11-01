@@ -40,8 +40,13 @@ async function handleLogin(req,res) {
     }
 
     // Create session
-    req.session.userId = user._id;
-    req.session.username = user.username;
+    req.session.user = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+    };
+    req.session.activeProfile = user.profiles[0]; // default to first profile
+
     await logService.createLog({
       level: "INFO",
       service: "Auth",
@@ -63,9 +68,9 @@ async function handleLogin(req,res) {
     req.session.error = "Something went wrong";
     res.redirect("/login");
   }
-};
+}
 
 module.exports = {
-    handleLogin,
-    renderLoginPage
+  handleLogin,
+  renderLoginPage,
 };
