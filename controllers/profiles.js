@@ -93,7 +93,7 @@ async function createProfile(req, res) {
     let preferences = req.body.preferences;
     if (typeof preferences === 'string') preferences = [preferences];
     if (!Array.isArray(preferences)) preferences = [];
-  const picture = req.body.newPicture || req.body.picture || 'default.jpg';
+    const picture = req.body.newPicture || req.body.picture || 'default.jpg';
 
     if (!displayName) {
       req.session.error = 'Profile name is required';
@@ -125,12 +125,10 @@ async function renderProfileCreationPage(req,res) {
     if (!user) return res.status(404).send("User not found");
 
     const genres = await genreService.getAllGenres();
-    const genreNames = genres.map(g => g.name);
-
     const profilesCount = user.profiles ? user.profiles.length : 0;
 
     res.render("createProfile", {
-      genres: genreNames,
+      genres: genres,
       profilesCount
     });
   } catch (err) {

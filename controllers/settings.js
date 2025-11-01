@@ -36,7 +36,6 @@ async function renderEditProfile(req, res) {
   const userId = req.session.user._id;
   if (!userId) return res.redirect('/login');
   const profileId = req.params.profileId;
-  const profiles = await loginService.getUserProfiles({ _id: userId });
   const profile = loginService.getUserProfiles({ _id: userId }).then(user => user.profiles.id(profileId));
     if (!profile) return res.status(404).send('Profile not found');
     res.render('editProfile', { profile });
