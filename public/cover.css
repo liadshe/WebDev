@@ -10,7 +10,6 @@
   background: #000;
 }
 
-/* Hidden class to hide video until activated */
 .hidden {
   display: none;
 }
@@ -44,7 +43,6 @@
   cursor: pointer;
 }
 
-/* Fade out cover and play button when playing */
 .cover.playing .cover-image,
 .cover.playing .play-overlay {
   opacity: 0;
@@ -63,7 +61,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
   background: #000;
   border-radius: 6px;
   cursor: pointer;
@@ -88,20 +85,17 @@
   pointer-events: none;
 }
 
-/* === Hover to show === */
 .cover:hover .controls,
 .controls.show {
   opacity: 1;
   pointer-events: auto;
 }
 
-/* === Keep visible when paused === */
 .cover.paused .controls {
   opacity: 1;
   pointer-events: auto;
 }
 
-/* Buttons */
 .controls button {
   background: none;
   border: none;
@@ -110,22 +104,15 @@
   cursor: pointer;
 }
 
-/* === TIMELINE SLIDER === */
+/* === TIMELINE === */
 .timeline {
   flex: 1;
-  cursor: pointer;
   appearance: none;
   height: 4px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
   overflow: hidden;
-}
-
-/* Red progress bar */
-.timeline::-webkit-slider-thumb {
-  appearance: none;
-  width: 0;
-  height: 0;
 }
 
 .timeline::-webkit-slider-runnable-track {
@@ -136,6 +123,103 @@
   );
   height: 4px;
   border-radius: 4px;
+}
+
+.timeline::-webkit-slider-thumb {
+  appearance: none;
+  width: 0;
+  height: 0;
+}
+
+/* === TIME DISPLAY === */
+.time-display {
+  color: #fff;
+  font-size: 14px;
+  font-family: monospace;
+  min-width: 95px;
+  text-align: right;
+}
+
+/* === HOVER-TO-SHOW HORIZONTAL VOLUME === */
+.volume-control {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: 6px;
+}
+
+.volumeToggle {
+  font-size: 18px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.volumeToggle:hover {
+  transform: scale(1.1);
+}
+
+/* hidden by default */
+.volumeSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+  transition: width 0.25s ease, opacity 0.25s ease;
+  margin-top: 0;
+  vertical-align: middle;
+  position: relative;
+}
+
+/* show on hover */
+.volume-control:hover .volumeSlider {
+  width: 70px; /* shorter red line */
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --- centered red thumb --- */
+.volumeSlider::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 4px;
+  border-radius: 4px;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: red;
+  cursor: pointer;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%); /* centers thumb vertically */
+  border: none;
+}
+
+.volumeSlider::-moz-range-track {
+  background: transparent;
+  height: 4px;
+  border-radius: 4px;
+}
+
+.volumeSlider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: red;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* === RESPONSIVE === */
@@ -155,12 +239,4 @@
     gap: 6px;
     padding: 6px 8px;
   }
-}
-/* Time display (current / total) */
-.time-display {
-  color: #fff;
-  font-size: 14px;
-  font-family: monospace;
-  min-width: 95px;
-  text-align: right;
 }
