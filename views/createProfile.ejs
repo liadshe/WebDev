@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Create New Profile</title>
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/settings.css">
 </head>
 <body class="edit-profile-page">
 <a href="/settings">
@@ -35,7 +35,7 @@
             <input type="text" id="displayName" name="displayName" 
                                 value="" 
                                 required minlength="2" maxlength="50"
-                                placeholder="Enter new display name">
+                                placeholder="">
         </section>
 
         <section style="text-align: left; margin-top:1rem;">
@@ -46,7 +46,8 @@
                     <input
                         type="checkbox"
                         name="preferences"
-                        value="<%= genre %>">
+                        value="<%= genre %>"
+                    />
                     <span class="text-sm font-medium text-white"><%= genre %></span>
                 </label>
             <% }) %>

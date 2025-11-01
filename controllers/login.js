@@ -33,7 +33,7 @@ async function handleLogin(req,res) {
         level: "WARN",
         service: "Auth",
         message: `Failed login attempt: Invalid password for user '${user.username}'.`,
-        userId: user._id,
+        userId: user.id,
       });
       req.session.error = "Invalid password";
       return res.redirect("/login");

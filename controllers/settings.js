@@ -4,7 +4,7 @@ const loginService = require("../services/loginService");
 
 async function renderSettingsPage(req, res) {
   try {
-    const userId = req.session.userId; 
+    const userId = req.session.user._id; 
 
     if (!userId) {
       return res.redirect("/login");
@@ -21,6 +21,7 @@ async function renderSettingsPage(req, res) {
     }));
 
     res.render("settings", {
+      userId : req.session.user._Id,
       username: req.session.username, 
       profiles: mappedProfiles
     });
@@ -32,10 +33,9 @@ async function renderSettingsPage(req, res) {
 
 async function renderEditProfile(req, res) {
   try {
-  const userId = req.session.userId;
+  const userId = req.session.user._id;
   if (!userId) return res.redirect('/login');
   const profileId = req.params.profileId;
-  const profiles = await loginService.getUserProfiles({ _id: userId });
   const profile = loginService.getUserProfiles({ _id: userId }).then(user => user.profiles.id(profileId));
     if (!profile) return res.status(404).send('Profile not found');
     res.render('editProfile', { profile });
