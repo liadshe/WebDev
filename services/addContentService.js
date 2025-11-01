@@ -12,7 +12,6 @@ const getAllGenres = async () => {
 
 // add content to db
 const addContent = async (contentData) => {
-    console.log("Adding content to database:", contentData);    
     // Implementation for adding content to the database
     const newContent = new Content(contentData);
     const saved = await newContent.save();

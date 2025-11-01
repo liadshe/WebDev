@@ -353,3 +353,33 @@ main.add-content-page h1 {
     padding: 20px;
   }
 }
+
+/* Success and Error Banners */
+.banner {
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-weight: bold;
+  text-align: center;
+}
+
+.banner.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.banner.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+ /* Image Preview Styling */
+#coverPreview {
+  max-width: 50px;
+  max-height: 50px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  display: block;
+}

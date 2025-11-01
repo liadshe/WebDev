@@ -6,3 +6,6 @@ node_modules/
 
 # Test users creation script
 createTestUsers.js
+
+# uploads folder
+uploads/

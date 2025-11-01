@@ -23,6 +23,19 @@
   </header>
   <main class="add-content-page">
     <h1>Add New Content</h1>
+
+    <% if (success) { %>
+    <div class="banner success">
+    ✅ Content uploaded successfully!
+    </div>
+  <% } %>
+
+  <% if (error) { %>
+    <div class="banner error">
+      ❌ There was an error uploading the content. Please try again.
+    </div>
+  <% } %>
+
 <form class="add-content-form" action="/content" method="POST" enctype="multipart/form-data">
 
   <div class="form-row">
@@ -82,9 +95,17 @@
 
   </main>
 
-   <!-- script for previewing the cover image before upload -->
   <script>
-  const coverInput = document.getElementById('coverImage');
+
+  // script to hide upload status banner after few seconds
+  setTimeout(() => {
+    const banner = document.querySelector('.banner');
+    if (banner) banner.style.display = 'none';
+  }, 4000); // hide after 4 seconds
+
+
+// script for previewing the cover image before upload
+  const coverInput = document.getElementById('coverImageFile');
   const coverPreview = document.createElement('img');
   coverPreview.id = 'coverPreview';
   coverInput.parentNode.insertBefore(coverPreview, coverInput.nextSibling);

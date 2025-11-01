@@ -2,9 +2,9 @@ const express = require("express");
 const multer = require("multer");
 const path = require('path');
 const fs = require('fs');
-const router = express.Router();
-
 const { renderAddConentPage, handleContentSubmission } = require("../../controllers/content");
+
+const router = express.Router();
 
 // ensure uploads dir exists
 const uploadsDir = path.join(__dirname, '../../public/uploads');
