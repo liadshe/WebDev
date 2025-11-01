@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
 const loginService = require("../services/loginService");
 const logService = require("../services/logService");
 

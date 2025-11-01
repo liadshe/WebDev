@@ -44,7 +44,8 @@
      <input type="hidden" name="action" value="update_preferences">
 
     <% 
-    const sortedGenres = genres.sort((a,b) => {
+    // Create a copy of the genres array before sorting to avoid mutating the original
+    const sortedGenres = [...genres].sort((a,b) => {
         const aChecked = profile.genrePreferences.includes(a);
         const bChecked = profile.genrePreferences.includes(b);
         return bChecked - aChecked;
@@ -53,7 +54,7 @@
 
 
     <div class="pref-box">
-      <% genres.forEach(genre => { %>
+      <% sortedGenres.forEach(genre => { %>
         <label class="pref-label">
           <input
             type="checkbox"
