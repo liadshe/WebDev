@@ -4,10 +4,13 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const path = require("path");
 
+const mainViewRouter = require("./routes/views/main");
 const loginViewRouter = require("./routes/views/login");
 const settingsViewRouter = require("./routes/views/settings");
-const profilesApiRouter = require("./routes/api/profiles");
 const contentViewRouter = require("./routes/views/content");
+
+const profilesApiRouter = require("./routes/api/profiles");
+const watchApiRouter = require("./routes/api/watch");
 
 dotenv.config();
 const app = express();
@@ -17,12 +20,13 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 
 // Connect to MongoDB
-mongoose.connect(process.env.DB_CONNECTION, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log("MongoDB connected"))
-.catch(err => console.error("MongoDB connection error:", err));
+mongoose
+  .connect(process.env.DB_CONNECTION, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
 // Session middleware
 app.use(
@@ -30,20 +34,24 @@ app.use(
     secret: "yourSecretKey",
     resave: false,
     saveUninitialized: false,
-  }));
+  })
+);
 
 // views routes
-app.use("/main", express.static("main.html"));
-app.use("/login",loginViewRouter);
+// app.use("/main", express.static("main.html"));
+app.use("/main", mainViewRouter);
+app.use("/login", loginViewRouter);
 app.use("/profiles", express.static("profiles.html"));
 app.use("/settings", settingsViewRouter);
 app.use("/content", contentViewRouter);
+
 app.get("/statistics", (req, res) => {
   res.render("statistics");
 });
 
 // api routes
 app.use("/api/profiles", profilesApiRouter);
+app.use("/api/watch", express.json(), watchApiRouter);
 
 app.post("/test", (req, res) => {
   res.send("POST /test works");
@@ -51,5 +59,5 @@ app.post("/test", (req, res) => {
 
 const PORT = parseInt(process.env.PORT);
 app.listen(PORT, () => {
-    console.log("Server is running");
+  console.log("Server is running");
 });

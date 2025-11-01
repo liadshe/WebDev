@@ -8,9 +8,11 @@ const ContentSchema = new mongoose.Schema({
   director: { type: String },
   releaseYear: { type: Number },
   durationMinutes: { type: Number },
+  durationSeconds: { type: Number },
   rating: { type: String }, // from IMDB or similar
   videoPath: { type: String },
-  coverImagePath: { type: String }
+  coverImagePath: { type: String },
 });
 
-module.exports = mongoose.model("Content", ContentSchema);
+module.exports =
+  mongoose.models.Content || mongoose.model("Content", ContentSchema);
