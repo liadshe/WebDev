@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Profile - <%= profile.name %></title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body class="edit-profile-page">
+    <a href="/settings">
+        ← Back 
+    </a> 
+<div class="card-bg">
+        <h2>
+        Edit Profile: <%= profile.name %>
+    </h2>
+    <div class="flex-container">
+        <div class="col-left">
+            <img id="current-profile-picture" 
+                    src="<%= "/images/" + (profile.picture || 'default.png') %>" 
+                    alt="<%= profile.name %>">  
+                    <button id="open-picture-modal">
+                Change Avatar
+            </button>                                
+        </div>
+            <div class="col-right">
+                <section style="text-align: left;">
+                    <h3>Update Profile Name</h3>
+                        <form action="/api/profiles/update/<%= profile.id %>" method="POST">
+                        <input type="hidden" name="action" value="update_name">
+                        <input type="text" id="displayName" name="displayName" 
+                                value="<%= profile.displayName || profile.name %>" 
+                                required minlength="2" maxlength="50"
+                                placeholder="Enter new display name">
+                        <button type="submit" class="btn">
+                            Save Name
+                        </button>
+                    </form>
+                </section>
+
+<section style="text-align: left;">
+  <h3>Genres Preferences</h3>
+    <form action="/api/profiles/update/<%= profile._id %>" method="POST">
+     <input type="hidden" name="action" value="update_preferences">
+
+    <% 
+    // Create a copy of the genres array before sorting to avoid mutating the original
+    const sortedGenres = [...genres].sort((a,b) => {
+        const aChecked = profile.genrePreferences.includes(a);
+        const bChecked = profile.genrePreferences.includes(b);
+        return bChecked - aChecked;
+    });
+    %>
+
+
+    <div class="pref-box">
+      <% sortedGenres.forEach(genre => { %>
+        <label class="pref-label">
+          <input
+            type="checkbox"
+            name="preferences"
+            value="<%= genre %>"
+            <%= profile.genrePreferences.includes(genre) ? 'checked' : '' %>>
+          <span class="text-sm font-medium text-white"><%= genre %></span>
+        </label>
+      <% }) %>
+    </div>
+
+
+    <button type="submit" class="btn" style="align-self: flex-start;">
+      Save Preferences
+    </button>
+  </form>
+</section>
+            </div>
+        </div>
+
+        <div>
+            <form action="/api/profiles/delete/<%= profile._id %>" method="POST" onsubmit="return confirmDelete()" style="display: inline-block;">
+                 <input type="hidden" name="action" value="delete_profile">
+                <button type="submit" class="btn-danger">
+                    Permanently delete this profile and its viewing history
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+<div id="picture-modal">
+    <div class="modal-content">
+        <h3 class="text-2xl font-bold mb-6 text-white">Select New Avatar</h3>
+        <% 
+            const availableAvatars = ['cow.jpg', 'horse.jpg', 'mouse.jpg', 'pig.jpg'];
+        %>
+
+        <div class="avatar-grid">
+            <% availableAvatars.forEach(avatar => { %>
+                <div style="position: relative;">
+                    <img src="<%= "/images/" + avatar %>" 
+                            alt="<%= avatar %>" 
+                            data-picture-name="<%= avatar %>"
+                            class="avatar-select <%= profile.picture === avatar ? 'selected' : '' %>">
+                </div>
+            <% }); %>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; column-gap: 1rem; margin-top: 1.5rem;">
+            <button id="close-picture-modal" class="btn-secondary">Cancel</button>
+            <form id="picture-update-form" action="/api/profiles/update/<%= profile._id %>" method="POST" style="display: inline-block;">
+                <input type="hidden" name="action" value="update_picture">
+                <input type="hidden" name="newPicture" id="new-picture-input">
+                <button type="submit" id="save-picture-btn" class="btn-secondary" disabled>
+                    Save New Picture
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete() {
+        const isConfirmed = window.prompt("To confirm deletion, type 'DELETE' in the box below:");
+        return isConfirmed === 'DELETE';
+    }
+
+    const pictureModal = document.getElementById('picture-modal');
+    const openModalBtn = document.getElementById('open-picture-modal');
+    const closeModalBtn = document.getElementById('close-picture-modal');
+    const savePictureBtn = document.getElementById('save-picture-btn');
+    const newPictureInput = document.getElementById('new-picture-input');
+    const avatarSelectors = document.querySelectorAll('.avatar-select');
+    let selectedPicture = "<%= profile.picture %>"; 
+
+    // Open Modal
+    openModalBtn.addEventListener('click', () => {
+        pictureModal.classList.remove('hidden');
+        pictureModal.classList.add('flex');
+        savePictureBtn.disabled = true; 
+        newPictureInput.value = ""; 
+    });
+
+    // Close Modal
+    closeModalBtn.addEventListener('click', () => {
+        pictureModal.classList.add('hidden');
+        pictureModal.classList.remove('flex');
+    });
+
+    // Handle Avatar Selection
+    avatarSelectors.forEach(img => {
+        img.addEventListener('click', () => {
+            const pictureName = img.dataset.pictureName;
+            
+            avatarSelectors.forEach(i => {
+                i.classList.remove('selected');
+                i.style.borderColor = 'transparent';
+            });
+
+            img.classList.add('selected');
+            img.style.borderColor = '#f58799';
+
+            // Update form data and enable button
+            selectedPicture = pictureName;
+            newPictureInput.value = pictureName;
+            savePictureBtn.disabled = false;
+        });
+    });
+
+    // Set the initial selected picture border when the modal opens
+    document.addEventListener('DOMContentLoaded', () => {
+        const currentPictureName = "<%= profile.picture %>";
+        const currentImg = document.querySelector(`.avatar-select[data-picture-name="${currentPictureName}"]`);
+        if (currentImg) {
+            currentImg.classList.add('selected');
+            currentImg.style.borderColor = 'var(--color-red-600)';
+        }
+    });
+</script>
+</body>
+</html>

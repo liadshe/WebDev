@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <title>Main Page</title>
   <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="settings-page">
-     <!-- Sidebar -->
   <div class="sidebar">
     <a href="/main" class="back-link">
         ← Back to main page
@@ -14,6 +14,65 @@
     <a href="/settings">Manage Profiles</a>
     <a href="/statistics" class="active">Statistics</a>
   </div>
-  <h1>here will be graphs from DB</h1>
+  <div style="margin: auto;">
+    <h2>profiles genres preferences</h2>
+    <canvas id="genrePopularityChart"></canvas>
+    <p id="no-data-message" style="display: none; text-align: center; color: var(--color-gray-300);">
+      No genre data available to display.
+    </p>
+  </div>
+
+  <div style="margin: auto;">
+      <h1>next graph here</h1>
+  </div>
+
+  <script>
+    const chartData = <%- JSON.stringify(genreData || []) %>;
+    console.log(chartData);
+    if (chartData.length > 0) {
+        const labels = chartData.map(item => item.label);
+        const dataValues = chartData.map(item => item.value);
+
+        // Generate random colors for each genre
+        function generateRandomColors(count) {
+          const colors = [];
+          for (let i = 0; i < count; i++) {
+            const r = Math.floor(Math.random() * 255);
+            const g = Math.floor(Math.random() * 255);
+            const b = Math.floor(Math.random() * 255);
+            colors.push(`rgb(${r}, ${g}, ${b})`);
+          }
+          return colors;
+        }
+
+        const backgroundColors = generateRandomColors(labels.length);
+        const ctx = document.getElementById('genrePopularityChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Profiles',
+                    data: dataValues,
+                    backgroundColor: backgroundColors,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'left' },
+                    title: {
+                        display: false,
+                        text: 'Your profiles preferences'
+                    }
+                }
+            }
+        });
+    } else {
+        document.getElementById('no-data-message').style.display = 'block';
+    }
+  </script>
 </body>
 </html>

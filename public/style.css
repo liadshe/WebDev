@@ -19,21 +19,56 @@ body {
   background: #222;
   border-radius: 10px;
 }
-.login-box input {
+.login-box input[type="text"],
+.login-box input[type="email"],
+.login-box input[type="password"] {
   width: 90%;
   padding: 10px;
-  margin: 10px 0;
+  margin: 10px auto;
   border: none;
   border-radius: 5px;
+  background: white;
+  color: black;
+  display: block;
+  box-sizing: border-box;
 }
+
 .btn {
   display: inline-block;
   padding: 10px 20px;
   margin-top: 10px;
-  background: pink;
+  background: #f58799;
   color: white;
+  font-weight: bold;
   text-decoration: none;
   border-radius: 5px;
+}
+
+.popup-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  background: #ff4d4d;
+  color: white;
+  text-align: center;
+  padding: 1em 0;
+  font-size: 1.2em;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.5s;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.register-section p {
+  margin-bottom: 4px;
 }
 
 /* Profiles Page */
@@ -85,7 +120,12 @@ body {
 
 /* Main Page */
 .top-menu {
-  background: linear-gradient(90deg, #141414, #1f1f1f, #141414);
+  background: linear-gradient(
+    90deg,
+    #141414,
+    #1f1f1f,
+    #141414
+  ); /* sleek gradient */
   padding: 12px 30px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   position: sticky;
@@ -146,8 +186,8 @@ body {
   height: 100vh;
   background: #111;
   color: white;
-  display: flex;
-  flex-direction: row;
+  display: flex; /* <-- ensures sidebar + content are side by side */
+  flex-direction: row; /* <-- row layout, not stacked */
 }
 
 /* Sidebar */
@@ -183,13 +223,13 @@ body {
 
 /* Special styling for Back option */
 .back-link {
-  margin-bottom: 20px;
-  padding: 16px 20px;
-  border-bottom: 1px solid #333;
+  margin-bottom: 20px; /* extra spacing below */
+  padding: 16px 20px; /* more padding so it stands out */
+  border-bottom: 1px solid #333; /* optional separator line */
 }
 
 .manage-profiles {
-  flex: 1;
+  flex: 1; /* take the remaining space */
   padding: 30px;
   background: #222;
   overflow-y: auto;
@@ -245,111 +285,3 @@ body {
 
 /* ===========================
    Add Content Page
-=========================== */
-main.add-content-page {
-  max-width: 800px;
-  margin: 50px auto;
-  padding: 30px;
-  background-color: #1f1f1f;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  text-align: left;
-}
-
-main.add-content-page h1 {
-  text-align: center;
-  color: #ff6b6b;
-  margin-bottom: 30px;
-  font-size: 2.2rem;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-}
-
-/* Form Fields */
-.add-content-form label {
-  display: block;
-  margin-top: 20px;
-  font-weight: bold;
-  color: #f1f1f1;
-}
-
-.add-content-form input[type="text"],
-.add-content-form input[type="number"],
-.add-content-form textarea,
-.add-content-form input[type="file"] {
-  width: 100%;
-  padding: 12px;
-  margin-top: 8px;
-  border-radius: 8px;
-  border: 1px solid #333;
-  background-color: #2a2a2a;
-  color: #fff;
-  font-size: 1rem;
-}
-
-.add-content-form .form-row {
-  display: flex;
-  flex-direction: column; /* stack label above input */
-  margin-bottom: 20px; /* space between rows */
-  width: 100%;
-}
-
-.add-content-form textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-/* Genre / Actors checkboxes */
-.checkbox-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-top: 8px;
-}
-
-.checkbox-group label {
-  display: flex;
-  align-items: center;
-  font-weight: normal;
-  color: #ccc;
-}
-
-.checkbox-group input[type="checkbox"] {
-  margin-right: 5px;
-}
-
-/* Submit Button */
-.add-content-form button {
-  margin-top: 25px;
-  padding: 12px 25px;
-  background: linear-gradient(90deg, #ff6b6b, #f06595);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.add-content-form button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5);
-}
-
-/* Live Image Preview */
-#coverPreview {
-  margin-top: 10px;
-  max-width: 200px;
-  max-height: 200px;
-  border-radius: 8px;
-  border: 2px solid #333;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  main.add-content-page {
-    margin: 20px;
-    padding: 20px;
-  }
-}
-

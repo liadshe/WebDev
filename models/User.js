@@ -18,4 +18,18 @@ const UserSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+UserSchema.pre("save", function (next) {
+  if (this.isNew && (!this.profiles || this.profiles.length === 0)) {
+    this.profiles = [
+      {
+        name: this.username, // default profile name
+        picture: "cow.jpg", // default picture
+        genrePreferences: [],
+        likedContent: [],
+      },
+    ];
+  }
+  next();
+});
+
 module.exports = mongoose.model("User", UserSchema);

@@ -1,17 +1,13 @@
 const express = require("express");
 const router = express.Router();
-//const { getAllProfiles } = require("../../controllers/settings");
+const User = require("../../models/User");
 const profileController = require("../../controllers/profiles");
 
-// READ - get all profiles
-router.get("/", profileController.getAllProfiles);
-
-// READ - get profile by name
-router.get("/name/:name", profileController.getProfileByName);
-
-// READ - get profile by id
-router.get("/:id", profileController.getProfileById);
-
+// Handle updates to a profile
+router.post("/update/:profileId", profileController.updateProfile);
+router.post("/delete/:profileId", profileController.deleteProfile);
+router.post("/createProfile", profileController.createProfile)
 
 module.exports = router;
+
 
