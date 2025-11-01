@@ -8,7 +8,7 @@ const path = require("path"); // to handle file paths
 dotenv.config();
 
 // render add-content page by ejs file named content.ejs
-async function renderAddConentPage(req, res){
+async function renderAddContentPage(req, res) {  
     try {
         const genres = await addContentService.getAllGenres();
         if (!genres) {
@@ -105,6 +105,6 @@ async function handleContentSubmission(req, res) {
 };
 
 module.exports = {
-    renderAddConentPage,
+    renderAddContentPage,
     handleContentSubmission
 };

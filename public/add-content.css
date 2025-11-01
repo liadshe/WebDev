@@ -1,0 +1,137 @@
+main.add-content-page {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #1f1f1f;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  text-align: left;
+}
+
+main.add-content-page h1 {
+  text-align: center;
+  color: #ff6b6b;
+  margin-bottom: 30px;
+  font-size: 2.2rem;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+/* Form Fields */
+.add-content-form label {
+  display: block;
+  margin-top: 20px;
+  font-weight: bold;
+  color: #f1f1f1;
+}
+
+.add-content-form input[type="text"],
+.add-content-form input[type="number"],
+.add-content-form textarea,
+.add-content-form input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background-color: #2a2a2a;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.add-content-form .form-row {
+  display: flex;
+  flex-direction: column; /* stack label above input */
+  margin-bottom: 20px;   /* space between rows */
+  width: 100%;
+}
+
+
+.add-content-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Genre / Actors checkboxes */
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 8px;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  color: #ccc;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* Submit Button */
+.add-content-form button {
+  margin-top: 25px;
+  padding: 12px 25px;
+  background: linear-gradient(90deg, #ff6b6b, #f06595);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-content-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5);
+}
+
+/* Live Image Preview */
+#coverPreview {
+  margin-top: 10px;
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 8px;
+  border: 2px solid #333;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  main.add-content-page {
+    margin: 20px;
+    padding: 20px;
+  }
+}
+
+/* Success and Error Banners */
+.banner {
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-weight: bold;
+  text-align: center;
+}
+
+.banner.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.banner.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+ /* Image Preview Styling */
+#coverPreview {
+  max-width: 50px;
+  max-height: 50px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  display: block;
+}
