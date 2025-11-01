@@ -10,6 +10,7 @@ const registerViewRouter = require("./routes/views/register");
 const settingsViewRouter = require("./routes/views/settings");
 const contentViewRouter = require("./routes/views/content");
 const statisticsViewRouter = require("./routes/views/statistics");
+const profilesViewRouter = require("./routes/views/profiles");
 
 const profilesApiRouter = require("./routes/api/profiles");
 const watchApiRouter = require("./routes/api/watch");
@@ -50,10 +51,11 @@ app.use("/", loginViewRouter);
 app.use("/main", mainViewRouter);
 app.use("/login", loginViewRouter);
 app.use("/register", registerViewRouter);
-app.use("/profiles", express.static("profiles.html"));
+app.use("/profiles", profilesViewRouter);
 app.use("/settings", settingsViewRouter);
 app.use("/statistics", statisticsViewRouter);
 app.use("/content", contentViewRouter);
+
 // api routes
 app.use("/api/profiles", profilesApiRouter);
 app.use("/api/statistics", statisticsApiRouter);

@@ -10,20 +10,19 @@ function renderLoginPage(req, res) {
   res.render("login", { error, showRegister });
 }
 
+async function handleLogin(req, res) {
+  const { email, password } = req.body;
 
-async function handleLogin(req,res) {
-    const { email, password } = req.body;
-    
-    try {
+  try {
     const user = await loginService.getUserByEmail({ email });
     if (!user) {
-        await logService.createLog({
-          level: "WARN",
-          service: "Auth",
-          message: `Failed login attempt: User not found for email '${email}'.`,
-        });
-        req.session.error = "User not found";
-      return res.redirect("/login"); 
+      await logService.createLog({
+        level: "WARN",
+        service: "Auth",
+        message: `Failed login attempt: User not found for email '${email}'.`,
+      });
+      req.session.error = "User not found";
+      return res.redirect("/login");
     }
 
     // Compare passwords
@@ -45,7 +44,7 @@ async function handleLogin(req,res) {
       username: user.username,
       email: user.email,
     };
-    req.session.activeProfile = user.profiles[0]; // default to first profile
+    // req.session.activeProfile = user.profiles[0]; // default to first profile
 
     await logService.createLog({
       level: "INFO",
@@ -56,8 +55,7 @@ async function handleLogin(req,res) {
     console.log("User logged in:", user.username);
 
     // Redirect to main page after login
-    res.redirect("/main");
-
+    res.redirect("/profiles");
   } catch (err) {
     await logService.createLog({
       level: "ERROR",
