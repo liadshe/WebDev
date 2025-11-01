@@ -5,7 +5,7 @@ const genreService = require("../services/genreService");
 async function renderEditProfilePage(req, res) {
   try {
     const { profileId } = req.params;
-    const userId = req.session.userId;
+    const userId = req.session.user._id;
 
     const user = await loginService.getUserById(userId);
     if (!user) return res.status(404).send("User not found");
@@ -27,7 +27,7 @@ async function renderEditProfilePage(req, res) {
 
 async function updateProfile(req, res) {
   try {
-    const userId = req.session.userId; 
+    const userId = req.session.user._id; 
     const profileId = req.params.profileId;
     const newName = req.body.displayName;
     const { action } = req.body;
@@ -55,7 +55,7 @@ async function updateProfile(req, res) {
 async function deleteProfile(req, res) {
   try {
     const { profileId } = req.params;
-    const userId = req.session.userId;
+    const userId = req.session.user._id;
 
     const user = await loginService.getUserById(userId);
     if (!user) return res.status(404).send("User not found");
@@ -75,7 +75,7 @@ async function deleteProfile(req, res) {
 
 async function createProfile(req, res) {
   try {
-    const userId = req.session.userId;
+    const userId = req.session.user._id;
 
     if (!userId) return res.status(401).send('Not authenticated');
 
@@ -119,7 +119,7 @@ async function createProfile(req, res) {
 
 async function renderProfileCreationPage(req,res) {
     try {
-    const userId = req.session.userId;
+    const userId = req.session.user._id;
 
     const user = await loginService.getUserById(userId);
     if (!user) return res.status(404).send("User not found");

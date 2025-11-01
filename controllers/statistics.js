@@ -1,7 +1,7 @@
 const genreService = require('../services/genreService');
 
 const getGenresData =  async (req, res) => {
-    const userId = req.session.userId;
+    const userId = req.session.user._id;
 
     try {
         const data = await genreService.getUserGenrePopularity(userId);
@@ -21,7 +21,7 @@ const getGenresData =  async (req, res) => {
 
 async function renderStatisticsPage(req, res) {
   try {
-    const userId = req.session.userId; 
+    const userId = req.session.user._id;
 
     if (!userId) {
       return res.redirect("/login");
