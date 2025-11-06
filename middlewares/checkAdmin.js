@@ -1,13 +1,17 @@
-function checkAdmin(req, res, next) { 
-  try{ 
-  if ((!req.session.user) || (req.session.user.username !== 'admin')) {
-    console.log(`user ${req.session.user.username} not permitted`); // convert to real log
-    return res.status(403).render('forbidden', { message: 'Access denied: Admins only' });
-  } else {
-    next();
-  } 
-}catch(err){   
-    return res.status(403).render('forbidden', { message: 'Access denied: Admins only' });
-}
+function checkAdmin(req, res, next) {
+  try {
+    if (!req.session.user || req.session.user.username !== "admin") {
+      console.log(`user ${req.session.user.username} not permitted`); // convert to real log
+      return res
+        .status(403)
+        .render("forbidden", { message: "Access denied: Admins only" });
+    } else {
+      next();
+    }
+  } catch (err) {
+    return res
+      .status(403)
+      .render("forbidden", { message: "Access denied: Admins only" });
+  }
 }
 module.exports = checkAdmin;
