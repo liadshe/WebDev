@@ -12,8 +12,6 @@
       return;
     }
 
-
-
     // Open search box
     searchIcon.addEventListener('click', function(e) {
       e.stopPropagation();
@@ -139,10 +137,8 @@
         const noResultsDiv = document.createElement('div');
         noResultsDiv.className = 'no-results-message';
         noResultsDiv.innerHTML = `
-          <div class="no-results-icon">🔍</div>
           <h2>No movies found</h2>
           <p>No results for "${escapeHtml(query)}"</p>
-          <p class="no-results-hint">Try searching for something else</p>
         `;
         main.appendChild(noResultsDiv);
       }
