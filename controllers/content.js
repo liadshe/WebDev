@@ -7,25 +7,26 @@ const path = require("path"); // to handle file paths
 dotenv.config();
 
 // render add-content page by ejs file named content.ejs
-async function renderAddContentPage(req, res) {  
-    try {
-        const genres = await addContentService.getAllGenres();
-        if (!genres) {
-            console.log("No genres found, using empty array");
-        }
-        res.render("content", { genres,
-            success:  req.query.success == '1',
-            error: req.query.error == '1'
-         });
-    }
-    catch (err) {
-        console.error("Error fetching genres:", err);
+async function renderAddContentPage(req, res) {
+  try {
+    const genres = await addContentService.getAllGenres();
+    if (!genres) {
+      console.log("No genres found, using empty array");
     }
     res.render("content", {
       genres,
       success: req.query.success == "1",
       error: req.query.error == "1",
     });
+    return;
+  } catch (err) {
+    console.error("Error fetching genres:", err);
+  }
+  res.render("content", {
+    genres,
+    success: req.query.success == "1",
+    error: req.query.error == "1",
+  });
 }
 
 // fetch rating from OMDb API by title, if not found return null
@@ -115,6 +116,6 @@ async function handleContentSubmission(req, res) {
 }
 
 module.exports = {
-    renderAddContentPage,
-    handleContentSubmission
+  renderAddContentPage,
+  handleContentSubmission,
 };
