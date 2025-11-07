@@ -1,7 +1,6 @@
 const Content = require("../models/Content");
 
 async function renderMainPage(req, res) {
-  console.log("************************");
   try {
     // Check if user is logged in
     if (!req.session.user) {

@@ -45,9 +45,13 @@ async function handleRegister(req, res) {
       userId: newUser._id,
     });
     console.log("User registered:", newUser.username);
-    res.redirect("/main");
+    res.redirect("/profiles");
   } catch (err) {
-    logService.createLog({ level: "ERROR", service: "Auth", message: `Registration error: ${err.message}.` });
+    logService.createLog({
+      level: "ERROR",
+      service: "Auth",
+      message: `Registration error: ${err.message}.`,
+    });
     console.error("Registration error:", err);
     req.session.error = "Something went wrong during registration";
     req.session.showRegister = true;
