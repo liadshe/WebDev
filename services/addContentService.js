@@ -1,5 +1,6 @@
 const Genre = require("../models/Genres");
 const Content = require("../models/Content");
+const Episode = require("../models/Episode");
 
 
 // send genres from db - return array of names of genres
@@ -15,16 +16,28 @@ const getAllSeries = async () => {
     return series;
 }
 
-// add content to db
+async function getSeriesByTitle(title)
+{
+    console.log("Searching for series with title:", title);
+    const series = await Content.find({type: 'series', title: title}).lean();
+    console.log("Found series:", series);
+    return series;
+}
+
+// add content to db - movie/series
 const addContent = async (contentData) => {
-    // Implementation for adding content to the database
     const newContent = new Content(contentData);
     const saved = await newContent.save();
     return saved;
 };
 
+const addEpisode = async (episodeData) => {
+    const newEpisode = new Episode(episodeData);
+    const saved = await newEpisode.save();
+    return saved;
+}
 const getAllContent = async () => {
     const contents = await Content.find().populate("genre").lean();
     return contents;
 }
-module.exports = { getAllGenres, getAllSeries, addContent, getAllContent };
+module.exports = { getAllGenres, getAllSeries, getSeriesByTitle, addContent, addEpisode, getAllContent };

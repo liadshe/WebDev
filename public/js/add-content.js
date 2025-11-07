@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function loadSeriesList() {
     try {
       seriesSelect.innerHTML = '<option value="">Select Series</option>';
-      console.log(series);
       series.forEach(s => {
         const opt = document.createElement('option');
         opt.value = s.title;

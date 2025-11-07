@@ -17,7 +17,6 @@ async function renderAddContentPage(req, res) {
     if (!series) {
       console.log("No series found, using empty array");
     }
-    console.log(series);
     res.render("content", {
       genres,
       series,
@@ -66,7 +65,6 @@ async function handleContentSubmission(req, res) {
     if (!title)
       return res.status(400).json({ error: "Missing title parameter" });
 
-    const rating = await getRating(req.body.title);
 
     // use uploaded files from multer (router uses upload.fields)
     const files = req.files || {};
@@ -76,8 +74,8 @@ async function handleContentSubmission(req, res) {
     // public URLs (public/ is served as root)
     const coverImagePath = path.join("uploads", coverFile.filename);
     const videoPath = path.join("uploads", videoFile.filename);
-
-    const durationMinutes = await getVideoDuration(videoPath);
+    console.log("Video path IS:", path.join(__dirname, "../public", videoPath));
+    const durationSeconds = await getVideoDuration(path.join(__dirname, "../public", videoPath));
 
     // normalize incoming fields
     const genre = Array.isArray(req.body.genre)
@@ -93,21 +91,40 @@ async function handleContentSubmission(req, res) {
             .filter(Boolean)
         : [];
 
-    const contentData = {
-      type: req.body.type.toLowerCase(), 
+
+    if (req.body.type.toLowerCase() === "episode") {
+      const series = await addContentService.getSeriesByTitle(req.body.series);
+      const episodeData = {
+        title: req.body.title,
+        description: req.body.description || "",
+        seasonNumber: Number(req.body.seasonNumber) || undefined,
+        episodeNumber: Number(req.body.episodeNumber) || undefined,
+        durationSeconds: durationSeconds,
+        videoPath: videoPath,
+        coverImagePath: coverImagePath,
+        series: series?.[0]?._id || undefined
+      };
+      await addContentService.addEpisode(episodeData);
+    }
+      // if content is a movie/series
+    else {
+      const rating = await getRating(req.body.title);
+      const contentData = {
+        type: req.body.type.toLowerCase(),
       title: req.body.title || "Untitled",
       description: req.body.description || "",
       genre,
       cast,
       director: req.body.director || "",
       releaseYear: Number(req.body.releaseYear) || undefined,
-      durationMinutes: durationMinutes,
-      rating: rating,
+      durationSeconds: durationSeconds,
+      rating: rating || "N/A",
       videoPath: videoPath,
       coverImagePath: coverImagePath,
     };
-
     await addContentService.addContent(contentData);
+  };
+
 
     // redirect back to the add form (or you can send JSON)
     res.redirect("/content?success=1");
