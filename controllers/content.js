@@ -10,11 +10,17 @@ dotenv.config();
 async function renderAddContentPage(req, res) {
   try {
     const genres = await addContentService.getAllGenres();
+    const series = await addContentService.getAllSeries();
     if (!genres) {
       console.log("No genres found, using empty array");
     }
+    if (!series) {
+      console.log("No series found, using empty array");
+    }
+    console.log(series);
     res.render("content", {
       genres,
+      series,
       success: req.query.success == "1",
       error: req.query.error == "1",
     });
@@ -22,11 +28,6 @@ async function renderAddContentPage(req, res) {
   } catch (err) {
     console.error("Error fetching genres:", err);
   }
-  res.render("content", {
-    genres,
-    success: req.query.success == "1",
-    error: req.query.error == "1",
-  });
 }
 
 // fetch rating from OMDb API by title, if not found return null
@@ -93,6 +94,7 @@ async function handleContentSubmission(req, res) {
         : [];
 
     const contentData = {
+      type: req.body.type.toLowerCase(), 
       title: req.body.title || "Untitled",
       description: req.body.description || "",
       genre,
