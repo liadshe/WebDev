@@ -1,0 +1,156 @@
+/* Search Container */
+.search-container {
+  position: relative;
+  display: inline-block;
+}
+
+#search-icon {
+  transition: opacity 0.3s;
+}
+
+
+.search-box input::placeholder {
+  color: #b3b3b3;  /* Lighter placeholder */
+}
+/* Search Box */
+.search-box {
+  position: fixed;
+  top: 5px;
+  right: 200px;
+  display: none;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #555;
+  border-radius: 4px;
+  padding: 5px 10px;
+  z-index: 1001;
+  animation: slideIn 0.3s ease;
+}
+
+.search-box.active {
+  display: flex;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.search-box input {
+  background: transparent;
+
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 8px 12px;
+  width: 200px;
+  outline: none;
+}
+
+.search-box input::placeholder {
+  color: #999;
+}
+
+#close-search {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: color 0.2s;
+}
+
+
+/* Overlay when search is active */
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  z-index: 999;
+}
+
+.search-overlay.active {
+  display: block;
+}
+
+/* Responsive adjustments for search 
+@media (max-width: 768px) {
+  .search-box {
+    right: 20px;
+    width: calc(100vw - 40px);
+  }
+  
+  .search-box input {
+    width: 100%;
+  }
+  
+  .search-results {
+    right: 20px;
+    width: calc(100vw - 40px);
+  }
+}
+
+/* Responsive adjustments for search 
+/* Tablets and smaller desktops 
+@media (max-width: 1024px) {
+  .search-box {
+    right: 100px;
+    max-width: calc(100vw - 200px);
+    min-width: 250px;
+  }
+  
+  .search-box input {
+    font-size: 15px;
+  }
+}
+
+/* Mobile devices 
+@media (max-width: 768px) {
+  .search-box {
+    right: 60px;
+    left: 60px;
+    max-width: none;
+    min-width: unset;
+    width: auto;
+  }
+  
+  .search-box input {
+    font-size: 14px;
+    padding: 4px 8px;
+  }
+}
+
+/* Very small screens 
+@media (max-width: 480px) {
+  .search-box {
+    right: 50px;
+    left: 50px;
+    padding: 6px 10px;
+  }
+  
+  .search-box input {
+    font-size: 13px;
+    padding: 3px 5px;
+  }
+  
+  #close-search {
+    font-size: 20px;
+  }
+  
+  .search-box::after {
+    font-size: 15px;
+    margin-left: 20px;
+  }
+}
+*/

@@ -144,7 +144,7 @@ body {
 }
 
 .top-menu li {
-  margin-right: 20px;
+  margin-right: 0px;
 }
 
 .top-menu li:last-child {
@@ -282,5 +282,3 @@ body {
   height: 50px;
   border-radius: 6px;
 }
-
-
