@@ -74,7 +74,6 @@ async function handleContentSubmission(req, res) {
     // public URLs (public/ is served as root)
     const coverImagePath = path.join("uploads", coverFile.filename);
     const videoPath = path.join("uploads", videoFile.filename);
-    console.log("Video path IS:", path.join(__dirname, "../public", videoPath));
     const durationSeconds = await getVideoDuration(path.join(__dirname, "../public", videoPath));
 
     // normalize incoming fields
@@ -134,7 +133,14 @@ async function handleContentSubmission(req, res) {
   }
 }
 
+async function getContentDetailsByTitle(req, res){
+    const content = await addContentService.getContentByTitle(req.params.title);
+    console.log("sending content to front....");
+    res.json(content);
+}
+
 module.exports = {
   renderAddContentPage,
   handleContentSubmission,
+  getContentDetailsByTitle
 };

@@ -20,8 +20,14 @@ async function getSeriesByTitle(title)
 {
     console.log("Searching for series with title:", title);
     const series = await Content.find({type: 'series', title: title}).lean();
-    console.log("Found series:", series);
     return series;
+}
+
+async function getContentByTitle(title)
+{
+    console.log("Searching for content with title:", title);
+    const content = await Content.findOne({title: title}).lean();
+    return content;
 }
 
 // add content to db - movie/series
@@ -40,4 +46,4 @@ const getAllContent = async () => {
     const contents = await Content.find().populate("genre").lean();
     return contents;
 }
-module.exports = { getAllGenres, getAllSeries, getSeriesByTitle, addContent, addEpisode, getAllContent };
+module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, addContent, addEpisode, getAllContent };
