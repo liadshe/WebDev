@@ -12,18 +12,16 @@ function changeLanguage(lang) {
     select.value = lang;
     select.dispatchEvent(new Event('change'));
   }
-}
 
-// Handle text direction
-const html = document.documentElement;
-if (lang === 'iw') {
+  // Handle text direction
+  const html = document.documentElement;
+  if (lang === 'iw') {
     html.setAttribute('dir', 'rtl');
     html.setAttribute('lang', 'he');
     document.body.classList.add('rtl');
-} 
-else {
+  } else {
     html.setAttribute('dir', 'ltr');
     html.setAttribute('lang', 'en');
     document.body.classList.remove('rtl');
+  }
 }
-
