@@ -135,9 +135,17 @@ async function handleContentSubmission(req, res) {
 
 async function getContentDetailsByTitle(req, res){
     const content = await addContentService.getContentByTitle(req.params.title);
-    console.log("sending content to front....");
+    
+    // if it's a series, fetch its episodes
+    if (content.type === 'series') {
+      const episodes = await addContentService.getEpisodesBySeriesTitle(req.params.title);
+      return res.json({ ...content, episodes });
+    }
+
+    // otherwise, just return the content
     res.json(content);
 }
+
 
 module.exports = {
   renderAddContentPage,
