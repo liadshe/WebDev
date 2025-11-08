@@ -6,14 +6,40 @@
           <img src="/images/Blanfix.png" alt="Logo" style="height: 30px; vertical-align: middle;">
         </a>
       </li>
-      <li><a href="main" class="active">Home</a></li>
-      <li><a href="#">TV Shows</a></li>
-      <li><a href="#">Movies</a></li>
+      <li><a href="main?type=all" class="active">Home</a></li>
+      <li><a href="main?type=series">TV Shows</a></li>
+      <li><a href="main?type=movies">Movies</a></li>
       <% if (user.username == 'admin') { %>
         <li><a href="content">Add Content</a></li>
       <% } %>
+
+        <!-- Genre Dropdown Filter - Only show on series/movies pages -->
+      <% if (locals.pageType === 'series' || locals.pageType === 'movies') { %>
+      <li class="genre-dropdown" id="genreDropdown">
+        <a href="#" id="genreToggle" style="display: flex; align-items: center;">
+          Genres <span style="margin-left: 5px; font-size: 10px;">▼</span>
+        </a>
+        <div class="genre-menu" id="genreMenu">
+          <div class="genre-option active" data-genre="all">
+            <span>All Genres</span>
+          </div>
+          <!-- Genres will be populated dynamically by JavaScript -->
+        </div>
+      </li>
+      <% } %>
+
+
       <li><a href="#">Browse by Languages</a></li>
       <li class="right-icons">
+          <!-- Sort Dropdown -->
+          <div class="sort-dropdown" id="sortDropdown">
+          <img src="/images/sort.png" alt="Sort" id="sortIcon" style="height:25px; cursor: pointer;" title="Sort">
+          <div class="sort-menu" id="sortMenu">
+            <a href="#" class="sort-option active" data-sort="default">Default</a>
+            <a href="#" class="sort-option" data-sort="a-z">A → Z</a>
+            <a href="#" class="sort-option" data-sort="z-a">Z → A</a>
+          </div>
+
         <div class="search-container">
           <img src="/images/search.png" alt="Search" id="search-icon" style="height:25px; cursor: pointer;">
           <div class="search-box" id="search-box">
@@ -22,7 +48,17 @@
           </div>
         </div>
         <a href="settings"><img src="/images/settings.png" alt="Settings" style="height:25px;"></a>
-        <a href="profiles"><img src="/images/pig.jpg" alt="Profile" style="height:30px; border-radius:30%;"></a>
+        
+        <!-- Profile dropdown with click functionality -->
+        <div class="profile-dropdown" id="profileDropdown">
+          <img src="/images/<%= profile.picture || 'default.jpg' %>" alt="Profile" class="profile-icon" id="profileIcon" style="height:30px; border-radius:30%; cursor: pointer;">
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="/profiles">Switch Profile</a>
+            <a href="/settings">Account Settings</a>
+            <hr style="margin: 5px 0; border-color: #444;">
+            <a href="/logout" class="sign-out">Sign Out</a>
+          </div>
+        </div>
       </li>
     </ul>
   </nav>
