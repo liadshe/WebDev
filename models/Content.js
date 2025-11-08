@@ -20,7 +20,8 @@ const ContentSchema = new mongoose.Schema({
   durationSeconds: { type: Number },
   
   // for series only    
-  seasonNumber: { type: Number, default: 1 }
+  seasonNumber: { type: Number, default: 1 },
+  uploadTime: { type: Date, default: Date.now }
 }); 
 
 module.exports =
