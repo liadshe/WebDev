@@ -1,5 +1,9 @@
 <style src="/public/style.css"></style>
 <header class="top-menu">
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./settings.css" />
+    <link rel="stylesheet" href="./search.css" />
   <nav>
     <ul>
       <li class="logo">
@@ -10,8 +14,10 @@
       <li><a href="main?type=all" class="active">Home</a></li>
       <li><a href="main?type=series">TV Shows</a></li>
       <li><a href="main?type=movies">Movies</a></li>
+
+      <!-- add add-content only if admin is connected -->
       <% if (user.username == 'admin') { %>
-        <li><a href="content">Add Content</a></li>
+        <li><a href="/content">Add Content</a></li>
       <% } %>
       <meta name="google" content="notranslate">
         <meta http-equiv="Content-Language" content="en">
@@ -38,8 +44,6 @@
       </li>
       <% } %>
 
-
-      <li><a href="#">Browse by Languages</a></li>
       <li class="right-icons">
           <!-- Sort Dropdown -->
           <div class="sort-dropdown" id="sortDropdown">
@@ -57,7 +61,6 @@
             <button id="close-search">✕</button>
           </div>
         </div>
-        <a href="settings"><img src="/images/settings.png" alt="Settings" style="height:25px;"></a>
         
         <!-- Profile dropdown with click functionality -->
         <div class="profile-dropdown" id="profileDropdown">
@@ -75,3 +78,9 @@
 </header>
     <script src="/js/translate.js"> </script>
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="/js/search.js"></script>
+    <script src="/js/genre-filter.js"></script>
+    <script src="/js/sort.js"></script>
+    <script src="/js/content-details.js"> </script>
+    <script src="/js/content-filter.js"></script>
+    <script src="/js/profile-dropdown.js"></script>

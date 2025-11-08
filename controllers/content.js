@@ -17,7 +17,12 @@ async function renderAddContentPage(req, res) {
     if (!series) {
       console.log("No series found, using empty array");
     }
-    res.render("content", {
+    const user = req.session.user;
+   // const profile = user.profiles.id(req.query.profileId) || { picture: 'default.jpg', name: 'User' };
+   const profile =  { picture: 'default.jpg', name: 'User' };
+   res.render("content", {
+      user,
+      profile,
       genres,
       series,
       success: req.query.success == "1",

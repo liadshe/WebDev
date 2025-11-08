@@ -8,19 +8,7 @@
 </head> 
 <body>
   <header class="top-menu">
-    <nav class=>
-      <ul>
-        <li><a href="main" class="active">Home</a></li>
-        <li><a href="#">TV Shows</a></li>
-        <li><a href="#">Movies</a></li>
-        <li><a href="#">Games</a></li>
-        <li><a href="#">New & Popular</a></li>
-        <li><a href="#">My List</a></li>
-        <li><a href="#">Browse by Languages</a></li>
-        <li class="switch-profile"><a href="profiles">Switch Profile</a></li>
-        <li><a href="settings">&#9881;</a></li>
-      </ul>
-    </nav>
+        <%- include('partials/header') %>
   </header>
   <main class="add-content-page">
     <h1>Add New Content</h1>
@@ -132,7 +120,7 @@
 
   </main>
 <script>
-    const series = <%- JSON.stringify(series || []) %>;
+    const series = JSON.stringify(series || []);
 </script>
 <script src="/js/add-content.js"> </script>
 

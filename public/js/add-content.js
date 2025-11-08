@@ -58,11 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Show depending on type
     if (selectedType === 'movie' || selectedType === 'series') {
       movieSeriesFields.forEach(el => el.style.display = 'block');
-      if (selectedType === 'series') {
-        // If you want, you can disable genre/cast/director for series
-        // For example:
-        // document.querySelector('.movie-series-field input[name="cast"]').closest('.form-row').style.display = 'none';
-      }
     } 
     else if (selectedType === 'episode') {
       episodeFields.style.display = 'block';
