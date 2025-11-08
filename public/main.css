@@ -46,6 +46,36 @@
   object-fit: cover;
 }
 
+/* === NO CONTENT MESSAGE === */
+.no-content-message {
+  text-align: center;
+  padding: 60px 20px;
+  color: #fff;
+  margin-top: 40px;
+}
+
+.no-content-message h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #ff3c00;
+}
+
+.no-content-message p {
+  font-size: 1.1rem;
+  color: #aaa;
+}
+
+.no-content-message a {
+  color: #ff5c33;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.no-content-message a:hover {
+  text-decoration: underline;
+  color: #ff784e;
+}
+
 /* === MODAL BACKGROUND === */
 .modal {
   display: none;
@@ -180,4 +210,3 @@
     font-size: 1.6rem;
   }
 }
-  
