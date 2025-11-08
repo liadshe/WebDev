@@ -68,7 +68,48 @@ async function handleLogin(req, res) {
   }
 }
 
+async function handleLogout(req, res) {
+  try {
+    const username = req.session.user?.username || "Unknown user";
+    const userId = req.session.user?._id;
+
+    // Log the logout action
+    if (userId) {
+      await logService.createLog({
+        level: "INFO",
+        service: "Auth",
+        message: `User '${username}' logged out successfully.`,
+        userId: userId,
+      });
+    }
+
+    console.log("User logged out:", username);
+
+    // Destroy the session
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+        return res.redirect("/main");
+      }
+      
+      // Clear the cookie
+      res.clearCookie("connect.sid"); // Default session cookie name
+      
+      // Redirect to login page
+      res.redirect("/login");
+    });
+  } catch (err) {
+    console.error("Logout error:", err);
+    await logService.createLog({
+      level: "ERROR",
+      service: "Auth",
+      message: `Logout error: ${err.message}.`,
+    });
+    res.redirect("/login");
+  }
+}
 module.exports = {
   handleLogin,
   renderLoginPage,
+  handleLogout,
 };
