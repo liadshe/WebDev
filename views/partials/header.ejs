@@ -22,7 +22,17 @@
           </div>
         </div>
         <a href="settings"><img src="/images/settings.png" alt="Settings" style="height:25px;"></a>
-        <a href="profiles"><img src="/images/<%= profile.picture || 'default.jpg' %>" alt="Profile" style="height:30px; border-radius:30%;"></a>
+        
+        <!-- Profile dropdown with click functionality -->
+        <div class="profile-dropdown" id="profileDropdown">
+          <img src="/images/<%= profile.picture || 'default.jpg' %>" alt="Profile" class="profile-icon" id="profileIcon" style="height:30px; border-radius:30%; cursor: pointer;">
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="/profiles">Switch Profile</a>
+            <a href="/settings">Account Settings</a>
+            <hr style="margin: 5px 0; border-color: #444;">
+            <a href="/logout" class="sign-out">Sign Out</a>
+          </div>
+        </div>
       </li>
     </ul>
   </nav>
