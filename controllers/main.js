@@ -41,13 +41,16 @@ async function renderMainPage(req, res) {
     if (!activeProfile && user.profiles && user.profiles.length > 0) {
       activeProfile = user.profiles[0];
     }
-
+    
+    const type = req.query.type || 'all';
+    
     // Render the main page
     res.render("main", {
       moviesByGenre: moviesByGenre,
       user: req.session.user,
       activeProfile: activeProfileId,
       profile: activeProfile || { picture: 'default.jpg', name: 'User' },
+      pageType: type,
 
     });
   } catch (err) {
