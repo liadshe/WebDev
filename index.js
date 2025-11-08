@@ -53,7 +53,7 @@ app.use("/", loginViewRouter);
 app.use("/main", mainViewRouter);
 app.use("/login", loginViewRouter);
 app.use("/register", registerViewRouter);
-app.use("/search", searchRouter)
+app.use("/search", searchRouter);
 app.use("/profiles", profilesViewRouter);
 app.use("/settings", settingsViewRouter);
 app.use("/statistics", statisticsViewRouter);
