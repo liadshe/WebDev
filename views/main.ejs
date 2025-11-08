@@ -35,8 +35,28 @@
           </section>
         <% } %>
       <% } %>
+
+   <!-- content details modal -->
+<div id="contentModal" class="modal">
+  <div class="modal-content">
+    <span id="modalClose" class="close">&times;</span>
+
+    <div class="modal-image-container">
+      <img id="modalCover" src="" alt="">
+      <button id="modalPlayBtn" class="play-btn">
+        ▶
+      </button>
+    </div>
+
+    <h2 id="modalTitle"></h2>
+    <p id="modalDescription"></p>
+    <div id="modalExtra"></div>
+  </div>
+</div>
+
     </main>
 
     <script src="/js/search.js"></script>
+    <script src="/js/content-details.js"> </script>
   </body>
 </html>

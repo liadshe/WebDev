@@ -35,4 +35,5 @@ async function renderMainPage(req, res) {
   }
 }
 
+
 module.exports = { renderMainPage };
