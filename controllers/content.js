@@ -23,8 +23,8 @@ async function renderAddContentPage(req, res) {
    res.render("content", {
       user,
       profile,
-      genres,
-      series,
+      genres: genres || [],
+      series: series || [],
       success: req.query.success == "1",
       error: req.query.error == "1",
     });
@@ -181,6 +181,7 @@ async function renderGenrePage(req,res)
   res.render('genre', {user,profile,givengenre})
 
 }
+
 
 
 module.exports = {

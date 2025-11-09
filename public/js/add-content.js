@@ -31,20 +31,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const videoFile = document.getElementById('videoFile');
   const coverImageFile = document.getElementById('coverImageFile');
 
-  function loadSeriesList() {
-    try {
-      seriesSelect.innerHTML = '<option value="">Select Series</option>';
-      series.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s.title;
-        opt.textContent = s.title;
-        seriesSelect.appendChild(opt);
-      });
-    } catch (err) {
-      console.log('Error loading series:', err);
-      seriesSelect.innerHTML = '<option value="">Error loading series!!!</option>';
+function loadSeriesList() {
+  try {
+    // make sure window.series exists and is an array
+    const serverSeries = Array.isArray(window.series) ? window.series : [];
+    seriesSelect.innerHTML = '<option value="">Select Series</option>';
+
+    if (serverSeries.length === 0) {
+      // optional: show a message so user knows there is no series
+      const noOpt = document.createElement('option');
+      noOpt.value = '';
+      noOpt.textContent = 'No series available';
+      seriesSelect.appendChild(noOpt);
+      return;
     }
+
+    serverSeries.forEach(s => {
+  const opt = document.createElement('option');
+  opt.value = s._id || s.title; // prefer _id
+  opt.textContent = s.title || 'Untitled Series';
+  seriesSelect.appendChild(opt);
+});
+
+  } catch (err) {
+    console.log('Error loading series:', err);
+    seriesSelect.innerHTML = '<option value="">Error loading series</option>';
   }
+}
 
   function toggleFields(selectedType) {
     // Hide everything initially
@@ -58,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Show depending on type
     if (selectedType === 'movie' || selectedType === 'series') {
       movieSeriesFields.forEach(el => el.style.display = 'block');
+      videoFile.closest('.form-row').style.display = 'none';
     } 
     else if (selectedType === 'episode') {
       episodeFields.style.display = 'block';
@@ -68,4 +82,12 @@ document.addEventListener("DOMContentLoaded", () => {
   typeRadios.forEach(radio => {
     radio.addEventListener('change', e => toggleFields(e.target.value));
   });
+
+    // Hide all fields initially
+  movieSeriesFields.forEach(el => el.style.display = 'none');
+  episodeFields.style.display = 'none';
+
+  // Check if something was pre-selected (for example after validation fail)
+  const checkedType = document.querySelector('input[name="type"]:checked');
+  if (checkedType) toggleFields(checkedType.value);
 });
