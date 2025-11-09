@@ -38,25 +38,37 @@ document.addEventListener("DOMContentLoaded", () => {
         <strong>Cast:</strong> ${castLinks}
       `;
 
-      // Episodes section (for series)
-      if (content.episodes && content.episodes.length > 0) {
-        const episodeCards = content.episodes.map(ep => `
-          <div class="episode-card">
-            <div class="episode-number">Ep ${ep.episodeNumber || "?"}</div>
-            <div class="episode-title">${ep.title}</div>
-            ${ep.duration ? `<div class="episode-duration">${ep.duration} min</div>` : ""}
-          </div>
-        `).join("");
+     if (content.type === "series") {
+        if (content.episodes && content.episodes.length > 0) {
+          const episodeCards = content.episodes
+            .map(ep => `
+              <div class="episode-card">
+                <div class="episode-number">Ep ${ep.episodeNumber || "?"}</div>
+                <div class="episode-title">${ep.title}</div>
+                ${ep.duration ? `<div class="episode-duration">${ep.duration} min</div>` : ""}
+              </div>
+            `)
+            .join("");
 
-        modalEpisodes.innerHTML = `
-          <h3 style="margin-top: 1rem;">Episodes:</h3>
-          <div class="episodes-container">
-            ${episodeCards}
-          </div>
-        `;
+          modalEpisodes.innerHTML = `
+            <h3 style="margin-top: 1rem;">Episodes:</h3>
+            <div class="episodes-container">
+              ${episodeCards}
+            </div>
+          `;
+        } else {
+          // show message if series has no episodes
+          modalEpisodes.innerHTML = `
+            <h3 style="margin-top: 1rem;">Episodes:</h3>
+            <div class="no-episodes-message" style="color: #888; font-style: italic; margin-top: .5rem;">
+              No episodes uploaded yet. Check back soon!
+            </div>
+          `;
+        }
       } else {
-        modalEpisodes.innerHTML = "";
+        modalEpisodes.innerHTML = ""; // clear for movies
       }
+
 
       // Remove previous similar section (if exists)
       const oldSimilar = document.getElementById("modalSimilar");
