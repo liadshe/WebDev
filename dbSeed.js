@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const User = require("./models/User");
 const Genre = require("./models/Genres");
 
-const MONGO_URI = "mongodb://localhost:27017/Blanflix";
+const MONGO_URI = "mongodb://localhost:27017/Netflix";
 
 const dummyGenres = [
   "Action", "Adventure", "Comedy", "Drama", "Fantasy",
