@@ -140,8 +140,8 @@ async function handleContentSubmission(req, res) {
 
 async function getContentDetailsByTitle(req, res){
     const content = await addContentService.getContentByTitle(req.params.title);
-    const similarFromSameGenre = await addContentService.getContentByGenre(content.genre)
-    
+    const similarFromSameGenre = await addContentService.getContentByGenre(content.genre);
+
     // if it's a series, fetch its episodes
     if (content.type === 'series') {
       const episodes = await addContentService.getEpisodesBySeriesTitle(req.params.title);
@@ -152,9 +152,41 @@ async function getContentDetailsByTitle(req, res){
     res.json({...content, similarFromSameGenre});
 }
 
+  async function getContentByGenre(req, res) {
+  try {
+    const genre = req.params.genre;
+    const skip = parseInt(req.query.skip) || 0;
+    const limit = parseInt(process.env.MOVIE_LIMIT || 10);
+    let genreContent;
+    if (genre == "All")
+    {
+     genreContent = await addContentService.getAllContent(); 
+    }
+    else{
+     genreContent = await addContentService.getContentByGenre(genre, skip, limit);
+    }
+    res.json(genreContent);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+}
+  
+async function renderGenrePage(req,res)
+{
+  const givengenre = req.params.genre;
+  const user = req.session.user;  
+  const profile =  { picture: 'default.jpg', name: 'User' }; // change when profile saved in session
+
+  res.render('genre', {user,profile,givengenre})
+
+}
+
 
 module.exports = {
   renderAddContentPage,
+  renderGenrePage,
   handleContentSubmission,
-  getContentDetailsByTitle
+  getContentDetailsByTitle,
+  getContentByGenre
 };

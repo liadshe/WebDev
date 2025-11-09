@@ -28,8 +28,6 @@ async function renderMainPage(req, res) {
     genres.forEach((g) => {
       moviesByGenre[g] = movies.filter((movie) => movie.genre.includes(g));
     });
-
-    console.log("Movies by genre:", Object.keys(moviesByGenre));
     
     // Find the active profile
     let activeProfile = null;

@@ -12,11 +12,13 @@ const contentViewRouter = require("./routes/views/content");
 const statisticsViewRouter = require("./routes/views/statistics");
 const searchRouter = require("./routes/views/search");
 const profilesViewRouter = require("./routes/views/profiles");
+const genreViewRouter = require("./routes/views/genre");
 
 const profilesApiRouter = require("./routes/api/profiles");
 const watchApiRouter = require("./routes/api/watch");
 const statisticsApiRouter = require("./routes/api/statistics");
 const contentDetailsApiRouter = require("./routes/api/content-details");
+const genreApiRouter = require("./routes/api/genre");
 
 dotenv.config();
 const app = express();
@@ -58,12 +60,15 @@ app.use("/profiles", profilesViewRouter);
 app.use("/settings", settingsViewRouter);
 app.use("/statistics", statisticsViewRouter);
 app.use("/content", contentViewRouter);
+app.use("/genre", genreViewRouter);
+
 
 // api routes
 app.use("/api/profiles", profilesApiRouter);
 app.use("/api/statistics", statisticsApiRouter);
 app.use("/api/watch", express.json(), watchApiRouter);
 app.use("/api/contentDetails", contentDetailsApiRouter)
+app.use("/api/genre", genreApiRouter)
 
 const PORT = parseInt(process.env.PORT);
 app.listen(PORT, () => {
