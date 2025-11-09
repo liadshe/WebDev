@@ -28,6 +28,19 @@ async function getContentByTitle(title)
     return content;
 }
 
+async function getContentByGenre(genres)
+{
+// ensure genres is an array
+  if (!Array.isArray(genres)) genres = [genres];
+
+  const content = await Content.find({
+    genre: { $in: genres } // find content that has ANY of these genres
+  }).lean();
+
+  return content;
+
+}
+
 async function getEpisodesBySeriesTitle(title)
 {
     const wantedSeries = await getSeriesByTitle(title);
@@ -52,4 +65,4 @@ const getAllContent = async () => {
     const contents = await Content.find().populate("genre").lean();
     return contents;
 }
-module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, getEpisodesBySeriesTitle, addContent, addEpisode, getAllContent };
+module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, getContentByGenre, getEpisodesBySeriesTitle, addContent, addEpisode, getAllContent };
