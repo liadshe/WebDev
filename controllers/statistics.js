@@ -38,7 +38,9 @@ const getDailyWatch = async (req, res) => {
 async function renderStatisticsPage(req, res) {
   try {
     const userId = req.session.user._id;
-    if (!userId) return res.redirect("/login");
+    if (!userId) {
+      return res.redirect("/login");
+    }
 
     const genreData = await genreService.getUserGenrePopularity(userId);
     const dailyWatchData = await watchService.getUserDailyWatch(userId);
