@@ -12,9 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   document.querySelectorAll(".cover").forEach((cover) => {
-    // Core DOM references
-    const img = cover.querySelector(".cover-image"); // optional (not on watch page)
-    const btn = cover.querySelector(".play-overlay"); // optional (not on watch page)
     const videoWrapper = cover.querySelector(".video-wrapper");
     const video = cover.querySelector(".cover-video");
     const controls = cover.querySelector(".controls");
@@ -24,126 +21,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const timeline = cover.querySelector(".timeline");
     const fullscreenBtn = cover.querySelector(".fullscreen");
     const timeDisplay = cover.querySelector(".time-display");
-    const volumeControl = cover.querySelector(".volume-control");
     const volumeToggle = cover.querySelector(".volumeToggle");
     const volumeSlider = cover.querySelector(".volumeSlider");
 
-    if (
-      !video ||
-      !videoWrapper ||
-      !controls ||
-      !playPause ||
-      !timeline ||
-      !fullscreenBtn ||
-      !timeDisplay ||
-      !volumeToggle ||
-      !volumeSlider
-    ) {
-      console.warn("⛔ Missing required player elements; skipping this cover.");
-      return;
-    }
+    if (!video || !controls) return;
 
     const userId = window.CURRENT_USER_ID;
     const profileName = window.CURRENT_PROFILE;
     const contentId = cover.id;
 
-    // --- Play video ---
-    function playTransition() {
-      // In case the wrapper was hidden elsewhere
+    // === VIDEO PLAY / PAUSE ===
+    const playTransition = () => {
       videoWrapper.classList.remove("hidden");
       cover.classList.add("playing");
       video.muted = false;
       video.play().catch(console.error);
-    }
-    // Make these optional (they don't exist on the dedicated watch page)
-    if (img) img.addEventListener("click", playTransition);
-    if (btn) btn.addEventListener("click", playTransition);
-
-    // --- Load watch progress ---
-    async function loadProgress() {
-      try {
-        const res = await fetch(
-          `/api/watch/progress/${userId}/${profileName}/${contentId}`
-        );
-        if (!res.ok) return;
-        const data = await res.json();
-        if (data?.progressSeconds > 0) {
-          const resume = Math.floor(data.progressSeconds);
-          const setWhenReady = () => {
-            if (video.readyState >= 1 && video.duration > 0) {
-              video.currentTime = Math.min(resume, video.duration - 0.25);
-              console.log(`✅ Resumed playback at ${resume}s`);
-            } else {
-              setTimeout(setWhenReady, 150);
-            }
-          };
-          setWhenReady();
-        }
-      } catch (err) {
-        console.error("❌ Error loading progress:", err);
-      }
-    }
-    video.addEventListener("loadedmetadata", loadProgress);
-
-    // --- Save watch progress ---
-    let updateTimer;
-    async function sendProgress() {
-      if (!video.duration) return;
-      const progressSeconds = video.currentTime;
-      const durationSeconds = video.duration;
-
-      try {
-        await fetch("/api/watch/progress", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId,
-            profileName,
-            contentId,
-            progressSeconds,
-            durationSeconds,
-          }),
-        });
-      } catch (err) {
-        console.error("❌ Error saving progress:", err);
-      }
-    }
-    window.addEventListener("beforeunload", sendProgress);
-
-    // --- Format time ---
-    const fmt = (s) => {
-      const m = Math.floor(s / 60);
-      const sec = Math.floor(s % 60);
-      return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
     };
 
-    function updateTimeDisplay() {
-      const c = video.currentTime || 0;
-      const t = video.duration || 0;
-      if (timeDisplay) timeDisplay.textContent = `${fmt(c)} / ${fmt(t)}`;
-    }
-
-    // --- Hover controls ---
-    let controlsTimeout;
-    function showControls() {
-      controls.classList.add("show");
-      clearTimeout(controlsTimeout);
-      controlsTimeout = setTimeout(() => {
-        if (!video.paused) controls.classList.remove("show");
-      }, 2500);
-    }
-
-    cover.addEventListener("mousemove", showControls);
-    cover.addEventListener("mouseenter", showControls);
-    cover.addEventListener("mouseleave", () => {
-      if (!video.paused) controls.classList.remove("show");
-    });
-
-    // --- Play/Pause ---
-    function togglePlay() {
-      video.paused ? video.play() : video.pause();
+    const togglePlay = () => {
+      if (video.paused) video.play();
+      else video.pause();
       showControls();
-    }
+    };
 
     playPause.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -152,13 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
     video.addEventListener("click", togglePlay);
 
     video.addEventListener("play", () => {
-      cover.classList.remove("paused");
       playPause.textContent = "⏸";
       if (!updateTimer) updateTimer = setInterval(sendProgress, 10000);
     });
 
     video.addEventListener("pause", () => {
-      cover.classList.add("paused");
       playPause.textContent = "▶";
       sendProgress();
       clearInterval(updateTimer);
@@ -168,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
     video.addEventListener("ended", async () => {
       clearInterval(updateTimer);
       updateTimer = null;
-
       try {
         await fetch("/api/watch/progress", {
           method: "POST",
@@ -177,28 +73,38 @@ document.addEventListener("DOMContentLoaded", () => {
             userId,
             profileName,
             contentId,
-            progressSeconds: video.duration, // mark full length
+            progressSeconds: video.duration,
             durationSeconds: video.duration,
           }),
         });
         console.log("✅ Marked video finished");
-      } catch (e) {
-        console.error("❌ Error marking finished:", e);
+      } catch (err) {
+        console.error("❌ Error marking finished:", err);
       }
     });
 
-    // --- Seek ---
-    backward.addEventListener("click", (e) => {
-      e.stopPropagation();
+    // === SEEK ===
+    backward.addEventListener("click", () => {
       video.currentTime = Math.max(0, video.currentTime - 10);
       showControls();
     });
-
-    forward.addEventListener("click", (e) => {
-      e.stopPropagation();
+    forward.addEventListener("click", () => {
       video.currentTime = Math.min(video.duration, video.currentTime + 10);
       showControls();
     });
+
+    // === TIME & TIMELINE ===
+    const fmt = (s) => {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+    };
+
+    const updateTimeDisplay = () => {
+      const c = video.currentTime || 0;
+      const t = video.duration || 0;
+      timeDisplay.textContent = `${fmt(c)} / ${fmt(t)}`;
+    };
 
     video.addEventListener("timeupdate", () => {
       if (!video.duration) return;
@@ -211,41 +117,98 @@ document.addEventListener("DOMContentLoaded", () => {
     timeline.addEventListener("input", (e) => {
       e.stopPropagation();
       if (!video.duration) return;
-      const seek = (timeline.value / 100) * video.duration;
-      video.currentTime = seek;
+      video.currentTime = (timeline.value / 100) * video.duration;
       updateTimeDisplay();
     });
 
-    // --- Fullscreen ---
+    // === FULLSCREEN ===
     fullscreenBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      // request fullscreen for the video wrapper so header stays layered above
-      if (!document.fullscreenElement) {
-        videoWrapper.requestFullscreen().catch(console.error);
-      } else {
-        document.exitFullscreen();
-      }
+      if (!document.fullscreenElement) videoWrapper.requestFullscreen();
+      else document.exitFullscreen();
       showControls();
     });
 
-    // --- Volume ---
+    // === SHOW CONTROLS ON HOVER ===
+    let controlsTimeout;
+    const showControls = () => {
+      controls.classList.add("show");
+      clearTimeout(controlsTimeout);
+      controlsTimeout = setTimeout(() => {
+        if (!video.paused) controls.classList.remove("show");
+      }, 2500);
+    };
+    cover.addEventListener("mousemove", showControls);
+    cover.addEventListener("mouseenter", showControls);
+    cover.addEventListener("mouseleave", () => {
+      if (!video.paused) controls.classList.remove("show");
+    });
+
+    // === WATCH PROGRESS ===
+    let updateTimer;
+    const sendProgress = async () => {
+      if (!video.duration) return;
+      try {
+        await fetch("/api/watch/progress", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId,
+            profileName,
+            contentId,
+            progressSeconds: video.currentTime,
+            durationSeconds: video.duration,
+          }),
+        });
+      } catch (err) {
+        console.error("❌ Error saving progress:", err);
+      }
+    };
+    window.addEventListener("beforeunload", sendProgress);
+
+    // === LOAD PREVIOUS PROGRESS ===
+    const loadProgress = async () => {
+      try {
+        const res = await fetch(
+          `/api/watch/progress/${userId}/${profileName}/${contentId}`
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data?.progressSeconds > 0) {
+          const resume = Math.min(
+            Math.floor(data.progressSeconds),
+            video.duration - 0.25
+          );
+          const setWhenReady = () => {
+            if (video.readyState >= 1 && video.duration > 0) {
+              video.currentTime = resume;
+              console.log(`✅ Resumed playback at ${resume}s`);
+            } else setTimeout(setWhenReady, 150);
+          };
+          setWhenReady();
+        }
+      } catch (err) {
+        console.error("❌ Error loading progress:", err);
+      }
+    };
+    video.addEventListener("loadedmetadata", loadProgress);
+
+    // === VOLUME ===
     let lastVolume = parseFloat(localStorage.getItem("lastVolume")) ?? 1.0;
     video.volume = lastVolume;
     volumeSlider.value = lastVolume;
-    paintVolumeBar();
-    updateVolumeIcon();
-
-    function updateVolumeIcon() {
-      if (video.muted || video.volume === 0) volumeToggle.textContent = "🔇";
-      else if (video.volume < 0.5) volumeToggle.textContent = "🔉";
-      else volumeToggle.textContent = "🔊";
-    }
-
-    function paintVolumeBar() {
+    const paintVolumeBar = () => {
       const vol = video.muted ? 0 : video.volume;
       const pct = Math.round(vol * 100);
       volumeSlider.style.background = `linear-gradient(to right, red 0%, red ${pct}%, rgba(255,255,255,0.3) ${pct}%, rgba(255,255,255,0.3) 100%)`;
-    }
+    };
+    const updateVolumeIcon = () => {
+      if (video.muted || video.volume === 0) volumeToggle.textContent = "🔇";
+      else if (video.volume < 0.5) volumeToggle.textContent = "🔉";
+      else volumeToggle.textContent = "🔊";
+    };
+    paintVolumeBar();
+    updateVolumeIcon();
 
     volumeToggle.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -253,9 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
         video.muted = false;
         video.volume = lastVolume || 1.0;
         volumeSlider.value = video.volume;
-      } else {
-        video.muted = true;
-      }
+      } else video.muted = true;
       updateVolumeIcon();
       paintVolumeBar();
       localStorage.setItem("lastVolume", video.volume);
@@ -272,15 +233,81 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("lastVolume", val);
     });
 
-    video.addEventListener("volumechange", () => {
-      volumeSlider.value = video.muted ? 0 : video.volume;
-      updateVolumeIcon();
-      paintVolumeBar();
-    });
+    // === EPISODE SELECTOR ===
+    const episodeSelector = document.getElementById("episodeSelector");
+    const dropdown = episodeSelector?.querySelector(".episodes-dropdown");
 
-    // ✅ Auto-play immediately if on watch page
-    if (isWatchPage) {
-      playTransition();
+    if (episodeSelector && dropdown) {
+      fetch(
+        `/api/contentDetails/${encodeURIComponent(
+          document.title.replace(" - Watch", "")
+        )}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.type !== "series" || !data.episodes?.length) {
+            episodeSelector.style.display = "none";
+            return;
+          }
+
+          const seasons = {};
+          data.episodes.forEach((ep) => {
+            const s = ep.seasonNumber || 1;
+            if (!seasons[s]) seasons[s] = [];
+            seasons[s].push(ep);
+          });
+
+          dropdown.innerHTML = Object.keys(seasons)
+            .sort((a, b) => a - b)
+            .map(
+              (season) => `
+            <div class="season-item">
+              <div class="dropdown-header">Season ${season}</div>
+              <div class="episodes-submenu">
+                ${seasons[season]
+                  .map(
+                    (ep) => `
+                  <button data-path="/${ep.videoPath}">
+                    E${ep.episodeNumber || "?"} — ${ep.title}
+                  </button>`
+                  )
+                  .join("")}
+              </div>
+            </div>`
+            )
+            .join("");
+
+          // Handle episode clicks
+          dropdown.addEventListener("click", (e) => {
+            const btn = e.target.closest("button[data-path]");
+            if (!btn) return;
+            video.src = btn.dataset.path;
+            video.currentTime = 0;
+            playTransition();
+            dropdown.style.display = "none";
+          });
+        })
+        .catch((err) => console.error("Error loading episodes:", err));
+
+      // Prevent flicker
+      let hoverTimeout;
+      episodeSelector.addEventListener("mouseenter", () => {
+        clearTimeout(hoverTimeout);
+        dropdown.style.display = "block";
+      });
+      episodeSelector.addEventListener("mouseleave", () => {
+        hoverTimeout = setTimeout(() => {
+          dropdown.style.display = "none";
+        }, 250);
+      });
+      dropdown.addEventListener("mouseenter", () => clearTimeout(hoverTimeout));
+      dropdown.addEventListener("mouseleave", () => {
+        hoverTimeout = setTimeout(() => {
+          dropdown.style.display = "none";
+        }, 250);
+      });
     }
+
+    if (isWatchPage) playTransition();
   });
 });

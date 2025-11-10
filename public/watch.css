@@ -29,16 +29,15 @@ body.watch-page {
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
 }
 
-/* 🔝 Header inside the video wrapper, always clickable */
+/* 🔝 Header inside the video wrapper */
 .video-header {
   position: absolute;
   top: 20px;
   left: 25px;
-  z-index: 10000; /* above video & controls */
+  z-index: 10000;
 }
 
 .back-btn {
-  pointer-events: auto; /* re-enable clicks on the button itself */
   background: rgba(0, 0, 0, 0.6);
   border: none;
   color: white;
@@ -57,6 +56,7 @@ body.watch-page {
   background: rgba(255, 255, 255, 0.15);
 }
 
+/* === VIDEO === */
 .cover-video {
   width: 100%;
   height: 100%;
@@ -81,7 +81,7 @@ body.watch-page {
   border-radius: 8px;
   opacity: 0;
   transition: opacity 0.3s ease;
-  z-index: 9990; /* below header, above video */
+  z-index: 9990;
   pointer-events: none;
 }
 
@@ -182,6 +182,79 @@ body.watch-page {
   background: red;
   cursor: pointer;
   position: relative;
-  top: 1px; /* keeps it flush on the line */
+  top: 1px; /* stays centered on line */
   border: none;
+}
+
+/* === EPISODE SELECTOR (Netflix-Style Unified) === */
+.episode-selector {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px; /* hover buffer to prevent flicker */
+}
+
+.episode-menu-btn {
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.episode-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.episodes-dropdown {
+  position: absolute;
+  bottom: 120%;
+  right: 0;
+  background: rgba(20, 20, 20, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 0;
+  min-width: 240px;
+  z-index: 20000;
+  display: none;
+}
+
+.episode-selector:hover .episodes-dropdown,
+.episode-selector:focus-within .episodes-dropdown {
+  display: block;
+}
+
+/* Season and episode items */
+.dropdown-item {
+  color: white;
+  padding: 8px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dropdown-header {
+  font-weight: bold;
+  color: #ff4444;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-header:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* subtle animation */
+.episodes-dropdown {
+  transform: translateY(5px);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0;
+}
+.episode-selector:hover .episodes-dropdown {
+  transform: translateY(0);
+  opacity: 1;
 }
