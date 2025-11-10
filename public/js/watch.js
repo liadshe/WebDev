@@ -12,8 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   document.querySelectorAll(".cover").forEach((cover) => {
-    const img = cover.querySelector(".cover-image");
-    const btn = cover.querySelector(".play-overlay");
+    // Core DOM references
+    const img = cover.querySelector(".cover-image"); // optional (not on watch page)
+    const btn = cover.querySelector(".play-overlay"); // optional (not on watch page)
     const videoWrapper = cover.querySelector(".video-wrapper");
     const video = cover.querySelector(".cover-video");
     const controls = cover.querySelector(".controls");
@@ -27,19 +28,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const volumeToggle = cover.querySelector(".volumeToggle");
     const volumeSlider = cover.querySelector(".volumeSlider");
 
+    if (
+      !video ||
+      !videoWrapper ||
+      !controls ||
+      !playPause ||
+      !timeline ||
+      !fullscreenBtn ||
+      !timeDisplay ||
+      !volumeToggle ||
+      !volumeSlider
+    ) {
+      console.warn("⛔ Missing required player elements; skipping this cover.");
+      return;
+    }
+
     const userId = window.CURRENT_USER_ID;
     const profileName = window.CURRENT_PROFILE;
     const contentId = cover.id;
-    console.log("%%%%%%%%", profileName);
+
     // --- Play video ---
     function playTransition() {
+      // In case the wrapper was hidden elsewhere
       videoWrapper.classList.remove("hidden");
       cover.classList.add("playing");
       video.muted = false;
       video.play().catch(console.error);
     }
-    img.addEventListener("click", playTransition);
-    btn.addEventListener("click", playTransition);
+    // Make these optional (they don't exist on the dedicated watch page)
+    if (img) img.addEventListener("click", playTransition);
+    if (btn) btn.addEventListener("click", playTransition);
 
     // --- Load watch progress ---
     async function loadProgress() {
@@ -53,9 +71,11 @@ document.addEventListener("DOMContentLoaded", () => {
           const resume = Math.floor(data.progressSeconds);
           const setWhenReady = () => {
             if (video.readyState >= 1 && video.duration > 0) {
-              video.currentTime = resume;
+              video.currentTime = Math.min(resume, video.duration - 0.25);
               console.log(`✅ Resumed playback at ${resume}s`);
-            } else setTimeout(setWhenReady, 150);
+            } else {
+              setTimeout(setWhenReady, 150);
+            }
           };
           setWhenReady();
         }
@@ -125,7 +145,10 @@ document.addEventListener("DOMContentLoaded", () => {
       showControls();
     }
 
-    playPause.addEventListener("click", togglePlay);
+    playPause.addEventListener("click", (e) => {
+      e.stopPropagation();
+      togglePlay();
+    });
     video.addEventListener("click", togglePlay);
 
     video.addEventListener("play", () => {
@@ -142,18 +165,37 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTimer = null;
     });
 
-    video.addEventListener("ended", () => {
-      sendProgress();
+    video.addEventListener("ended", async () => {
       clearInterval(updateTimer);
       updateTimer = null;
+
+      try {
+        await fetch("/api/watch/progress", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId,
+            profileName,
+            contentId,
+            progressSeconds: video.duration, // mark full length
+            durationSeconds: video.duration,
+          }),
+        });
+        console.log("✅ Marked video finished");
+      } catch (e) {
+        console.error("❌ Error marking finished:", e);
+      }
     });
 
     // --- Seek ---
-    backward.addEventListener("click", () => {
+    backward.addEventListener("click", (e) => {
+      e.stopPropagation();
       video.currentTime = Math.max(0, video.currentTime - 10);
       showControls();
     });
-    forward.addEventListener("click", () => {
+
+    forward.addEventListener("click", (e) => {
+      e.stopPropagation();
       video.currentTime = Math.min(video.duration, video.currentTime + 10);
       showControls();
     });
@@ -166,7 +208,8 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTimeDisplay();
     });
 
-    timeline.addEventListener("input", () => {
+    timeline.addEventListener("input", (e) => {
+      e.stopPropagation();
       if (!video.duration) return;
       const seek = (timeline.value / 100) * video.duration;
       video.currentTime = seek;
@@ -174,10 +217,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // --- Fullscreen ---
-    fullscreenBtn.addEventListener("click", () => {
-      if (!document.fullscreenElement)
-        cover.requestFullscreen().catch(console.error);
-      else document.exitFullscreen();
+    fullscreenBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      // request fullscreen for the video wrapper so header stays layered above
+      if (!document.fullscreenElement) {
+        videoWrapper.requestFullscreen().catch(console.error);
+      } else {
+        document.exitFullscreen();
+      }
       showControls();
     });
 
@@ -215,6 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     volumeSlider.addEventListener("input", (e) => {
+      e.stopPropagation();
       const val = parseFloat(e.target.value);
       video.volume = val;
       video.muted = val === 0;
