@@ -44,7 +44,8 @@ async function handleLogin(req, res) {
       username: user.username,
       email: user.email,
     };
-    // req.session.activeProfile = user.profiles[0]; // default to first profile
+    console.log("######Session created for user:", user);
+    req.session.activeProfile = user.activeProfile;
 
     await logService.createLog({
       level: "INFO",
@@ -91,10 +92,10 @@ async function handleLogout(req, res) {
         console.error("Error destroying session:", err);
         return res.redirect("/main");
       }
-      
+
       // Clear the cookie
       res.clearCookie("connect.sid"); // Default session cookie name
-      
+
       // Redirect to login page
       res.redirect("/login");
     });

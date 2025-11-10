@@ -11,7 +11,7 @@
       <% if (profiles && profiles.length > 0) { %> <%
       profiles.forEach(function(profile) { %>
       <div class="profile">
-        <a href="/main?profileId=<%= profile._id %>">
+        <a href="/profiles/set/<%= profile._id %>">
           <img
             src="/images/<%= profile.picture || 'default.jpg' %>"
             alt="<%= profile.name %>"

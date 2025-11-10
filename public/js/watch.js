@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const isWatchPage = document.body.classList.contains("watch-page");
+
   if (!window.CURRENT_USER_ID || window.CURRENT_USER_ID === "guest") {
     console.warn("No user logged in; watch progress tracking disabled.");
     return;
@@ -28,8 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const userId = window.CURRENT_USER_ID;
     const profileName = window.CURRENT_PROFILE;
     const contentId = cover.id;
-
-    /* --- Play video --- */
+    console.log("%%%%%%%%", profileName);
+    // --- Play video ---
     function playTransition() {
       videoWrapper.classList.remove("hidden");
       cover.classList.add("playing");
@@ -39,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     img.addEventListener("click", playTransition);
     btn.addEventListener("click", playTransition);
 
-    /* --- Load watch progress --- */
+    // --- Load watch progress ---
     async function loadProgress() {
       try {
         const res = await fetch(
@@ -63,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     video.addEventListener("loadedmetadata", loadProgress);
 
-    /* --- Save watch progress --- */
+    // --- Save watch progress ---
     let updateTimer;
     async function sendProgress() {
       if (!video.duration) return;
@@ -88,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     window.addEventListener("beforeunload", sendProgress);
 
-    /* --- Format time --- */
+    // --- Format time ---
     const fmt = (s) => {
       const m = Math.floor(s / 60);
       const sec = Math.floor(s % 60);
@@ -101,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (timeDisplay) timeDisplay.textContent = `${fmt(c)} / ${fmt(t)}`;
     }
 
-    /* --- Hover controls --- */
+    // --- Hover controls ---
     let controlsTimeout;
     function showControls() {
       controls.classList.add("show");
@@ -117,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!video.paused) controls.classList.remove("show");
     });
 
-    /* --- Play/Pause --- */
+    // --- Play/Pause ---
     function togglePlay() {
       video.paused ? video.play() : video.pause();
       showControls();
@@ -146,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTimer = null;
     });
 
-    /* --- Seek --- */
+    // --- Seek ---
     backward.addEventListener("click", () => {
       video.currentTime = Math.max(0, video.currentTime - 10);
       showControls();
@@ -171,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTimeDisplay();
     });
 
-    /* --- Fullscreen --- */
+    // --- Fullscreen ---
     fullscreenBtn.addEventListener("click", () => {
       if (!document.fullscreenElement)
         cover.requestFullscreen().catch(console.error);
@@ -179,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showControls();
     });
 
-    /* --- Volume --- */
+    // --- Volume ---
     let lastVolume = parseFloat(localStorage.getItem("lastVolume")) ?? 1.0;
     video.volume = lastVolume;
     volumeSlider.value = lastVolume;
@@ -227,5 +229,10 @@ document.addEventListener("DOMContentLoaded", () => {
       updateVolumeIcon();
       paintVolumeBar();
     });
+
+    // ✅ Auto-play immediately if on watch page
+    if (isWatchPage) {
+      playTransition();
+    }
   });
 });

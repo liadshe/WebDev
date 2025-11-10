@@ -1,7 +1,9 @@
 const Content = require("../models/Content");
 
-async function renderMainPage(req, res) {
+async function renderWatchPage(req, res) {
   try {
+    if (!req.session.user) return res.redirect("/login");
+
     const movie = await Content.findById(req.params.id).lean();
     if (!movie) return res.status(404).send("Movie not found");
 
@@ -17,4 +19,4 @@ async function renderMainPage(req, res) {
   }
 }
 
-module.exports = { renderMainPage };
+module.exports = { renderWatchPage };

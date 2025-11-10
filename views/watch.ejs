@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= movie.title %> - Watch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/watch.css" />
+    <style>
+      .hidden {
+        display: none;
+      }
+      .video-wrapper {
+        position: relative;
+        max-width: 100vw;
+        max-height: 100vh;
+      }
+      .controls {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 1rem;
+        opacity: 0.95;
+      }
+    </style>
+  </head>
+  <body class="watch-page">
+    <div class="cover" id="<%= movie._id %>">
+      <img
+        class="cover-image"
+        src="/<%= movie.coverImagePath %>"
+        alt="<%= movie.title %>"
+      />
+
+      <button class="play-overlay" aria-label="Play"></button>
+
+      <div class="video-wrapper hidden">
+        <video
+          class="cover-video"
+          src="/<%= movie.videoPath %>"
+          preload="metadata"
+        ></video>
+
+        <div class="controls">
+          <button class="playPause">▶</button>
+          <button class="backward">⏪ 10s</button>
+          <button class="forward">10s ⏩</button>
+          <div class="volume-control">
+            <button class="volumeToggle">🔊</button>
+            <input
+              class="volumeSlider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value="1"
+            />
+          </div>
+          <input type="range" class="timeline" min="0" max="100" value="0" />
+          <span class="time-display">00:00 / 00:00</span>
+
+          <button class="fullscreen">⛶</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.CURRENT_USER_ID = "<%= (user && user._id) ? user._id : 'guest' %>";
+      window.CURRENT_PROFILE = "<%= activeProfile.name %>";
+    </script>
+    <script src="/js/watch.js"></script>
+  </body>
+</html>

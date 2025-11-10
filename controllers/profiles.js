@@ -163,6 +163,37 @@ async function renderProfileCreationPage(req, res) {
   }
 }
 
+async function setActiveProfile(req, res) {
+  try {
+    const { profileId } = req.params;
+    const userId = req.session.user?._id;
+
+    if (!userId) return res.redirect("/login");
+
+    const user = await loginService.getUserById(userId);
+    if (!user) return res.status(404).send("User not found");
+
+    const profile = user.profiles.id(profileId);
+    if (!profile) return res.status(404).send("Profile not found");
+
+    // ✅ Save the selected profile in the session
+    req.session.activeProfile = {
+      _id: profile._id,
+      name: profile.name,
+      picture: profile.picture,
+    };
+
+    await req.session.save();
+    console.log("✅ Active profile set:", req.session.activeProfile);
+
+    // redirect wherever you want after selection
+    res.redirect("/main");
+  } catch (err) {
+    console.error("❌ Error setting active profile:", err);
+    res.status(500).send("Server error");
+  }
+}
+
 module.exports = {
   updateProfile,
   renderEditProfilePage,
@@ -170,4 +201,5 @@ module.exports = {
   createProfile,
   renderProfileCreationPage,
   renderProfilesPage,
+  setActiveProfile,
 };
