@@ -19,9 +19,9 @@
           <section class="genre-section">
             <h2><%= genre %></h2>
 
-            <div class="genre-row">
+            <div class="genre-row" data-genre="<%= genre %>">
               <% moviesByGenre[genre].forEach(movie => { %>
-                <div class="cover" id="<%= movie._id %>">
+                <div class="cover" id="<%= movie._id %>" data-type="<%= movie.type %>">
                   <img
                     src="<%= movie.coverImagePath %>"
                     alt="<%= movie.title %>"
@@ -51,5 +51,10 @@
 </div>
     </main>
   <script src="/js/content-details.js"> </script>
+  <script src="/js/search.js"></script>
+  <script src="/js/genre-filter.js"></script>
+  <script src="/js/sort.js"></script>
+  <script src="/js/content-filter.js"></script>
+  <script src="/js/profile-dropdown.js"></script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-Genre Filter Functionality
+// Genre Filter Functionality
 (function() {
   let currentGenre = 'all';
 
@@ -87,18 +87,8 @@ Genre Filter Functionality
         option.innerHTML = `<span>${genre}</span>`;
         
         option.addEventListener('click', function() {
-        window.location.href = `/genre/${encodeURIComponent(genre)}`;
-
-         
-          // filterByGenre(genre);
-          
-        //   // Update active state
-        //   const allOptions = genreMenu.querySelectorAll('.genre-option');
-        //   allOptions.forEach(opt => opt.classList.remove('active'));
-        //   option.classList.add('active');
-          
-        //   // Close menu
-        //   genreMenu.classList.remove('show');
+          // Navigate to genre page
+          window.location.href = `/genre/${encodeURIComponent(genre)}`;
         });
         
         genreMenu.appendChild(option);
@@ -108,61 +98,15 @@ Genre Filter Functionality
       const allOption = genreMenu.querySelector('.genre-option[data-genre="all"]');
       if (allOption) {
         allOption.addEventListener('click', function() {
+          // Navigate back to main page showing all genres
           window.location.href = '/main';
-          // filterByGenre('all');
-          
-          // // Update active state
-          // const allOptions = genreMenu.querySelectorAll('.genre-option');
-          // allOptions.forEach(opt => opt.classList.remove('active'));
-          // allOption.classList.add('active');
-          
-          // // Close menu
-          // genreMenu.classList.remove('show');
         });
       }
 
       console.log('Populated', sortedGenres.length, 'genres');
     }
 
-    // Filter content by genre
-    function filterByGenre(genre) {
-      currentGenre = genre;
-      const genreSections = document.querySelectorAll('.genre-section');
-
-      if (genre === 'all') {
-        // Show all sections
-        genreSections.forEach(section => {
-          section.style.display = 'block';
-        });
-        console.log('Showing all genres');
-      } else {
-        // Show only selected genre
-        genreSections.forEach(section => {
-          const sectionGenre = section.getAttribute('data-genre');
-          if (sectionGenre === genre) {
-            section.style.display = 'block';
-          } else {
-            section.style.display = 'none';
-          }
-        });
-        console.log('Filtered to genre:', genre);
-      }
-
-      // Re-apply current sort to visible sections
-      if (window.sortContent && window.getCurrentSort) {
-        const currentSort = window.getCurrentSort();
-        if (currentSort) {
-          // Use setTimeout to ensure display changes are applied first
-          setTimeout(() => {
-            window.sortContent(currentSort);
-            console.log('Re-applied sort after genre filter:', currentSort);
-          }, 10);
-        }
-      }
-    }
-
-    // Export functions for external use
-    window.filterByGenre = filterByGenre;
+    // Export current genre for external use
     window.getCurrentGenre = function() { return currentGenre; };
   });
 })();
