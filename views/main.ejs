@@ -16,10 +16,10 @@
 
       <% for (let genre in moviesByGenre) { %>
         <% if (moviesByGenre[genre].length > 0) { %>
-          <section class="genre-section">
+          <section class="genre-section" data-genre="<%= genre %>"> 
             <h2><%= genre %></h2>
 
-            <div class="genre-row" data-genre="<%= genre %>">
+            <div class="genre-row" >
               <% moviesByGenre[genre].forEach(movie => { %>
                 <div class="cover" id="<%= movie._id %>" data-type="<%= movie.type %>">
                   <img
