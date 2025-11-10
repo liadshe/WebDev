@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalDescription = document.getElementById("modalDescription");
   const modalExtra = document.getElementById("modalExtra");
   const modalClose = document.getElementById("modalClose");
+  const modalPlayBtn = document.getElementById("modalPlayBtn");
+  let currentMovieId = null; // store the id for redirection
 
   let modalEpisodes = document.getElementById("modalEpisodes");
   if (!modalEpisodes) {
@@ -16,19 +18,24 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🧩 Function: render content inside the modal
   async function renderModalContent(title) {
     try {
-      const res = await fetch(`/api/contentDetails/${encodeURIComponent(title)}`);
+      const res = await fetch(
+        `/api/contentDetails/${encodeURIComponent(title)}`
+      );
       if (!res.ok) throw new Error("Content not found");
       const content = await res.json();
-
+      currentMovieId = content._id;
       modalTitle.textContent = content.title;
       modalCover.src = `/${content.coverImagePath}`;
       modalCover.alt = content.title;
-      modalDescription.textContent = content.description || "No description available.";
+      modalDescription.textContent =
+        content.description || "No description available.";
 
       // Cast links
       const castLinks = (content.cast || [])
-        .map(actor => {
-          const wikiUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(actor.replace(/\s+/g, "_"))}`;
+        .map((actor) => {
+          const wikiUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(
+            actor.replace(/\s+/g, "_")
+          )}`;
           return `<a href="${wikiUrl}" target="_blank" rel="noopener noreferrer">${actor}</a>`;
         })
         .join(", ");
@@ -43,13 +50,21 @@ document.addEventListener("DOMContentLoaded", () => {
       // Episodes (if series)
       if (content.type === "series") {
         if (content.episodes && content.episodes.length > 0) {
-          const episodeCards = content.episodes.map(ep => `
+          const episodeCards = content.episodes
+            .map(
+              (ep) => `
             <div class="episode-card">
               <div class="episode-number">Ep ${ep.episodeNumber || "?"}</div>
               <div class="episode-title">${ep.title}</div>
-              ${ep.duration ? `<div class="episode-duration">${ep.duration} min</div>` : ""}
+              ${
+                ep.duration
+                  ? `<div class="episode-duration">${ep.duration} min</div>`
+                  : ""
+              }
             </div>
-          `).join("");
+          `
+            )
+            .join("");
 
           modalEpisodes.innerHTML = `
             <h3 style="margin-top: 1rem;">Episodes:</h3>
@@ -74,19 +89,28 @@ document.addEventListener("DOMContentLoaded", () => {
       if (oldSimilar) oldSimilar.remove();
 
       // Similar content
-      if (content.similarFromSameGenre && content.similarFromSameGenre.length > 0) {
+      if (
+        content.similarFromSameGenre &&
+        content.similarFromSameGenre.length > 0
+      ) {
         const modalSimilar = document.createElement("div");
         modalSimilar.id = "modalSimilar";
 
-        const filteredSimilar = content.similarFromSameGenre.filter(sim => sim.title !== content.title);
+        const filteredSimilar = content.similarFromSameGenre.filter(
+          (sim) => sim.title !== content.title
+        );
 
         if (filteredSimilar.length > 0) {
-          const similarCards = filteredSimilar.map(sim => `
+          const similarCards = filteredSimilar
+            .map(
+              (sim) => `
             <div class="similar-card" data-title="${sim.title}">
               <img src="/${sim.coverImagePath}" alt="${sim.title}" class="similar-image" />
               <div class="similar-title">${sim.title}</div>
             </div>
-          `).join("");
+          `
+            )
+            .join("");
 
           modalSimilar.innerHTML = `
             <h3 style="margin-top: 1rem;">Similar Content:</h3>
@@ -104,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ✅ Handle clicks on any dynamically loaded movie cover
-  document.addEventListener("click", event => {
+  document.addEventListener("click", (event) => {
     const img = event.target.closest(".cover-image");
     if (!img) return;
     const title = img.alt.trim();
@@ -112,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ✅ Handle clicks on similar content cards (inside the modal)
-  document.addEventListener("click", event => {
+  document.addEventListener("click", (event) => {
     const card = event.target.closest(".similar-card");
     if (!card) return;
     const title = card.dataset.title;
@@ -121,7 +145,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Close modal
   modalClose.onclick = () => (modal.style.display = "none");
-  window.onclick = event => {
+  window.onclick = (event) => {
     if (event.target === modal) modal.style.display = "none";
   };
-});
+
+  // ✅ Redirect to the watch page when Play is clicked
+  modalPlayBtn.addEventListener("click", () => {
+    if (!currentMovieId) {
+      console.warn("No movie ID found for play action");
+      return;
+    }
+    // Optional graceful close before redirect
+    modal.style.display = "none";
+    setTimeout(() => {
+      window.location.href = `/watch/${currentMovieId}`;
+    }, 150);
+  }); // Closing the event listener function
+}); // Closing the DOMContentLoaded event listener
