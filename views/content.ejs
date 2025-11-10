@@ -38,7 +38,7 @@
         Series
       </label>
        <label style="display:inline-flex; align-items:center; gap:6px;">
-        <input type="radio" name="type" value="episode" required>
+        <input type="radio" name="type" value="episode">
         Episode
       </label>
     </div>
@@ -120,7 +120,7 @@
 
   </main>
 <script>
-    const series = JSON.stringify(series || []);
+  window.series = <%- JSON.stringify(series || []) %>;
 </script>
 <script src="/js/add-content.js"> </script>
 

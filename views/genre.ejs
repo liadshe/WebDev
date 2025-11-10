@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= givengenre.charAt(0).toUpperCase() + givengenre.slice(1).toLowerCase() %> Content</title>
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/main.css" />
+  <link rel="stylesheet" href="/settings.css" />
+  <link rel="stylesheet" href="/search.css" />
+  <link rel="stylesheet" href="/genre.css" />
+</head>
+
+<body class="main-page"
+      data-genre="<%= givengenre.charAt(0).toUpperCase() + givengenre.slice(1).toLowerCase() %>">
+
+  <%- include('partials/header') %>
+
+  <main class="genre-page">
+    <h1 class="genre-title">
+      <%= givengenre.charAt(0).toUpperCase() + givengenre.slice(1).toLowerCase() %> Content
+    </h1>
+
+    <div id="movie-grid" class="movie-grid"></div>
+    <div id="loading">Loading...</div>
+  </main>
+
+  <!-- Content Details Modal -->
+  <div id="contentModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="modalClose" class="close">&times;</span>
+
+      <div class="modal-image-container">
+        <img id="modalCover" src="" alt="">
+        <button id="modalPlayBtn" class="play-btn"></button>
+      </div>
+
+      <h2 id="modalTitle"></h2>
+      <p id="modalDescription"></p>
+      <div id="modalExtra"></div>
+      <div id="modalEpisodes"></div>
+      <div id="modalSimilar"></div>
+    </div>
+  </div>
+
+  <script src="/js/show-content-by-genre.js"></script>
+  <script src="/js/content-details.js"></script>
+</body>
+</html>

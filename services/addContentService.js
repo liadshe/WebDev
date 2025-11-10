@@ -13,6 +13,7 @@ const getAllGenres = async () => {
 
 const getAllSeries = async () => {
     const series = await Content.find({ type: 'series' }).lean();
+    console.log(series);
     return series;
 }
 
@@ -28,18 +29,18 @@ async function getContentByTitle(title)
     return content;
 }
 
-async function getContentByGenre(genres)
-{
-// ensure genres is an array
+async function getContentByGenre(genres, skip = 0, limit = 10) {
   if (!Array.isArray(genres)) genres = [genres];
 
   const content = await Content.find({
-    genre: { $in: genres } // find content that has ANY of these genres
-  }).lean();
-
+    genre: { $in: genres }
+  })
+    .skip(skip)
+    .limit(limit)
+    .lean();
   return content;
-
 }
+
 
 async function getEpisodesBySeriesTitle(title)
 {
