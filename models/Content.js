@@ -12,7 +12,7 @@ const ContentSchema = new mongoose.Schema({
   cast: [{ type: String, index: true }],
   director: { type: String },
   releaseYear: { type: Number },
-  rating: { type: String }, // from IMDB or similar
+  rating: { type: String }, 
   videoPath: { type: String },
   coverImagePath: { type: String },
 
@@ -20,7 +20,7 @@ const ContentSchema = new mongoose.Schema({
   durationSeconds: { type: Number },
   
   // for series only    
-  seasonNumber: { type: Number, default: 1 },
+  seasonNumber: { type: Number},
   uploadTime: { type: Date, default: Date.now }
 }); 
 
