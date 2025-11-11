@@ -258,3 +258,33 @@ body.watch-page {
   transform: translateY(0);
   opacity: 1;
 }
+
+.nextEpisode {
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.nextEpisode:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.nextEpisode {
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.nextEpisode:hover {
+  background: rgba(255, 255, 255, 0.15);
+}

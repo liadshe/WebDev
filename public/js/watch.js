@@ -23,14 +23,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const timeDisplay = cover.querySelector(".time-display");
     const volumeToggle = cover.querySelector(".volumeToggle");
     const volumeSlider = cover.querySelector(".volumeSlider");
+    const nextEpBtn = document.createElement("button");
 
     if (!video || !controls) return;
+
+    // === Add "Next Episode" button ===
+    nextEpBtn.classList.add("nextEpisode");
+    nextEpBtn.textContent = "Next ▶";
+    nextEpBtn.style.display = "none";
+    controls.appendChild(nextEpBtn);
 
     const userId = window.CURRENT_USER_ID;
     const profileName = window.CURRENT_PROFILE;
     const contentId = cover.id;
+    let allEpisodes = [];
 
-    // === VIDEO PLAY / PAUSE ===
+    // === Video play logic ===
     const playTransition = () => {
       videoWrapper.classList.remove("hidden");
       cover.classList.add("playing");
@@ -54,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
       playPause.textContent = "⏸";
       if (!updateTimer) updateTimer = setInterval(sendProgress, 10000);
     });
-
     video.addEventListener("pause", () => {
       playPause.textContent = "▶";
       sendProgress();
@@ -62,89 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTimer = null;
     });
 
-    video.addEventListener("ended", async () => {
-      clearInterval(updateTimer);
-      updateTimer = null;
-      try {
-        await fetch("/api/watch/progress", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId,
-            profileName,
-            contentId,
-            progressSeconds: video.duration,
-            durationSeconds: video.duration,
-          }),
-        });
-        console.log("✅ Marked video finished");
-      } catch (err) {
-        console.error("❌ Error marking finished:", err);
-      }
-    });
-
-    // === SEEK ===
-    backward.addEventListener("click", () => {
-      video.currentTime = Math.max(0, video.currentTime - 10);
-      showControls();
-    });
-    forward.addEventListener("click", () => {
-      video.currentTime = Math.min(video.duration, video.currentTime + 10);
-      showControls();
-    });
-
-    // === TIME & TIMELINE ===
-    const fmt = (s) => {
-      const m = Math.floor(s / 60);
-      const sec = Math.floor(s % 60);
-      return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
-    };
-
-    const updateTimeDisplay = () => {
-      const c = video.currentTime || 0;
-      const t = video.duration || 0;
-      timeDisplay.textContent = `${fmt(c)} / ${fmt(t)}`;
-    };
-
-    video.addEventListener("timeupdate", () => {
-      if (!video.duration) return;
-      const pct = (video.currentTime / video.duration) * 100;
-      timeline.value = pct;
-      timeline.style.setProperty("--progress", `${pct}%`);
-      updateTimeDisplay();
-    });
-
-    timeline.addEventListener("input", (e) => {
-      e.stopPropagation();
-      if (!video.duration) return;
-      video.currentTime = (timeline.value / 100) * video.duration;
-      updateTimeDisplay();
-    });
-
-    // === FULLSCREEN ===
-    fullscreenBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      if (!document.fullscreenElement) videoWrapper.requestFullscreen();
-      else document.exitFullscreen();
-      showControls();
-    });
-
-    // === SHOW CONTROLS ON HOVER ===
-    let controlsTimeout;
-    const showControls = () => {
-      controls.classList.add("show");
-      clearTimeout(controlsTimeout);
-      controlsTimeout = setTimeout(() => {
-        if (!video.paused) controls.classList.remove("show");
-      }, 2500);
-    };
-    cover.addEventListener("mousemove", showControls);
-    cover.addEventListener("mouseenter", showControls);
-    cover.addEventListener("mouseleave", () => {
-      if (!video.paused) controls.classList.remove("show");
-    });
-
-    // === WATCH PROGRESS ===
+    // === Progress saving ===
     let updateTimer;
     const sendProgress = async () => {
       if (!video.duration) return;
@@ -166,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     window.addEventListener("beforeunload", sendProgress);
 
-    // === LOAD PREVIOUS PROGRESS ===
+    // === Resume from saved progress ===
     const loadProgress = async () => {
       try {
         const res = await fetch(
@@ -182,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const setWhenReady = () => {
             if (video.readyState >= 1 && video.duration > 0) {
               video.currentTime = resume;
-              console.log(`✅ Resumed playback at ${resume}s`);
+              console.log(`✅ Resumed at ${resume}s`);
             } else setTimeout(setWhenReady, 150);
           };
           setWhenReady();
@@ -193,7 +118,48 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     video.addEventListener("loadedmetadata", loadProgress);
 
-    // === VOLUME ===
+    // === Time formatting & controls ===
+    const fmt = (s) => {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+    };
+    const updateTimeDisplay = () => {
+      const c = video.currentTime || 0;
+      const t = video.duration || 0;
+      timeDisplay.textContent = `${fmt(c)} / ${fmt(t)}`;
+    };
+    video.addEventListener("timeupdate", () => {
+      if (!video.duration) return;
+      const pct = (video.currentTime / video.duration) * 100;
+      timeline.value = pct;
+      timeline.style.setProperty("--progress", `${pct}%`);
+      updateTimeDisplay();
+    });
+    timeline.addEventListener("input", (e) => {
+      e.stopPropagation();
+      if (!video.duration) return;
+      video.currentTime = (timeline.value / 100) * video.duration;
+      updateTimeDisplay();
+    });
+
+    // === Seek & fullscreen ===
+    backward.addEventListener("click", () => {
+      video.currentTime = Math.max(0, video.currentTime - 10);
+      showControls();
+    });
+    forward.addEventListener("click", () => {
+      video.currentTime = Math.min(video.duration, video.currentTime + 10);
+      showControls();
+    });
+    fullscreenBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!document.fullscreenElement) videoWrapper.requestFullscreen();
+      else document.exitFullscreen();
+      showControls();
+    });
+
+    // === Volume ===
     let lastVolume = parseFloat(localStorage.getItem("lastVolume")) ?? 1.0;
     video.volume = lastVolume;
     volumeSlider.value = lastVolume;
@@ -233,7 +199,18 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("lastVolume", val);
     });
 
-    // === EPISODE SELECTOR ===
+    // === Show / Hide controls ===
+    let controlsTimeout;
+    const showControls = () => {
+      controls.classList.add("show");
+      clearTimeout(controlsTimeout);
+      controlsTimeout = setTimeout(() => {
+        if (!video.paused) controls.classList.remove("show");
+      }, 2500);
+    };
+    cover.addEventListener("mousemove", showControls);
+
+    // === EPISODE SELECTOR + NEXT EPISODE ===
     const episodeSelector = document.getElementById("episodeSelector");
     const dropdown = episodeSelector?.querySelector(".episodes-dropdown");
 
@@ -247,9 +224,20 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((data) => {
           if (data.type !== "series" || !data.episodes?.length) {
             episodeSelector.style.display = "none";
+            nextEpBtn.style.display = "none";
             return;
           }
 
+          allEpisodes = data.episodes.sort((a, b) => {
+            if (a.seasonNumber === b.seasonNumber)
+              return a.episodeNumber - b.episodeNumber;
+            return a.seasonNumber - b.seasonNumber;
+          });
+
+          nextEpBtn.style.display = "inline-block";
+          episodeSelector.classList.remove("hidden");
+
+          // === build dropdown ===
           const seasons = {};
           data.episodes.forEach((ep) => {
             const s = ep.seasonNumber || 1;
@@ -267,7 +255,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 ${seasons[season]
                   .map(
                     (ep) => `
-                  <button data-path="/${ep.videoPath}">
+                  <button data-path="/${ep.videoPath}" data-ep="${
+                      ep.episodeNumber
+                    }" data-s="${ep.seasonNumber}">
                     E${ep.episodeNumber || "?"} — ${ep.title}
                   </button>`
                   )
@@ -277,19 +267,15 @@ document.addEventListener("DOMContentLoaded", () => {
             )
             .join("");
 
-          // Handle episode clicks
+          // === click episode ===
           dropdown.addEventListener("click", (e) => {
             const btn = e.target.closest("button[data-path]");
             if (!btn) return;
-            video.src = btn.dataset.path;
-            video.currentTime = 0;
-            playTransition();
-            dropdown.style.display = "none";
+            playEpisode(btn.dataset.path);
           });
-        })
-        .catch((err) => console.error("Error loading episodes:", err));
+        });
 
-      // Prevent flicker
+      // Hover delay
       let hoverTimeout;
       episodeSelector.addEventListener("mouseenter", () => {
         clearTimeout(hoverTimeout);
@@ -307,6 +293,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 250);
       });
     }
+
+    // === Helper to play episode ===
+    const playEpisode = (path) => {
+      video.src = path;
+      video.currentTime = 0;
+      playTransition();
+    };
+
+    // === Next episode logic ===
+    nextEpBtn.addEventListener("click", () => {
+      if (!allEpisodes.length) return;
+      const currentSrc = video.src.split("/").pop();
+      const currentIndex = allEpisodes.findIndex((ep) =>
+        ep.videoPath.includes(currentSrc)
+      );
+      const next = allEpisodes[currentIndex + 1];
+      if (!next) {
+        alert("🎉 You've reached the last episode!");
+        return;
+      }
+      console.log("➡️ Playing next episode:", next.title);
+      playEpisode(`/${next.videoPath}`);
+    });
 
     if (isWatchPage) playTransition();
   });
