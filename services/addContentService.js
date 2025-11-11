@@ -13,7 +13,6 @@ const getAllGenres = async () => {
 
 const getAllSeries = async () => {
     const series = await Content.find({ type: 'series' }).lean();
-    console.log(series);
     return series;
 }
 

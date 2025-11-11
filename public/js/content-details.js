@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .join(", ");
 
       modalExtra.innerHTML = `
+      <strong> Rating:</strong> ${content.rating || "N/A"}<br> 
         <strong>Genre:</strong> ${content.genre.join(", ")}<br>
         <strong>Year:</strong> ${content.releaseYear || "N/A"}<br>
         <strong>Director:</strong> ${content.director || "N/A"}<br>
@@ -44,12 +45,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (content.type === "series") {
         if (content.episodes && content.episodes.length > 0) {
           const episodeCards = content.episodes.map(ep => `
-            <div class="episode-card">
-              <div class="episode-number">Ep ${ep.episodeNumber || "?"}</div>
-              <div class="episode-title">${ep.title}</div>
-              ${ep.duration ? `<div class="episode-duration">${ep.duration} min</div>` : ""}
-            </div>
-          `).join("");
+  <div class="episode-card">
+    <div class="episode-number">S${ep.seasonNumber || "?"}:E${ep.episodeNumber || "?"}</div>
+    <div class="episode-title">${ep.title || "Untitled Episode"}</div>
+    ${ep.durationSeconds ? `<div class="episode-duration">${Math.round(ep.durationSeconds)} seconds</div>` : ""}
+  </div>
+`).join("");
+
 
           modalEpisodes.innerHTML = `
             <h3 style="margin-top: 1rem;">Episodes:</h3>
@@ -103,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ✅ Handle clicks on any dynamically loaded movie cover
+  // Handle clicks on any dynamically loaded movie cover
   document.addEventListener("click", event => {
     const img = event.target.closest(".cover-image");
     if (!img) return;
@@ -111,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderModalContent(title);
   });
 
-  // ✅ Handle clicks on similar content cards (inside the modal)
+  // Handle clicks on similar content cards (inside the modal)
   document.addEventListener("click", event => {
     const card = event.target.closest(".similar-card");
     if (!card) return;

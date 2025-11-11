@@ -1,5 +1,3 @@
-const bcrypt = require("bcrypt");
-const User = require("../models/User");
 const loginService = require("../services/loginService");
 
 async function renderSettingsPage(req, res) {

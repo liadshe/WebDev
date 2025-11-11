@@ -36,15 +36,19 @@ async function handleRegister(req, res) {
       email,
       passwordHash,
     });
-    req.session.userId = newUser._id;
-    req.session.username = newUser.username;
+    
+    req.session.user ={
+      _id: newUser._id,
+      username: newUser.username,
+      email: newUser.email,
+    };
+
     await logService.createLog({
       level: "INFO",
       service: "Auth",
       message: `New user registered: '${newUser.username}'.`,
       userId: newUser._id,
     });
-    console.log("User registered:", newUser.username);
     res.redirect("/profiles");
   } catch (err) {
     logService.createLog({

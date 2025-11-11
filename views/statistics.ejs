@@ -2,77 +2,84 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Main Page</title>
+  <title>Statistics</title>
   <link rel="stylesheet" href="/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="settings-page">
   <div class="sidebar">
-    <a href="/main" class="back-link">
-        ← Back to main page
-    </a>
+    <a href="/main" class="back-link">← Back to main page</a>
     <a href="/settings">Manage Profiles</a>
     <a href="/statistics" class="active">Statistics</a>
   </div>
+
   <div style="margin: auto;">
-    <h2>profiles genres preferences</h2>
+    <h2>Profiles Genres Preferences</h2>
     <canvas id="genrePopularityChart"></canvas>
-    <p id="no-data-message" style="display: none; text-align: center; color: var(--color-gray-300);">
-      No genre data available to display.
-    </p>
+    <p id="no-genre-data" style="display:none; text-align:center; color:gray;">No data available.</p>
   </div>
 
   <div style="margin: auto;">
-      <h1>next graph here</h1>
+    <h2>Profiles Daily Watch Time (minutes)</h2>
+    <canvas id="dailyWatchChart"></canvas>
+    <p id="no-watch-data" style="display:none; text-align:center; color:gray;">No data available.</p>
   </div>
 
   <script>
-    const chartData = <%- JSON.stringify(genreData || []) %>;
-    console.log(chartData);
-    if (chartData.length > 0) {
-        const labels = chartData.map(item => item.label);
-        const dataValues = chartData.map(item => item.value);
+    // GENRES CHART
+    const genreData = <%- JSON.stringify(genreData || []) %>;
+    if (genreData.length > 0) {
+      const labels = genreData.map(item => item.label);
+      const dataValues = genreData.map(item => item.value);
+      const bgColors = labels.map(() => `hsl(${Math.random()*360}, 70%, 60%)`);
+      const ctx1 = document.getElementById('genrePopularityChart').getContext('2d');
+      new Chart(ctx1, {
+        type: 'pie',
+        data: { labels, datasets: [{ data: dataValues, backgroundColor: bgColors }] },
+        options: { responsive: true, plugins: { legend: { position: 'left' } } }
+      });
+    } else document.getElementById('no-genre-data').style.display = 'block';
 
-        // Generate random colors for each genre
-        function generateRandomColors(count) {
-          const colors = [];
-          for (let i = 0; i < count; i++) {
-            const r = Math.floor(Math.random() * 255);
-            const g = Math.floor(Math.random() * 255);
-            const b = Math.floor(Math.random() * 255);
-            colors.push(`rgb(${r}, ${g}, ${b})`);
-          }
-          return colors;
-        }
 
-        const backgroundColors = generateRandomColors(labels.length);
-        const ctx = document.getElementById('genrePopularityChart').getContext('2d');
+    // DAILY WATCH CHART
+    const dailyWatchData = <%- JSON.stringify(dailyWatchData || []) %>;
 
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels,
-                datasets: [{
-                    label: 'Profiles',
-                    data: dataValues,
-                    backgroundColor: backgroundColors,
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'left' },
-                    title: {
-                        display: false,
-                        text: 'Your profiles preferences'
-                    }
-                }
-            }
+    if (dailyWatchData.length > 0) {
+      // Extract unique dates and profiles
+      const dates = [...new Set(dailyWatchData.map(d => d._id.date))];
+      const profiles = [...new Set(dailyWatchData.map(d => d._id.profile))];
+
+      // Create dataset for each profile
+      const datasets = profiles.map(profile => {
+        const data = dates.map(date => {
+          const entry = dailyWatchData.find(
+            d => d._id.date === date && d._id.profile === profile
+          );
+          return entry ? (entry.totalSeconds / 60).toFixed(1) : 0; // convert to minutes
         });
-    } else {
-        document.getElementById('no-data-message').style.display = 'block';
-    }
+        return {
+          label: profile,
+          data,
+          backgroundColor: `hsl(${Math.random()*360}, 70%, 60%)`
+        };
+      });
+
+      const ctx2 = document.getElementById('dailyWatchChart').getContext('2d');
+      new Chart(ctx2, {
+        type: 'bar',
+        data: { labels: dates, datasets },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: false }
+          },
+          scales: {
+            y: { title: { display: true, text: "Minutes Watched" }, beginAtZero: true }
+          }
+        }
+      });
+    } else document.getElementById('no-watch-data').style.display = 'block';
   </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const contentController = require("../../controllers/content");
+const genreController = require("../../controllers/genre");
 
-router.get("/:genre", contentController.renderGenrePage);
+router.get("/:genre", genreController.renderGenrePage);
 
 module.exports = router;

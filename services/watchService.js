@@ -1,4 +1,5 @@
 const WatchHistory = require("../models/watchHistory");
+const mongoose = require("mongoose");
 
 async function updateProgress({
   userId,
@@ -28,4 +29,25 @@ async function getProgress(userId, profileName, contentId) {
   return await WatchHistory.findOne({ userId, profileName, contentId });
 }
 
-module.exports = { updateProgress, getProgress };
+async function getUserDailyWatch(userId) {
+  const objectId = new mongoose.Types.ObjectId(userId);
+
+  const result = await WatchHistory.aggregate([
+    { $match: { userId: objectId } },
+    {
+      $group: {
+        _id: {
+          date: { $dateToString: { format: "%Y-%m-%d", date: "$watchedAt" } },
+          profile: "$profileName"
+        },
+        totalSeconds: { $sum: "$progressSeconds" },
+      },
+    },
+    { $sort: { "_id.date": 1 } },
+  ]);
+
+  return result;
+}
+
+
+module.exports = { updateProgress, getProgress, getUserDailyWatch };

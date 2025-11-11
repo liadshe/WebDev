@@ -16,9 +16,7 @@ async function searchContent(req, res) {
     }
 
     // Get all content
-    console.log("Fetching all content from database...");
     const allContent = await addContentService.getAllContent();
-    console.log(`Found ${allContent.length} total content items`);
     
     // Search logic: filter by title or genre
     const searchTerm = query.toLowerCase().trim();
@@ -37,8 +35,6 @@ async function searchContent(req, res) {
       
       return titleMatch || genreMatch || descriptionMatch;
     });
-
-    console.log(`Search for "${query}" returned ${results.length} results`);
 
     // Limit results to avoid overwhelming the UI
     const limitedResults = results.slice(0, 10);
