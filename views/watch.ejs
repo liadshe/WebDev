@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= movie.title %> - Watch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="/watch.css" />
+  </head>
+
+  <body class="watch-page">
+    <div class="cover" id="<%= movie._id %>">
+      <div class="video-wrapper">
+        <!-- 🔙 Back button lives INSIDE the video wrapper so it’s above the video -->
+        <div class="video-header">
+          <button
+            class="back-btn"
+            onclick="event.stopPropagation(); window.location.href='/main'"
+          >
+            ←
+          </button>
+        </div>
+
+        <video
+          class="cover-video"
+          src="/<%= movie.videoPath %>"
+          preload="metadata"
+        ></video>
+
+        <div class="controls">
+          <button class="playPause">▶</button>
+          <button class="backward">⮜ 10s</button>
+          <button class="forward">10s ⮞</button>
+          <div class="volume-control">
+            <button class="volumeToggle">🔊</button>
+            <input
+              class="volumeSlider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value="1"
+            />
+          </div>
+          <input type="range" class="timeline" min="0" max="100" value="0" />
+          <span class="time-display">00:00 / 00:00</span>
+          <button class="fullscreen">⛶</button>
+
+          <div id="episodeSelector" class="episode-selector hidden">
+            <button class="episode-menu-btn" aria-label="Select episode">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="26"
+                height="26"
+                fill="white"
+              >
+                <path d="M3 5h18v2H3V5zm0 6h18v2H3v-2zm0 6h12v2H3v-2z" />
+              </svg>
+            </button>
+            <div class="episodes-dropdown"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.CURRENT_USER_ID = "<%= (user && user._id) ? user._id : 'guest' %>";
+      window.CURRENT_PROFILE = "<%= activeProfile.name %>";
+    </script>
+    <script src="/js/watch.js"></script>
+  </body>
+</html>
