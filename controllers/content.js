@@ -3,6 +3,7 @@ const dotenv = require("dotenv"); // to load OMDb API key
 const axios = require("axios"); // to call external OMDb API
 const { getVideoDurationInSeconds } = require("get-video-duration"); // to get video duration
 const path = require("path"); // to handle file paths
+const logService = require("../services/logService");
 
 dotenv.config();
 
@@ -43,23 +44,38 @@ async function getRating(title) {
     });
 
     if (response.data.Response === "False") {
-      console.log("Movie not found");
-    }
+    await logService.createLog({
+          level: "INFO",
+          service: "AddContent",
+          message: `content ${title} was not found in omdb.`,
+        });
+        }    
     return response.data.imdbRating;
   } catch (err) {
-    console.error("Error fetching rating from OMDb:", err);
-  }
-  return null;
+        await logService.createLog({
+          level: "INFO",
+          service: "AddContent",
+          message: `error accured while fetching rating for ${title}: ${err}.`,
+          userId: req.session.user,
+        });
+        }
+    return null;
 }
 
-// get video duration in seconds
+// get video Zduration in seconds
 async function getVideoDuration(videoPath) {
   try {
     const absolutePath = path.resolve(videoPath);
     const durationSeconds = await getVideoDurationInSeconds(absolutePath);
     return durationSeconds;
   } catch (err) {
-    console.error("Error reading video duration:", err);
+      await logService.createLog({
+      level: "INFO",
+      service: "AddContent",
+      message: `Error reading video duration: ${err}`,
+      userId: req.session.user,
+        });
+
     return null;
   }
 }
