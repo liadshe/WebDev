@@ -1,69 +1,69 @@
-/* === COVER CONTAINER === */
+/* === BASE PAGE === */
+body.watch-page {
+  background-color: black;
+  margin: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+/* === VIDEO CONTAINER === */
 .cover {
   position: relative;
   width: 100%;
-  max-width: 900px;
-  aspect-ratio: 16/9;
-  margin: 1.25rem auto;
-  overflow: hidden;
-  border-radius: 6px;
-  background: #000;
-}
-
-.hidden {
-  display: none;
-}
-
-/* === IMAGE & PLAY ICON === */
-.cover-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 450ms cubic-bezier(0.2, 0.9, 0.2, 1), opacity 350ms ease;
-  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.play-overlay {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.45);
-  color: #fff;
-  font-size: 34px;
-  border: none;
-  display: grid;
-  place-items: center;
-  transition: background 200ms ease, transform 200ms ease, opacity 200ms ease;
-  z-index: 3;
-  cursor: pointer;
-}
-
-.cover.playing .cover-image,
-.cover.playing .play-overlay {
-  opacity: 0;
-  transform: scale(1.05);
-  pointer-events: none;
-}
-
-/* === VIDEO WRAPPER === */
 .video-wrapper {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 90vw;
+  height: 90vh;
+  max-width: 1600px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
 }
 
+/* 🔝 Header inside the video wrapper */
+.video-header {
+  position: absolute;
+  top: 20px;
+  left: 25px;
+  z-index: 10000;
+}
+
+.back-btn {
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: white;
+  font-size: 28px;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* === VIDEO === */
 .cover-video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   background: #000;
-  border-radius: 6px;
   cursor: pointer;
+  border-radius: 10px;
 }
 
 /* === CONTROLS === */
@@ -81,17 +81,12 @@
   border-radius: 8px;
   opacity: 0;
   transition: opacity 0.3s ease;
-  z-index: 10;
+  z-index: 9990;
   pointer-events: none;
 }
 
 .cover:hover .controls,
 .controls.show {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.cover.paused .controls {
   opacity: 1;
   pointer-events: auto;
 }
@@ -140,7 +135,7 @@
   text-align: right;
 }
 
-/* === HOVER-TO-SHOW HORIZONTAL VOLUME === */
+/* === VOLUME CONTROL === */
 .volume-control {
   display: flex;
   align-items: center;
@@ -161,7 +156,6 @@
   transform: scale(1.1);
 }
 
-/* hidden by default */
 .volumeSlider {
   -webkit-appearance: none;
   appearance: none;
@@ -172,23 +166,12 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.3);
   transition: width 0.25s ease, opacity 0.25s ease;
-  margin-top: 0;
-  vertical-align: middle;
-  position: relative;
 }
 
-/* show on hover */
 .volume-control:hover .volumeSlider {
-  width: 70px; /* shorter red line */
+  width: 70px;
   opacity: 1;
   pointer-events: auto;
-}
-
-/* --- centered red thumb --- */
-.volumeSlider::-webkit-slider-runnable-track {
-  background: transparent;
-  height: 4px;
-  border-radius: 4px;
 }
 
 .volumeSlider::-webkit-slider-thumb {
@@ -199,44 +182,109 @@
   background: red;
   cursor: pointer;
   position: relative;
-  top: 50%;
-  transform: translateY(-50%); /* centers thumb vertically */
+  top: 1px; /* stays centered on line */
   border: none;
 }
 
-.volumeSlider::-moz-range-track {
-  background: transparent;
-  height: 4px;
-  border-radius: 4px;
-}
-
-.volumeSlider::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: red;
-  border: none;
-  cursor: pointer;
+/* === EPISODE SELECTOR (Netflix-Style Unified) === */
+.episode-selector {
   position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+  display: inline-block;
+  padding-bottom: 10px; /* hover buffer to prevent flicker */
 }
 
-/* === RESPONSIVE === */
-@media (max-width: 640px) {
-  .play-overlay {
-    width: 64px;
-    height: 64px;
-    font-size: 24px;
-  }
+.episode-menu-btn {
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
 
-  .cover {
-    max-width: 100%;
-  }
+.episode-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
 
-  .controls {
-    font-size: 14px;
-    gap: 6px;
-    padding: 6px 8px;
-  }
+.episodes-dropdown {
+  position: absolute;
+  bottom: 120%;
+  right: 0;
+  background: rgba(20, 20, 20, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 0;
+  min-width: 240px;
+  z-index: 20000;
+  display: none;
+}
+
+.episode-selector:hover .episodes-dropdown,
+.episode-selector:focus-within .episodes-dropdown {
+  display: block;
+}
+
+/* Season and episode items */
+.dropdown-item {
+  color: white;
+  padding: 8px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dropdown-header {
+  font-weight: bold;
+  color: #ff4444;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-header:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* subtle animation */
+.episodes-dropdown {
+  transform: translateY(5px);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0;
+}
+.episode-selector:hover .episodes-dropdown {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.nextEpisode {
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.nextEpisode:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.nextEpisode {
+  background: rgba(0, 0, 0, 0.45);
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.nextEpisode:hover {
+  background: rgba(255, 255, 255, 0.15);
 }

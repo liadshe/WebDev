@@ -1,4 +1,4 @@
-Genre Filter Functionality
+// Genre Filter Functionality
 (function() {
   let currentGenre = 'all';
 
@@ -9,11 +9,13 @@ Genre Filter Functionality
     const genreMenu = document.getElementById('genreMenu');
     const genreDropdown = document.getElementById('genreDropdown');
     
-    // Exit if genre dropdown doesn't exist (not on series/movies page)
+    // Exit if genre dropdown doesn't exist
     if (!genreToggle || !genreMenu || !genreDropdown) {
-      console.log('Genre dropdown not found - likely on home page');
+      console.log('Genre dropdown not found - likely on a different page');
       return;
     }
+
+    console.log('Genre dropdown elements found - initializing...');
 
     // Initialize genre dropdown
     initializeGenreDropdown();
@@ -27,7 +29,11 @@ Genre Filter Functionality
       genreToggle.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
+        
+        const isOpen = genreMenu.classList.contains('show');
         genreMenu.classList.toggle('show');
+        
+        console.log('Genre dropdown toggled:', !isOpen ? 'opened' : 'closed');
         
         // Close sort menu if open
         const sortMenu = document.getElementById('sortMenu');
@@ -61,23 +67,29 @@ Genre Filter Functionality
         }
       });
 
-      console.log('Genre dropdown initialized');
+      console.log('Genre dropdown event listeners attached');
     }
 
     // Populate genre options from existing content
     function populateGenres() {
+      console.log('Populating genres from page content...');
+      
       const genreSections = document.querySelectorAll('.genre-section');
+      console.log('Found', genreSections.length, 'genre sections');
+      
       const genres = new Set();
 
-      genreSections.forEach(section => {
+      genreSections.forEach((section, index) => {
         const genre = section.getAttribute('data-genre');
         if (genre) {
           genres.add(genre);
+          console.log(`  ${index + 1}. Found genre: "${genre}"`);
         }
       });
 
       // Sort genres alphabetically
       const sortedGenres = Array.from(genres).sort();
+      console.log('Total unique genres:', sortedGenres.length);
 
       // Add genre options to menu
       sortedGenres.forEach(genre => {
@@ -86,19 +98,18 @@ Genre Filter Functionality
         option.setAttribute('data-genre', genre);
         option.innerHTML = `<span>${genre}</span>`;
         
-        option.addEventListener('click', function() {
-        window.location.href = `/genre/${encodeURIComponent(genre)}`;
-
-         
-          // filterByGenre(genre);
+        // IMPORTANT: Click handler to navigate to /genre/Action, /genre/Drama, etc.
+        option.addEventListener('click', function(e) {
+          e.preventDefault();
           
-        //   // Update active state
-        //   const allOptions = genreMenu.querySelectorAll('.genre-option');
-        //   allOptions.forEach(opt => opt.classList.remove('active'));
-        //   option.classList.add('active');
+          console.log('Genre clicked:', genre);
+          console.log('Navigating to: /genre/' + genre);
           
-        //   // Close menu
-        //   genreMenu.classList.remove('show');
+          // Close the menu
+          genreMenu.classList.remove('show');
+          
+          // Navigate to the genre page
+          window.location.href = `/genre/${encodeURIComponent(genre)}`;
         });
         
         genreMenu.appendChild(option);
@@ -107,62 +118,25 @@ Genre Filter Functionality
       // Add click handler to "All Genres" option
       const allOption = genreMenu.querySelector('.genre-option[data-genre="all"]');
       if (allOption) {
-        allOption.addEventListener('click', function() {
+        allOption.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          console.log('"All Genres" clicked');
+          console.log('Navigating to: /main');
+          
+          // Close the menu
+          genreMenu.classList.remove('show');
+          
+          // Navigate back to main page showing all genres
           window.location.href = '/main';
-          // filterByGenre('all');
-          
-          // // Update active state
-          // const allOptions = genreMenu.querySelectorAll('.genre-option');
-          // allOptions.forEach(opt => opt.classList.remove('active'));
-          // allOption.classList.add('active');
-          
-          // // Close menu
-          // genreMenu.classList.remove('show');
         });
+        console.log('"All Genres" option configured');
       }
 
-      console.log('Populated', sortedGenres.length, 'genres');
+      console.log('✓ Genre dropdown populated with', sortedGenres.length, 'genres');
     }
 
-    // Filter content by genre
-    function filterByGenre(genre) {
-      currentGenre = genre;
-      const genreSections = document.querySelectorAll('.genre-section');
-
-      if (genre === 'all') {
-        // Show all sections
-        genreSections.forEach(section => {
-          section.style.display = 'block';
-        });
-        console.log('Showing all genres');
-      } else {
-        // Show only selected genre
-        genreSections.forEach(section => {
-          const sectionGenre = section.getAttribute('data-genre');
-          if (sectionGenre === genre) {
-            section.style.display = 'block';
-          } else {
-            section.style.display = 'none';
-          }
-        });
-        console.log('Filtered to genre:', genre);
-      }
-
-      // Re-apply current sort to visible sections
-      if (window.sortContent && window.getCurrentSort) {
-        const currentSort = window.getCurrentSort();
-        if (currentSort) {
-          // Use setTimeout to ensure display changes are applied first
-          setTimeout(() => {
-            window.sortContent(currentSort);
-            console.log('Re-applied sort after genre filter:', currentSort);
-          }, 10);
-        }
-      }
-    }
-
-    // Export functions for external use
-    window.filterByGenre = filterByGenre;
+    // Export current genre for external use
     window.getCurrentGenre = function() { return currentGenre; };
   });
 })();

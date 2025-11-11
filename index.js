@@ -13,6 +13,7 @@ const statisticsViewRouter = require("./routes/views/statistics");
 const searchRouter = require("./routes/views/search");
 const profilesViewRouter = require("./routes/views/profiles");
 const genreViewRouter = require("./routes/views/genre");
+const watchViewRouter = require("./routes/views/watch");
 
 const profilesApiRouter = require("./routes/api/profiles");
 const watchApiRouter = require("./routes/api/watch");
@@ -61,14 +62,14 @@ app.use("/settings", settingsViewRouter);
 app.use("/statistics", statisticsViewRouter);
 app.use("/content", contentViewRouter);
 app.use("/genre", genreViewRouter);
-
+app.use("/watch", watchViewRouter);
 
 // api routes
 app.use("/api/profiles", profilesApiRouter);
 app.use("/api/statistics", statisticsApiRouter);
-app.use("/api/watch", express.json(), watchApiRouter);
-app.use("/api/contentDetails", contentDetailsApiRouter)
-app.use("/api/genre", genreApiRouter)
+app.use("/api/watch", watchApiRouter);
+app.use("/api/contentDetails", contentDetailsApiRouter);
+app.use("/api/genre", genreApiRouter);
 
 const PORT = parseInt(process.env.PORT);
 app.listen(PORT, () => {

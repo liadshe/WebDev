@@ -13,4 +13,10 @@ const WatchHistorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Ensure unique progress entry per user + profile + content
+WatchHistorySchema.index(
+  { userId: 1, profileName: 1, contentId: 1 },
+  { unique: true }
+);
+
 module.exports = mongoose.model("WatchHistory", WatchHistorySchema);
