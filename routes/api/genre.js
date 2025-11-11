@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const contentController = require("../../controllers/content");
+const genreController = require("../../controllers/genre");
 
 // return json of contents by given genre
-router.get("/:genre", contentController.getContentByGenre);
+router.get("/:genre", genreController.getContentByGenre);
 
 module.exports = router;

@@ -64,6 +64,7 @@ async function getVideoDuration(videoPath) {
   }
 }
 
+// hnndle submission of add-content form
 async function handleContentSubmission(req, res) {
     try {
     const title = req.body.title;
@@ -167,7 +168,7 @@ async function handleContentSubmission(req, res) {
   }
 }
 
-
+// gets a title and return the content data by the title 
 async function getContentDetailsByTitle(req, res){
     const content = await addContentService.getContentByTitle(req.params.title);
     const similarFromSameGenre = await addContentService.getContentByGenre(content.genre);
@@ -182,6 +183,7 @@ async function getContentDetailsByTitle(req, res){
     res.json({...content, similarFromSameGenre});
 }
 
+// 
   async function getContentByGenre(req, res) {
   try {
     const genre = req.params.genre;
