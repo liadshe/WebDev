@@ -45,12 +45,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (content.type === "series") {
         if (content.episodes && content.episodes.length > 0) {
           const episodeCards = content.episodes.map(ep => `
-            <div class="episode-card">
-              <div class="episode-number">Ep ${ep.episodeNumber || "?"}</div>
-              <div class="episode-title">${ep.title}</div>
-              ${ep.duration ? `<div class="episode-duration">${ep.duration} min</div>` : ""}
-            </div>
-          `).join("");
+  <div class="episode-card">
+    <div class="episode-number">S${ep.seasonNumber || "?"}:E${ep.episodeNumber || "?"}</div>
+    <div class="episode-title">${ep.title || "Untitled Episode"}</div>
+    ${ep.durationSeconds ? `<div class="episode-duration">${Math.round(ep.durationSeconds)} seconds</div>` : ""}
+  </div>
+`).join("");
+
 
           modalEpisodes.innerHTML = `
             <h3 style="margin-top: 1rem;">Episodes:</h3>

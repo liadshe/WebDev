@@ -99,14 +99,13 @@ async function handleContentSubmission(req, res) {
       if (!videoFile) throw new Error("Episode must include a video file");
 
       let seriesId;
-      if (req.body.series && req.body.series.match(/^[0-9a-fA-F]{24}$/)) {
+      if (req.body.series && req.body.series.match(/^[0-9a-fA-F]{24}$/)) { // if id is ok 
         seriesId = req.body.series;
       } else {
-        const found = await addContentService.getSeriesByTitle(req.body.series);
+        const found = await addContentService.getSeriesByTitle(req.body.series); // if not - try to search it yourself
         seriesId = found?.[0]?._id;
       }
 
-      if (!seriesId) throw new Error("Series ID not provided or not found");
 
       const episodeData = {
         title: req.body.title,
