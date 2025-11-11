@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ✅ Handle clicks on any dynamically loaded movie cover
+  // Handle clicks on any dynamically loaded movie cover
   document.addEventListener("click", event => {
     const img = event.target.closest(".cover-image");
     if (!img) return;
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderModalContent(title);
   });
 
-  // ✅ Handle clicks on similar content cards (inside the modal)
+  // Handle clicks on similar content cards (inside the modal)
   document.addEventListener("click", event => {
     const card = event.target.closest(".similar-card");
     if (!card) return;
