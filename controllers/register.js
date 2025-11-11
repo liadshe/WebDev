@@ -36,8 +36,13 @@ async function handleRegister(req, res) {
       email,
       passwordHash,
     });
-    req.session.userId = newUser._id;
-    req.session.username = newUser.username;
+    
+    req.session.user ={
+      _id: newUser._id,
+      username: newUser.username,
+      email: newUser.email,
+    };
+    
     await logService.createLog({
       level: "INFO",
       service: "Auth",
