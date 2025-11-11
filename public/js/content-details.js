@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .join(", ");
 
       modalExtra.innerHTML = `
+      <strong> Rating:</strong> ${content.rating || "N/A"}<br> 
         <strong>Genre:</strong> ${content.genre.join(", ")}<br>
         <strong>Year:</strong> ${content.releaseYear || "N/A"}<br>
         <strong>Director:</strong> ${content.director || "N/A"}<br>

@@ -59,25 +59,31 @@ function loadSeriesList() {
   }
 }
 
-  function toggleFields(selectedType) {
-    // Hide everything initially
-    movieSeriesFields.forEach(el => el.style.display = 'none');
-    episodeFields.style.display = 'none';
+ function toggleFields(selectedType) {
+  // Hide everything initially
+  movieSeriesFields.forEach(el => el.style.display = 'none');
+  episodeFields.style.display = 'none';
 
-    // Always show video + cover uploads for all types
-    coverImageFile.closest('.form-row').style.display = 'block';
-    videoFile.closest('.form-row').style.display = 'block';
+  // Always show cover upload for all types
+  coverImageFile.closest('.form-row').style.display = 'block';
+  videoFile.closest('.form-row').style.display = 'none'; // hidden by default
 
-    // Show depending on type
-    if (selectedType === 'movie' || selectedType === 'series') {
-      movieSeriesFields.forEach(el => el.style.display = 'block');
-      videoFile.closest('.form-row').style.display = 'none';
-    } 
-    else if (selectedType === 'episode') {
-      episodeFields.style.display = 'block';
-      loadSeriesList();
-    }
+  // Show depending on type
+  if (selectedType === 'movie') {
+    movieSeriesFields.forEach(el => el.style.display = 'block');
+    videoFile.closest('.form-row').style.display = 'block'; // show only for movies
+  } 
+  else if (selectedType === 'series') {
+    movieSeriesFields.forEach(el => el.style.display = 'block');
+    videoFile.closest('.form-row').style.display = 'none'; // keep hidden for series
+  } 
+  else if (selectedType === 'episode') {
+    episodeFields.style.display = 'block';
+    loadSeriesList();
+    videoFile.closest('.form-row').style.display = 'block'; // allow upload for episode
   }
+}
+
 
   typeRadios.forEach(radio => {
     radio.addEventListener('change', e => toggleFields(e.target.value));
