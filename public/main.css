@@ -594,3 +594,36 @@
   background: #f6121d;
 }
 
+.episode-status {
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.episode-card {
+  background-color: #1c1c1c;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 6px;
+  flex: 0 0 180px;
+  transition: transform 0.2s ease;
+}
+
+.episode-card:hover {
+  transform: scale(1.05);
+}
+
+
+.progress-bar {
+  background: #333;
+  border-radius: 6px;
+  height: 8px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #e50914;
+  transition: width 0.3s ease;
+}
+
