@@ -41,6 +41,10 @@ A typical request in this application follows this flow:
 ### Logging
 
 The application has a centralized `logService` that writes structured logs to the database. 
+There are 3 logs levels:
+INFO - logs for routine events and general application flow.
+WARN - logs for unexpected and suboptimal events that do not affect application running.
+ERROR - logs for failure that prevent the application from functioning corrrectly.
 
 ## Setup and Running the Application
 
