@@ -559,3 +559,38 @@
   background-color: #7f8c8d;
   color: white;
 }
+
+
+.episode-card {
+  position: relative;
+  background-color: #1a1a1a;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 6px;
+  text-align: left;
+  width: 180px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.episode-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 8px rgba(255,255,255,0.2);
+}
+
+.episode-play-btn {
+  background: #e50914;
+  border: none;
+  color: white;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.episode-play-btn:hover {
+  background: #f6121d;
+}
+

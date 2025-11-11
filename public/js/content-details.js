@@ -52,14 +52,18 @@ document.addEventListener("DOMContentLoaded", () => {
       if (content.type === "series") {
         if (content.episodes && content.episodes.length > 0) {
           const episodeCards = content.episodes
-            .map(
-              (ep) => `
-             <div class="episode-card">
-    <div class="episode-number">S${ep.seasonNumber || "?"}:E${ep.episodeNumber || "?"}</div>
-    <div class="episode-title">${ep.title || "Untitled Episode"}</div>
-    ${ep.durationSeconds ? `<div class="episode-duration">${Math.round(ep.durationSeconds)} seconds</div>` : ""}
-  </div>
-`).join("");
+  .map(
+    (ep) => `
+      <div class="episode-card" data-episode-id="${ep._id}">
+        <div class="episode-number">S${ep.seasonNumber || "?"}:E${ep.episodeNumber || "?"}</div>
+        <div class="episode-title">${ep.title || "Untitled Episode"}</div>
+        ${ep.durationSeconds ? `<div class="episode-duration">${Math.round(ep.durationSeconds / 60)} min</div>` : ""}
+        <button class="episode-play-btn">▶ Play</button>
+      </div>
+    `
+  )
+  .join("");
+
 
 
           modalEpisodes.innerHTML = `
@@ -179,5 +183,25 @@ if (watchStatusContainer) {
     setTimeout(() => {
       window.location.href = `/watch/${currentMovieId}`;
     }, 150);
-  }); // Closing the event listener function
-}); // Closing the DOMContentLoaded event listener
+  });
+  
+  // Handle clicks on episode play buttons
+document.addEventListener("click", (event) => {
+  const btn = event.target.closest(".episode-play-btn");
+  if (!btn) return;
+
+  const episodeCard = btn.closest(".episode-card");
+  const episodeId = episodeCard?.dataset.episodeId;
+
+  if (!episodeId) {
+    console.warn("No episode ID found for play action");
+    return;
+  }
+
+  modal.style.display = "none";
+  setTimeout(() => {
+    window.location.href = `/watch/${episodeId}`;
+  }, 150);
+});
+
+}); 
