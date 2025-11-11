@@ -29,11 +29,7 @@ async function renderMainPage(req, res) {
       moviesByGenre[g] = movies.filter((movie) => movie.genre.includes(g));
     });
     
-    // Find the active profile
-    let activeProfile = null;
-    if (activeProfileId) {
-      activeProfile = user.profiles.id(activeProfileId);
-    }
+    const activeProfile = req.session.activeProfile;
     
     // If no profile is selected or profile not found, use the first profile
     if (!activeProfile && user.profiles && user.profiles.length > 0) {
