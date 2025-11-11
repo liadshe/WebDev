@@ -8,10 +8,12 @@ const EpisodeSchema = new mongoose.Schema({
   releaseDate: { type: Date },
   durationSeconds: { type: Number },
   videoPath: { type: String },
-  coverImagePath: { type: String },
 
-// Relationship: each episode belongs to a series
-  series: { type: mongoose.Schema.Types.ObjectId, ref: "Content", required: true }});
+  // Relationship: each episode belongs to a series
+  series: { type: mongoose.Schema.Types.ObjectId, ref: "Content", required: true },
+  uploadTime: { type: Date, default: Date.now }
+
+});
 
 // create a unique index to prevent duplicate episodes in the same season of a series
 EpisodeSchema.index({ series: 1, seasonNumber: 1, episodeNumber: 1 }, { unique: true });

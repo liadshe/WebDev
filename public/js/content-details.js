@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .join(", ");
 
       modalExtra.innerHTML = `
+      <strong> Rating:</strong> ${content.rating || "N/A"}<br> 
         <strong>Genre:</strong> ${content.genre.join(", ")}<br>
         <strong>Year:</strong> ${content.releaseYear || "N/A"}<br>
         <strong>Director:</strong> ${content.director || "N/A"}<br>
@@ -127,16 +128,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ✅ Handle clicks on any dynamically loaded movie cover
-  document.addEventListener("click", (event) => {
+  // Handle clicks on any dynamically loaded movie cover
+  document.addEventListener("click", event => {
     const img = event.target.closest(".cover-image");
     if (!img) return;
     const title = img.alt.trim();
     renderModalContent(title);
   });
 
-  // ✅ Handle clicks on similar content cards (inside the modal)
-  document.addEventListener("click", (event) => {
+  // Handle clicks on similar content cards (inside the modal)
+  document.addEventListener("click", event => {
     const card = event.target.closest(".similar-card");
     if (!card) return;
     const title = card.dataset.title;

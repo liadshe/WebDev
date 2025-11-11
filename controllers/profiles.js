@@ -20,7 +20,6 @@ async function renderProfilesPage(req, res) {
     req.session.error = "User not found";
     return res.redirect("/login");
   }
-  console.log(user.profiles);
   return res.render("profiles", { profiles: user.profiles });
 }
 
