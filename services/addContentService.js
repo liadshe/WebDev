@@ -69,7 +69,6 @@ const getAllContent = async () => {
 async function getTypeById(contentId)
 {
     const content = await Content.findById(contentId).lean();
-    console.log("this is a ", content.type);
     return content.type;
 }
 module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, getContentByGenre, getTypeById, getEpisodesBySeriesTitle, addContent, addEpisode, getAllContent };
