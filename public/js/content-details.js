@@ -117,6 +117,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
+      // --- WATCH STATUS ---
+const watchStatusContainer = document.getElementById("modalWatchStatus");
+if (watchStatusContainer) {
+  let statusHTML = "";
+  const history = content.history;
+
+  if (history == "") {
+    // No record for this user/profile
+    statusHTML = `<span class="status not-started">⏺ Not started yet</span>`;
+  }
+ else if (history[0].finished) {
+    statusHTML = `<span class="status finished"> Finished watching</span>`;
+  } else if (history[0].progressPercent > 0) {
+    statusHTML = `<span class="status in-progress"> Watching In progress (${Math.round(history[0].progressPercent)}%)</span>`;
+  } else {
+    statusHTML = `<span class="status not-started">⏺️ Not started yet</span>`;
+  }
+
+  watchStatusContainer.innerHTML = `<h4>Watch Status:</h4>${statusHTML}`;
+}
+
+
+      console.log(content.history);
       modal.style.display = "block";
     } catch (err) {
       console.error(err);
@@ -145,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (event.target === modal) modal.style.display = "none";
   };
 
-  // ✅ Redirect to the watch page when Play is clicked
+  // Redirect to the watch page when Play is clicked
   modalPlayBtn.addEventListener("click", () => {
     if (!currentMovieId) {
       console.warn("No movie ID found for play action");

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const contentController = require("../../controllers/content");
+const contentDetailsController = require("../../controllers/content-details");
 
-router.get("/:title", contentController.getContentDetailsByTitle);
+router.get("/:title", contentDetailsController.getContentDetailsByTitle);
 
 module.exports = router;
