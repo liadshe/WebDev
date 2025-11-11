@@ -37,7 +37,7 @@ async function renderAddContentPage(req, res) {
 // fetch rating from OMDb API by title, if not found return null
 async function getRating(title) {
   try {
-    const apiKey = process.env.OMDB_API_KEY;
+    const apiKey = process.env.API_KEY;
     const response = await axios.get(`https://www.omdbapi.com/`, {
       params: { t: title, apikey: apiKey },
     });
@@ -65,78 +65,108 @@ async function getVideoDuration(videoPath) {
 }
 
 async function handleContentSubmission(req, res) {
-  try {
+    try {
     const title = req.body.title;
-    if (!title)
-      return res.status(400).json({ error: "Missing title parameter" });
+    if (!title) return res.status(400).json({ error: "Missing title parameter" });
 
-
-    // use uploaded files from multer (router uses upload.fields)
     const files = req.files || {};
     const coverFile = files.coverImageFile && files.coverImageFile[0];
     const videoFile = files.videoFile && files.videoFile[0];
 
-    // public URLs (public/ is served as root)
-    const coverImagePath = path.join("uploads", coverFile.filename);
-    const videoPath = path.join("uploads", videoFile.filename);
-    const durationSeconds = await getVideoDuration(path.join(__dirname, "../public", videoPath));
+    let coverImagePath = null;
+    let videoPath = null;
+    let durationSeconds = null;
 
-    // normalize incoming fields
+    if (coverFile) coverImagePath = path.join("uploads", coverFile.filename);
+    if (videoFile) {
+      videoPath = path.join("uploads", videoFile.filename);
+      durationSeconds = await getVideoDuration(path.join(__dirname, "../public", videoPath));
+    }
+
     const genre = Array.isArray(req.body.genre)
       ? req.body.genre
-      : req.body.genre
-      ? [req.body.genre]
+      : req.body.genre ? [req.body.genre] : [];
+
+    const cast = typeof req.body.cast === "string"
+      ? req.body.cast.split(",").map(s => s.trim()).filter(Boolean)
       : [];
-    const cast =
-      typeof req.body.cast === "string"
-        ? req.body.cast
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean)
-        : [];
 
+    const type = req.body.type.toLowerCase();
 
-    if (req.body.type.toLowerCase() === "episode") {
-      const series = await addContentService.getSeriesByTitle(req.body.series);
+    // --- EPISODE ---
+    if (type === "episode") {
+      if (!videoFile) throw new Error("Episode must include a video file");
+
+      let seriesId;
+      if (req.body.series && req.body.series.match(/^[0-9a-fA-F]{24}$/)) {
+        seriesId = req.body.series;
+      } else {
+        const found = await addContentService.getSeriesByTitle(req.body.series);
+        seriesId = found?.[0]?._id;
+      }
+
+      if (!seriesId) throw new Error("Series ID not provided or not found");
+
       const episodeData = {
         title: req.body.title,
         description: req.body.description || "",
-        seasonNumber: Number(req.body.seasonNumber) || undefined,
-        episodeNumber: Number(req.body.episodeNumber) || undefined,
-        durationSeconds: durationSeconds,
-        videoPath: videoPath,
-        coverImagePath: coverImagePath,
-        series: series?.[0]?._id || undefined
+        seasonNumber: Number(req.body.seasonNumber) || 1,
+        episodeNumber: Number(req.body.episodeNumber) || 1,
+        durationSeconds,
+        videoPath,
+        series: seriesId
       };
+
       await addContentService.addEpisode(episodeData);
     }
-      // if content is a movie/series
-    else {
+
+    // --- MOVIE ---
+    else if (type === "movie") {
+      if (!coverFile || !videoFile) throw new Error("Movie must include both cover and video");
+
       const rating = await getRating(req.body.title);
-      const contentData = {
-        type: req.body.type.toLowerCase(),
-      title: req.body.title || "Untitled",
-      description: req.body.description || "",
-      genre,
-      cast,
-      director: req.body.director || "",
-      releaseYear: Number(req.body.releaseYear) || undefined,
-      durationSeconds: durationSeconds,
-      rating: rating || "N/A",
-      videoPath: videoPath,
-      coverImagePath: coverImagePath,
-    };
-    await addContentService.addContent(contentData);
-  };
+      const movieData = {
+        type,
+        title,
+        description: req.body.description || "",
+        genre,
+        cast,
+        director: req.body.director || "",
+        releaseYear: Number(req.body.releaseYear) || undefined,
+        durationSeconds,
+        rating: rating || "N/A",
+        videoPath,
+        coverImagePath
+      };
+      await addContentService.addContent(movieData);
+    }
 
+    // --- SERIES ---
+    else if (type === "series") {
+      if (!coverFile) throw new Error("Series must include a cover image");
 
-    // redirect back to the add form (or you can send JSON)
+      const rating = await getRating(req.body.title);
+      const seriesData = {
+        type,
+        title,
+        description: req.body.description || "",
+        genre,
+        cast,
+        director: req.body.director || "",
+        releaseYear: Number(req.body.releaseYear) || undefined,
+        rating: rating || "N/A",
+        coverImagePath
+      };
+      await addContentService.addContent(seriesData);
+    }
+
     res.redirect("/content?success=1");
   } catch (err) {
-    console.log("Error in handleContentSubmission:", err);
+    console.error("Error in handleContentSubmission:", err);
     res.redirect("/content?error=1");
   }
 }
+
 
 async function getContentDetailsByTitle(req, res){
     const content = await addContentService.getContentByTitle(req.params.title);

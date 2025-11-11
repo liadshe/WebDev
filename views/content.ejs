@@ -85,12 +85,19 @@
 
   <!-- EPISODE ONLY -->
   <div id="episode-fields" style="display:none;">
-    <div class="form-row">
-      <label for="seriesSelect">Select Series</label>
-      <select id="seriesSelect" name="series">
-        <option value="">Loading...</option>
-      </select>
-    </div>
+  <div class="form-row">
+    <label for="seriesSelect">Select Series</label>
+    <select id="seriesSelect" name="series">
+      <option value="">Select Series</option>
+      <% if (Array.isArray(series) && series.length) { %>
+        <% series.forEach(function(s) { %>
+            <option value="<%= s._id %>"><%= s.title %></option>
+        <% }); %>
+      <% } else { %>
+        <option value="">No series available</option>
+      <% } %>
+    </select>
+  </div>
 
     <div class="form-row">
       <label for="seasonNumber">Season Number</label>
