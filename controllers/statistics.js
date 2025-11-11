@@ -1,4 +1,3 @@
-const { get } = require('mongoose');
 const genreService = require('../services/genreService');
 const watchService = require('../services/watchService');
 

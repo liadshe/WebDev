@@ -12,8 +12,6 @@ const getAllGenres = async () => {
 // Get genres popularity
 const getUserGenrePopularity = async (userId) => {
     const objectId = new mongoose.Types.ObjectId(userId);
-    console.log(`Running aggregation for user: ${userId}`);
-
     try {
         const genreData = await User.aggregate([
             { $match: { _id: objectId } },

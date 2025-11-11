@@ -52,7 +52,6 @@ async function handleLogin(req, res) {
       message: `User '${user.username}' logged in successfully.`,
       userId: user._id,
     });
-    console.log("User logged in:", user.username);
 
     // Redirect to main page after login
     res.redirect("/profiles");
@@ -82,8 +81,6 @@ async function handleLogout(req, res) {
         userId: userId,
       });
     }
-
-    console.log("User logged out:", username);
 
     // Destroy the session
     req.session.destroy((err) => {
