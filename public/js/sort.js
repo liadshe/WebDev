@@ -4,7 +4,6 @@
   let originalOrder = {};
 
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Sort functionality initialized');
     
     const sortIcon = document.getElementById('sortIcon');
     const sortToggle = document.getElementById('sortToggle');
@@ -83,7 +82,6 @@
           // Close menu
           sortMenu.classList.remove('show');
           
-          console.log('Sort applied:', sortType);
         });
       });
 
@@ -94,7 +92,6 @@
         }
       });
 
-      console.log('Sort dropdown initialized');
     }
 
     // Store original order of movies
@@ -117,7 +114,6 @@
         }));
       });
       
-      console.log('Original order stored for', Object.keys(originalOrder).length, 'genres');
     }
 
     // Sort all genre sections
@@ -191,7 +187,6 @@
         });
       });
       
-      console.log('Sorted all visible content:', sortType);
     }
 
     // Export functions for external use

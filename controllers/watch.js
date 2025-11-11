@@ -16,12 +16,9 @@ async function renderMainPage(req, res) {
     const activeProfile = req.session.activeProfile || {
       name: "Default Profile",
     };
-    console.log("Session user:", user);
     console.log(
       `Rendering main page for user: ${user.username}, profile: ${activeProfile.name}`
     );
-    console.log("Movies fetched:", movies.length);
-    console.log("Movies fetched:", movies);
 
     // Render the main page
     res.render("main", { movies, user, activeProfile });

@@ -46,7 +46,6 @@ async function getUserDailyWatch(userId) {
     { $sort: { "_id.date": 1 } },
   ]);
 
-  console.log("📊 Aggregation result:", result);
   return result;
 }
 
