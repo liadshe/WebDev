@@ -18,12 +18,9 @@ async function renderAddContentPage(req, res) {
     if (!series) {
       console.log("No series found, using empty array");
     }
-    const user = req.session.user;
-   // const profile = user.profiles.id(req.query.profileId) || { picture: 'default.jpg', name: 'User' };
-   const profile =  { picture: 'default.jpg', name: 'User' };
    res.render("content", {
-      user,
-      profile,
+      user: req.session.activeProfile.name,
+      profile: req.session.activeProfile,
       genres: genres || [],
       series: series || [],
       success: req.query.success == "1",
@@ -62,7 +59,7 @@ async function getRating(title) {
     return null;
 }
 
-// get video Zduration in seconds
+// get video duration in seconds
 async function getVideoDuration(videoPath) {
   try {
     const absolutePath = path.resolve(videoPath);
