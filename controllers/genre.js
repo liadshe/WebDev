@@ -1,6 +1,5 @@
 const addContentService = require("../services/addContentService");
 
-
 // returns all content from specific genre
   async function getContentByGenre(req, res) {
   try {

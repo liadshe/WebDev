@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const contentController = require("../../min/content");
+const contentController = require("../../controllers/content");
 
 router.get("/:title", contentController.getContentDetailsByTitle);
 
