@@ -9,7 +9,7 @@ body {
 
 /* Login Page */
 .login-page {
-  background: url("images/login-bg.jpg") no-repeat center center fixed;
+  background: url("../images/login-bg.jpg") no-repeat center center fixed;
   background-size: cover;
 }
 .login-box {
@@ -281,49 +281,4 @@ body {
   width: 50px;
   height: 50px;
   border-radius: 6px;
-}
-
-
-/* Hide the default "Powered by Google" text */
-.goog-logo-link {
-  display: none !important;
-}
-.goog-te-gadget {
-  color: transparent !important;
-}
-
-/* ==== TRANSLATE BUTTONS (Dark theme) ==== */
-
-.translate-buttons {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-left: 15px;
-}
-
-/* Button base style */
-.lang-btn {
-  background: rgba(255, 255, 255, 0.08); /* subtle transparency over dark bg */
-  color: #fff;
-  border: 1px solid rgba(255, 192, 203, 0.4); /* soft pink border */
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(4px); /* glass effect */
-}
-
-/* Hover effect — pink glow like your links */
-.lang-btn:hover {
-  background: rgba(255, 192, 203, 0.2);
-  box-shadow: 0 0 8px rgba(255, 105, 180, 0.5);
-  transform: scale(1.05);
-}
-/* Active click effect */
-.lang-btn:active {
-  transform: scale(0.97);
-  background: rgba(255, 192, 203, 0.25);
 }
