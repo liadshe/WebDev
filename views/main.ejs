@@ -13,6 +13,50 @@
     <%- include('partials/header') %>
     <main>
       <h1>Hello, <%= user.username %></h1>
+    <!-- Most Popular Section -->
+      <% if ((typeof sortOption === 'undefined' || sortOption === 'default') && typeof mostPopular !== 'undefined' && mostPopular.length > 0) { %>
+        <section class="genre-section" data-genre="popular"> 
+          <h2>
+            Most Popular
+            <span style="font-size: 0.9rem; color: #aaa; font-weight: normal;"> - Trending Now</span>
+          </h2>
+
+          <div class="genre-row">
+            <% mostPopular.forEach(movie => { %>
+              <div class="cover popular-item" id="<%= movie._id %>" data-type="<%= movie.type %>">
+                <img
+                  src="<%= movie.coverImagePath %>"
+                  alt="<%= movie.title %>"
+                  class="cover-image"
+                />
+              </div>
+            <% }) %>
+          </div>
+        </section>
+      <% } %>
+
+      <!-- Personalized Recommendations Section -->
+      <% if ((typeof sortOption === 'undefined' || sortOption === 'default') && typeof personalizedRecommendations !== 'undefined' && personalizedRecommendations.length > 0) { %>
+        <section class="genre-section" data-genre="recommended"> 
+          <h2>
+            Recommended for You
+            <span style="font-size: 0.9rem; color: #aaa; font-weight: normal;"> - Based on your preferences</span>
+          </h2>
+
+          <div class="genre-row">
+            <% personalizedRecommendations.forEach(movie => { %>
+              <div class="cover recommended-item" id="<%= movie._id %>" data-type="<%= movie.type %>">
+                <img
+                  src="<%= movie.coverImagePath %>"
+                  alt="<%= movie.title %>"
+                  class="cover-image"
+                />
+              </div>
+            <% }) %>
+          </div>
+        </section>
+      <% } %>
+
 
       <% for (let genre in moviesByGenre) { %>
         <% if (moviesByGenre[genre].length > 0) { %>
@@ -65,10 +109,6 @@
 
     </main>
   <script src="/js/content-details.js"> </script>
-  <script src="/js/search.js"></script>
-  <script src="/js/genre-filter.js"></script>
-  <script src="/js/sort.js"></script>
   <script src="/js/content-filter.js"></script>
-  <script src="/js/profile-dropdown.js"></script>
   </body>
 </html>

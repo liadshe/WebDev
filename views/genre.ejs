@@ -22,6 +22,30 @@
       <%= givengenre.charAt(0).toUpperCase() + givengenre.slice(1).toLowerCase() %> Content
     </h1>
 
+
+        <!-- Popular in Genre Section -->
+    <% if (typeof popularInGenre !== 'undefined' && popularInGenre.length > 0) { %>
+      <section class="genre-section popular-section" style="margin-bottom: 40px;">
+        <h2 style="color: #fff; margin-left: 20px; font-size: 1.5rem;">
+          Popular in <%= givengenre %>
+          <span style="font-size: 0.9rem; color: #aaa; font-weight: normal;"> - Most Watched</span>
+        </h2>
+
+        <div class="genre-row">
+          <% popularInGenre.forEach(movie => { %>
+            <div class="cover popular-genre-item" id="<%= movie._id %>" data-type="<%= movie.type %>">
+              <img
+                src="<%= movie.coverImagePath %>"
+                alt="<%= movie.title %>"
+                class="cover-image"
+              />
+            </div>
+          <% }) %>
+        </div>
+      </section>
+    <% } %>
+
+
     <div id="movie-grid" class="movie-grid"></div>
     <div id="loading">Loading...</div>
   </main>

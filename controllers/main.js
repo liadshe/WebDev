@@ -1,6 +1,7 @@
 const genreService = require("../services/genreService");
 const addContentService = require("../services/addContentService");
 const loginService = require("../services/loginService");
+const recommendationService = require("../services/recommendationService");
 
 async function renderMainPage(req, res) {
   try {
@@ -54,6 +55,19 @@ async function renderMainPage(req, res) {
     
     const type = req.query.type || 'all';
     
+        // Get most popular content (top 10)
+    const mostPopular = await recommendationService.getMostPopularContent(10);
+    
+    // Get personalized recommendations for active profile
+    let personalizedRecommendations = [];
+    if (activeProfile) {
+      personalizedRecommendations = await recommendationService.getPersonalizedRecommendations(
+        req.session.user._id,
+        activeProfile.name,
+        10
+      );
+    }
+
     // Render the main page
     res.render("main", {
       moviesByGenre: moviesByGenre,
@@ -62,6 +76,9 @@ async function renderMainPage(req, res) {
       profile: activeProfile || { picture: 'default.jpg', name: 'User' },
       pageType: type,
       sortOption: sortOption, 
+      mostPopular: mostPopular, // Pass most popular content
+      personalizedRecommendations: personalizedRecommendations,
+      allGenres: genres 
 
     });
   } catch (err) {
