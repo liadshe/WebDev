@@ -82,6 +82,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // 📺 EPISODES (Series only)
       if (content.type === "series") {
+        let episodesHTML = '';
+        if (content.hasFinished) {
+          episodesHTML += `
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <h3 style="margin-top: 1rem;">Episodes:</h3>
+              <button id="rewatchBtn" class="rewatch-btn" style="margin-left: auto; padding: 5px 10px; border: none; background-color: #f0ad4e; color: white; border-radius: 4px; cursor: pointer;">Rewatch</button>
+            </div>
+          `;
+        } else {
+          episodesHTML += '<h3 style="margin-top: 1rem;">Episodes:</h3>';
+        }
+
         if (content.history && content.history.length > 0) {
           const episodeCards = content.history
             .map((ep) => {
@@ -110,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   ${progressHTML}
                   ${
                     ep.durationSeconds
-                      ? `<div class="episode-duration">${Math.round(ep.durationSeconds / 60)} min</div>`
+                      ? `<div class="episode-duration">${Math.round(ep.durationSeconds)} seconds</div>`
                       : ""
                   }
                   <button class="episode-play-btn">▶ Play</button>
@@ -119,17 +131,57 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .join("");
 
-          modalEpisodes.innerHTML = `
-            <h3 style="margin-top: 1rem;">Episodes:</h3>
-            <div class="episodes-container">${episodeCards}</div>
-          `;
-        } else {
-          modalEpisodes.innerHTML = `
-            <h3 style="margin-top: 1rem;">Episodes:</h3>
+          episodesHTML += `<div class="episodes-container">${episodeCards}</div>`;
+        } else if (!content.hasFinished) {
+          episodesHTML += `
             <div class="no-episodes-message" style="color: #888; font-style: italic; margin-top: .5rem;">
               No episodes uploaded yet. Check back soon!
             </div>
           `;
+        }
+        
+        modalEpisodes.innerHTML = episodesHTML;
+
+        if (content.hasFinished) {
+          const rewatchButton = document.getElementById("rewatchBtn");
+          rewatchButton.onclick = async () => {
+            try {
+              const res = await fetch("/api/watch/reset-series", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ seriesId: content._id }),
+              });
+              if (res.ok) {
+                // Find the first episode (Season 1, Episode 1)
+                const firstEpisode = content.history
+                  .map(ep => ({
+                    episodeId: ep.episodeId,
+                    seasonNumber: ep.seasonNumber,
+                    episodeNumber: ep.episodeNumber
+                  }))
+                  .sort((a, b) => {
+                    if (a.seasonNumber !== b.seasonNumber) {
+                      return a.seasonNumber - b.seasonNumber;
+                    }
+                    return a.episodeNumber - b.episodeNumber;
+                  })[0];
+
+                if (firstEpisode) {
+                  modal.style.display = "none";
+                  setTimeout(() => {
+                    window.location.href = `/watch/${firstEpisode.episodeId}`;
+                  }, 150);
+                } else {
+                  console.warn("No episodes found for this series to rewatch.");
+                  renderModalContent(content.title); // Refresh modal even if no episodes
+                }
+              } else {
+                console.error("Failed to reset watch history");
+              }
+            } catch (err) {
+              console.error("Error resetting watch history:", err);
+            }
+          };
         }
       } else {
         modalEpisodes.innerHTML = "";
