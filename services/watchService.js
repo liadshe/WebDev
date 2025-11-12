@@ -89,5 +89,11 @@ async function getUserDailyWatch(userId) {
   return result;
 }
 
+// gets user id, profile and content id and returns the watch history per this user, profile and content.
+async function getWatchHistoryPerContentByProfileID(contentId, userId, profileName)
+{
+  const ProfileHistory = await WatchHistory.find({contentId, userId, profileName}).lean();
+  return ProfileHistory;
+}
 
-module.exports = { updateProgress, getProgress, getUserDailyWatch };
+module.exports = { updateProgress, getProgress, getUserDailyWatch, getWatchHistoryPerContentByProfileID };
