@@ -21,12 +21,28 @@ async function renderMainPage(req, res) {
     const genres = await genreService.getAllGenres();
 
     // Fetch movies from the DB
-    const movies = await addContentService.getAllContent();
+    //const movies = await addContentService.getAllContent();
+    const sortOption = req.query.sort || 'default'; // Get sort parameter from query
+     let movies;
+    if (sortOption === 'newest') {
+      // Get newest 10 items per genre
+      movies = await addContentService.getNewestContentByGenre(10);
+    } else {
+      // Get all content with specified sorting
+      movies = await addContentService.getAllContent(sortOption);
+    }
 
     // Group movies by genre
     const moviesByGenre = {};
     genres.forEach((g) => {
-      moviesByGenre[g] = movies.filter((movie) => movie.genre.includes(g));
+      if (sortOption === 'newest') {
+        // Limit to 10 newest per genre
+        moviesByGenre[g] = movies
+          .filter((movie) => movie.genre.includes(g))
+          .slice(0, 10);
+      } else {
+        moviesByGenre[g] = movies.filter((movie) => movie.genre.includes(g));
+      }
     });
     
     const activeProfile = req.session.activeProfile;
@@ -45,6 +61,7 @@ async function renderMainPage(req, res) {
       activeProfile: activeProfileId,
       profile: activeProfile || { picture: 'default.jpg', name: 'User' },
       pageType: type,
+      sortOption: sortOption, 
 
     });
   } catch (err) {

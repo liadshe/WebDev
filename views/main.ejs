@@ -17,7 +17,12 @@
       <% for (let genre in moviesByGenre) { %>
         <% if (moviesByGenre[genre].length > 0) { %>
           <section class="genre-section" data-genre="<%= genre %>"> 
-            <h2><%= genre %></h2>
+            <h2>
+              <%= genre %>
+              <% if (typeof sortOption !== 'undefined' && sortOption === 'newest') { %>
+                <span style="font-size: 0.9rem; color: #aaa; font-weight: normal;"> - 10 Newest</span>
+              <% } %>
+            </h2>
 
             <div class="genre-row" >
               <% moviesByGenre[genre].forEach(movie => { %>

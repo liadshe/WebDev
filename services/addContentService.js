@@ -61,8 +61,34 @@ const addEpisode = async (episodeData) => {
     const saved = await newEpisode.save();
     return saved;
 }
-const getAllContent = async () => {
-    const contents = await Content.find().populate("genre").lean();
+
+// Get all content with optional sorting
+const getAllContent = async (sortOption = 'default') => {
+    let query = Content.find().populate("genre");
+    
+    switch(sortOption) {
+        case 'a-z':
+            query = query.sort({ title: 1 }); // A to Z ascending
+            break;
+        case 'newest':
+            query = query.sort({ uploadTime: -1 }); // Newest first
+            break;
+        case 'default':
+        default:
+            // No sorting, default MongoDB order
+            break;
+    }
+    
+    const contents = await query.lean();
+    return contents;
+}
+// Get newest content limited to a specific number per genre
+const getNewestContentByGenre = async (limit = 10) => {
+    const contents = await Content.find()
+        .sort({ uploadTime: -1 })
+        .populate("genre")
+        .lean();
+    
     return contents;
 }
 
@@ -71,4 +97,4 @@ async function getTypeById(contentId)
     const content = await Content.findById(contentId).lean();
     return content.type;
 }
-module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, getContentByGenre, getTypeById, getEpisodesBySeriesTitle, addContent, addEpisode, getAllContent };
+module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, getContentByGenre,getNewestContentByGenre, getTypeById, getEpisodesBySeriesTitle, addContent, addEpisode, getAllContent };

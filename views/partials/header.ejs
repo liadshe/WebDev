@@ -11,9 +11,9 @@
           <img src="/images/Blanfix.png" alt="Logo" style="height: 30px; vertical-align: middle;">
         </a>
       </li>
-      <li><a href="main?type=all" class="active">Home</a></li>
-      <li><a href="main?type=series">TV Shows</a></li>
-      <li><a href="main?type=movies">Movies</a></li>
+      <li><a href="/main?type=all" class="active">Home</a></li>
+      <li><a href="/main?type=series">TV Shows</a></li>
+      <li><a href="/main?type=movies">Movies</a></li>
 
         <!-- Genre Dropdown Filter -->
       <li class="genre-dropdown" id="genreDropdown">
@@ -47,12 +47,16 @@
       <li class="right-icons">
           <!-- Sort Dropdown -->
           <div class="sort-dropdown" id="sortDropdown">
-          <img src="/images/sort.png" alt="Sort" id="sortIcon" style="height:25px; cursor: pointer;" title="Sort">
+          <div id="sortToggle" style="display: flex; align-items: center; cursor: pointer; color: white;">
+            Sort <span style="margin-left: 5px; font-size: 10px;"></span>
+          </div>
           <div class="sort-menu" id="sortMenu">
             <a href="#" class="sort-option active" data-sort="default">Default</a>
             <a href="#" class="sort-option" data-sort="a-z">A → Z</a>
-            <a href="#" class="sort-option" data-sort="z-a">Z → A</a>
+            <a href="#" class="sort-option" data-sort="newest">10 Newest</a>
           </div>
+        </div>
+
 
         <div class="search-container">
           <img src="/images/search.png" alt="Search" id="search-icon" style="height:25px; cursor: pointer;">
