@@ -1,5 +1,27 @@
 const WatchHistory = require("../models/watchHistory");
 const mongoose = require("mongoose");
+const Episode = require("../models/Episode");
+
+async function hasFinishedSeries(profileName, seriesId, userId) {
+  // Find the last episode of the series
+  const lastEpisode = await Episode.findOne({ series: seriesId })
+    .sort({ seasonNumber: -1, episodeNumber: -1 })
+    .lean();
+
+  if (!lastEpisode) {
+    return false; // No episodes for this series
+  }
+
+  // Check if the user has finished watching the last episode
+  const history = await WatchHistory.findOne({
+    userId: userId,
+    profileName: profileName,
+    contentId: lastEpisode._id,
+    finished: true,
+  });
+
+  return !!history;
+}
 
 /**
  * Update or insert watch progress for a specific user + profile + content
@@ -96,4 +118,23 @@ async function getWatchHistoryPerContentByProfileID(contentId, userId, profileNa
   return ProfileHistory;
 }
 
-module.exports = { updateProgress, getProgress, getUserDailyWatch, getWatchHistoryPerContentByProfileID };
+async function resetSeriesHistory(profileName, seriesId, userId) {
+  // Find all episodes for the series
+  const episodes = await Episode.find({ series: seriesId }).select('_id').lean();
+  const episodeIds = episodes.map(ep => ep._id);
+
+  if (episodeIds.length === 0) {
+    return { message: "No episodes found for this series." };
+  }
+
+  // Delete all watch history for these episodes for the given user and profile
+  const result = await WatchHistory.deleteMany({
+    userId: userId,
+    profileName: profileName,
+    contentId: { $in: episodeIds },
+  });
+
+  return { message: `Reset ${result.deletedCount} episodes for series.` };
+}
+
+module.exports = { updateProgress, getProgress, getUserDailyWatch, getWatchHistoryPerContentByProfileID, hasFinishedSeries, resetSeriesHistory };

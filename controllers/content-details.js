@@ -12,7 +12,6 @@ async function getContentDetailsByTitle(req, res) {
     const userId = req.session?.user?._id;
     const profile = req.session?.activeProfile?.name;
 
-    // ✅ SERIES
     if (content.type === "series") {
       const episodes = await addContentService.getEpisodesBySeriesTitle(req.params.title);
 
@@ -34,11 +33,14 @@ async function getContentDetailsByTitle(req, res) {
           })
         );
 
+        const hasFinished = await watchService.hasFinishedSeries(profile, content._id, userId);
+
         return res.json({
           ...content,
           type: "series",
           history: episodeHistories,
           similarFromSameGenre,
+          hasFinished,
         });
       }
 
@@ -50,7 +52,6 @@ async function getContentDetailsByTitle(req, res) {
       });
     }
 
-    // ✅ MOVIES
     let history = [];
     if (userId && profile) {
       const movieHistory = await watchService.getWatchHistoryPerContentByProfileID(
