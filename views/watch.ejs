@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title><%= movie.title %> - Watch</title>
+    <title><%= content.title %> - Watch</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/main.css" />
@@ -10,7 +10,7 @@
   </head>
 
   <body class="watch-page">
-    <div class="cover" id="<%= movie._id %>">
+    <div class="cover" id="<%= content._id %>">
       <div class="video-wrapper">
         <!-- 🔙 Back button lives INSIDE the video wrapper so it’s above the video -->
         <div class="video-header">
@@ -24,7 +24,7 @@
 
         <video
           class="cover-video"
-          src="/<%= movie.videoPath %>"
+          src="/<%= content.videoPath %>"
           preload="metadata"
         ></video>
 

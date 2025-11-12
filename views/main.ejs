@@ -34,21 +34,30 @@
         <% } %>
       <% } %>
 
-   <!-- content details modal -->
+<!-- content details modal -->
 <div id="contentModal" class="modal">
   <div class="modal-content">
     <span id="modalClose" class="close">&times;</span>
 
     <div class="modal-image-container">
-      <img id="modalCover" src="" alt="">
+      <img id="modalCover" src="" alt="Cover">
+      <!-- ▶️ Play button with visible icon -->
       <button id="modalPlayBtn" class="play-btn"></button>
     </div>
 
     <h2 id="modalTitle"></h2>
     <p id="modalDescription"></p>
+
     <div id="modalExtra"></div>
+
+    <!-- Watch status for movies -->
+    <div id="modalWatchStatus" class="watch-status" style="margin-top: 10px;"></div>
+
+    <!-- Episodes will be injected here dynamically -->
+    <div id="modalEpisodes"></div>
   </div>
 </div>
+
     </main>
   <script src="/js/content-details.js"> </script>
   <script src="/js/search.js"></script>
