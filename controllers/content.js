@@ -33,7 +33,7 @@ async function renderAddContentPage(req, res) {
 }
 
 // fetch rating from OMDb API by title, if not found return null
-async function getRating(title) {
+async function getRating(req, title) {
   try {
     const apiKey = process.env.API_KEY;
     const response = await axios.get(`https://www.omdbapi.com/`, {
