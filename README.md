@@ -40,43 +40,11 @@ A typical request in this application follows this flow:
 
 ### Logging
 
-The application has a centralized `logService` that writes structured logs to the database. However, there are numerous instances of `console.log` and `console.error` scattered throughout the codebase. These should be replaced with calls to the `logService` to ensure consistent and persistent logging.
-
-`console.log` and `console.error` statements were found in the following files:
-
--   `controllers/content.js`
--   `controllers/login.js`
--   `controllers/main.js`
--   `controllers/profiles.js`
--   `controllers/register.js`
--   `controllers/search.js`
--   `controllers/settings.js`
--   `controllers/statistics.js`
--   `controllers/watch.js`
--   `controllers/watchController.js`
--   `index.js`
--   `middlewares/authMiddleware.js`
--   `middlewares/checkAdmin.js`
--   `public/js/add-content.js`
--   `public/js/content-details.js`
--   `public/js/content-filter.js`
--   `public/js/genre-filter.js`
--   `public/js/profile-dropdown.js`
--   `public/js/watch.js`
--   `services/addContentService.js`
--   `services/genreService.js`
--   `services/logService.js`
--   `services/registerService.js`
--   `services/watchService.js`
-
-### Unused Imports and Variables
-
-A manual inspection of the code revealed several unused imports and variables that should be removed to improve code quality.
-
--   **`controllers/statistics.js`**: The `get` import from `mongoose` is not used.
--   **`routes/api/profiles.js`**: The `User` model is imported but never used.
--   **`controllers/settings.js`**: The `bcrypt` module is imported but not used.
--   **`controllers/settings.js`**: The `User` model is imported but not used.
+The application has a centralized `logService` that writes structured logs to the database. 
+There are 3 logs levels:
+INFO - logs for routine events and general application flow.
+WARN - logs for unexpected and suboptimal events that do not affect application running.
+ERROR - logs for failure that prevent the application from functioning corrrectly.
 
 ## Setup and Running the Application
 

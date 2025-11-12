@@ -1,6 +1,9 @@
 const WatchHistory = require("../models/watchHistory");
 const mongoose = require("mongoose");
 
+/**
+ * Update or insert watch progress for a specific user + profile + content
+ */
 async function updateProgress({
   userId,
   profileName,
@@ -8,25 +11,62 @@ async function updateProgress({
   progressSeconds,
   durationSeconds,
 }) {
-  const progressPercent = Math.min(
-    100,
-    (progressSeconds / durationSeconds) * 100
-  );
+  if (!userId || !contentId) {
+    throw new Error("Missing required fields: userId or contentId");
+  }
 
-  return await WatchHistory.findOneAndUpdate(
-    { userId, profileName, contentId },
+  // Protect against divide by zero
+  const progressPercent =
+    durationSeconds && durationSeconds > 0
+      ? Math.min(100, (progressSeconds / durationSeconds) * 100)
+      : 0;
+
+  const finished = durationSeconds && progressSeconds >= durationSeconds - 5; // within 5s of end
+
+  const updated = await WatchHistory.findOneAndUpdate(
+    { userId, profileName, contentId }, // <-- includes profile!
     {
       watchedAt: new Date(),
       progressSeconds,
       progressPercent,
-      finished: progressPercent >= 99,
+      finished,
     },
-    { upsert: true, new: true }
+    { upsert: true, new: true, setDefaultsOnInsert: true }
   );
+
+  return {
+    message: "Progress saved successfully",
+    progress: {
+      progressSeconds: updated.progressSeconds,
+      progressPercent: updated.progressPercent,
+      finished: updated.finished,
+    },
+  };
 }
 
+/**
+ * Retrieve saved progress for a user + profile + content
+ */
 async function getProgress(userId, profileName, contentId) {
-  return await WatchHistory.findOne({ userId, profileName, contentId });
+  if (!userId || !contentId) {
+    throw new Error("Missing required fields: userId or contentId");
+  }
+
+  const history = await WatchHistory.findOne({
+    userId,
+    profileName,
+    contentId,
+  });
+
+  if (!history) {
+    return { progressSeconds: 0, progressPercent: 0, finished: false };
+  }
+
+  return {
+    progressSeconds: history.progressSeconds,
+    progressPercent: history.progressPercent,
+    finished: history.finished,
+  };
 }
 
 async function getUserDailyWatch(userId) {
@@ -49,5 +89,11 @@ async function getUserDailyWatch(userId) {
   return result;
 }
 
+// gets user id, profile and content id and returns the watch history per this user, profile and content.
+async function getWatchHistoryPerContentByProfileID(contentId, userId, profileName)
+{
+  const ProfileHistory = await WatchHistory.find({contentId, userId, profileName}).lean();
+  return ProfileHistory;
+}
 
-module.exports = { updateProgress, getProgress, getUserDailyWatch };
+module.exports = { updateProgress, getProgress, getUserDailyWatch, getWatchHistoryPerContentByProfileID };

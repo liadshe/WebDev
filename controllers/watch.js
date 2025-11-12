@@ -1,31 +1,31 @@
 const Content = require("../models/Content");
+const Episode = require("../models/Episode");
 
-async function renderMainPage(req, res) {
+async function renderWatchPage(req, res) {
   try {
-    // Check if user is logged in
-    if (!req.session.user) {
-      console.log("User not logged in, redirecting to /login");
-      return res.redirect("/login");
-    }
+    if (!req.session.user) return res.redirect("/login");
 
-    // Fetch movies from the DB
-    const movies = await Content.find({}).lean();
+    let content = await Content.findById(req.params.id).lean();
+    if (!content)
+      {
+        content = await Episode.findById(req.params.id).lean();
+        if(!content)
+        {
+          return res.status(404).send("content not found");
+        }
+      } 
 
-    // Pull data from session
+
     const user = req.session.user;
     const activeProfile = req.session.activeProfile || {
       name: "Default Profile",
     };
-    console.log(
-      `Rendering main page for user: ${user.username}, profile: ${activeProfile.name}`
-    );
 
-    // Render the main page
-    res.render("main", { movies, user, activeProfile });
+    return res.render("watch", { content, user, activeProfile });
   } catch (err) {
-    console.error("Error fetching movies:", err);
-    res.status(500).send("Failed to load movies");
+    console.error(" Error rendering watch page:", err);
+    return res.status(500).send("Error loading watch page");
   }
 }
 
-module.exports = { renderMainPage };
+module.exports = { renderWatchPage };

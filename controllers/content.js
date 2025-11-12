@@ -3,6 +3,7 @@ const dotenv = require("dotenv"); // to load OMDb API key
 const axios = require("axios"); // to call external OMDb API
 const { getVideoDurationInSeconds } = require("get-video-duration"); // to get video duration
 const path = require("path"); // to handle file paths
+const logService = require("../services/logService");
 
 dotenv.config();
 
@@ -17,12 +18,9 @@ async function renderAddContentPage(req, res) {
     if (!series) {
       console.log("No series found, using empty array");
     }
-    const user = req.session.user;
-   // const profile = user.profiles.id(req.query.profileId) || { picture: 'default.jpg', name: 'User' };
-   const profile =  { picture: 'default.jpg', name: 'User' };
    res.render("content", {
-      user,
-      profile,
+      user: req.session.activeProfile.name,
+      profile: req.session.activeProfile,
       genres: genres || [],
       series: series || [],
       success: req.query.success == "1",
@@ -43,13 +41,22 @@ async function getRating(title) {
     });
 
     if (response.data.Response === "False") {
-      console.log("Movie not found");
-    }
+    await logService.createLog({
+          level: "INFO",
+          service: "AddContent",
+          message: `content ${title} was not found in omdb.`,
+        });
+        }    
     return response.data.imdbRating;
   } catch (err) {
-    console.error("Error fetching rating from OMDb:", err);
-  }
-  return null;
+        await logService.createLog({
+          level: "INFO",
+          service: "AddContent",
+          message: `error accured while fetching rating for ${title}: ${err}.`,
+          userId: req.session.user,
+        });
+        }
+    return null;
 }
 
 // get video duration in seconds
@@ -59,7 +66,13 @@ async function getVideoDuration(videoPath) {
     const durationSeconds = await getVideoDurationInSeconds(absolutePath);
     return durationSeconds;
   } catch (err) {
-    console.error("Error reading video duration:", err);
+      await logService.createLog({
+      level: "INFO",
+      service: "AddContent",
+      message: `Error reading video duration: ${err}`,
+      userId: req.session.user,
+        });
+
     return null;
   }
 }
@@ -167,25 +180,9 @@ async function handleContentSubmission(req, res) {
   }
 }
 
-// gets a title and return the content data by the title
-async function getContentDetailsByTitle(req, res){
-    const content = await addContentService.getContentByTitle(req.params.title);
-    const similarFromSameGenre = await addContentService.getContentByGenre(content.genre);
-
-    // if it's a series, fetch its episodes
-    if (content.type === 'series') {
-      const episodes = await addContentService.getEpisodesBySeriesTitle(req.params.title);
-      return res.json({ ...content, similarFromSameGenre, episodes });
-    }
-
-    // otherwise, just return the content
-    res.json({...content, similarFromSameGenre});
-}
-
 
 
 module.exports = {
   renderAddContentPage,
   handleContentSubmission,
-  getContentDetailsByTitle,
 };

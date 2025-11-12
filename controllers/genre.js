@@ -5,7 +5,7 @@ const addContentService = require("../services/addContentService");
   try {
     const genre = req.params.genre;
     const skip = parseInt(req.query.skip) || 0;
-    const limit = parseInt(process.env.MOVIE_LIMIT || 10);
+    const limit = parseInt(process.env.CONTENT_LIMIT);
     let genreContent;
     if (genre == "All")
     {

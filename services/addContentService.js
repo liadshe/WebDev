@@ -65,4 +65,10 @@ const getAllContent = async () => {
     const contents = await Content.find().populate("genre").lean();
     return contents;
 }
-module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, getContentByGenre, getEpisodesBySeriesTitle, addContent, addEpisode, getAllContent };
+
+async function getTypeById(contentId)
+{
+    const content = await Content.findById(contentId).lean();
+    return content.type;
+}
+module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, getContentByGenre, getTypeById, getEpisodesBySeriesTitle, addContent, addEpisode, getAllContent };
