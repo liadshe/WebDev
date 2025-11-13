@@ -1,81 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-  <title><%= givengenre.charAt(0).toUpperCase() + givengenre.slice(1).toLowerCase() %> Content</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <title>
+      <%= givengenre.charAt(0).toUpperCase() + givengenre.slice(1).toLowerCase()
+      %> Content
+    </title>
 
-  <link rel="stylesheet" href="/css/style.css" />
-  <link rel="stylesheet" href="/css/main.css" />
-  <link rel="stylesheet" href="/css/settings.css" />
-  <link rel="stylesheet" href="/css/search.css" />
-  <link rel="stylesheet" href="/css/genre.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/settings.css" />
+    <link rel="stylesheet" href="/css/search.css" />
+    <link rel="stylesheet" href="/css/genre.css" />
+  </head>
 
-</head>
+  <body
+    class="main-page"
+    data-genre="<%= givengenre.charAt(0).toUpperCase() + givengenre.slice(1).toLowerCase() %>"
+  >
+    <%- include('partials/header') %>
 
-<body class="main-page"
-      data-genre="<%= givengenre.charAt(0).toUpperCase() + givengenre.slice(1).toLowerCase() %>">
+    <main class="genre-page">
+      <h1 class="genre-title">
+        <%= givengenre.charAt(0).toUpperCase() +
+        givengenre.slice(1).toLowerCase() %> Content
+      </h1>
 
-  <%- include('partials/header') %>
+      <div
+        class="filter-controls"
+        style="
+          margin-bottom: 20px;
+          display: flex;
+          justify-content: flex-start;
+          gap: 10px;
+          margin-left: 20px;
+        "
+      >
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="watched">Watched</button>
+        <button class="filter-btn" data-filter="unwatched">Unwatched</button>
+      </div>
 
-  <main class="genre-page">
-    <h1 class="genre-title">
-      <%= givengenre.charAt(0).toUpperCase() + givengenre.slice(1).toLowerCase() %> Content
-    </h1>
-
-<div class="filter-controls" style="margin-bottom: 20px; display: flex; justify-content: flex-start; gap: 10px; margin-left: 20px;">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="watched">Watched</button>
-      <button class="filter-btn" data-filter="unwatched">Unwatched</button>
-    </div>
-    
-        <!-- Popular in Genre Section -->
-    <% if (typeof popularInGenre !== 'undefined' && popularInGenre.length > 0) { %>
-      <section class="genre-section popular-section" style="margin-bottom: 40px;">
-        <h2 style="color: #fff; margin-left: 20px; font-size: 1.5rem;">
+      <!-- Popular in Genre Section -->
+      <% if (typeof popularInGenre !== 'undefined' && popularInGenre.length > 0)
+      { %>
+      <section
+        class="genre-section popular-section"
+        style="margin-bottom: 40px"
+      >
+        <h2 style="color: #fff; margin-left: 20px; font-size: 1.5rem">
           Popular in <%= givengenre %>
-          <span style="font-size: 0.9rem; color: #aaa; font-weight: normal;"> - Most Watched</span>
+          <span style="font-size: 0.9rem; color: #aaa; font-weight: normal">
+            - Most Watched</span
+          >
         </h2>
 
         <div class="genre-row">
           <% popularInGenre.forEach(movie => { %>
-            <div class="cover popular-genre-item" id="<%= movie._id %>" data-type="<%= movie.type %>">
-              <img
-                src="/<%= movie.coverImagePath.replace(/^\/+/, '') %>"
-                alt="<%= movie.title %>"
-                class="cover-image"
-              />
-            </div>
+          <div
+            class="cover popular-genre-item"
+            id="<%= movie._id %>"
+            data-type="<%= movie.type %>"
+          >
+            <img
+              src="/<%= movie.coverImagePath.replace(/^\/+/, '') %>"
+              alt="<%= movie.title %>"
+              class="cover-image"
+            />
+          </div>
           <% }) %>
         </div>
       </section>
-    <% } %>
+      <% } %>
 
+      <div id="movie-grid" class="movie-grid"></div>
+      <div id="loading">Loading...</div>
+    </main>
 
-    <div id="movie-grid" class="movie-grid" ></div>
-    <div id="loading">Loading...</div>
-  </main>
+    <!-- Content Details Modal -->
+    <div id="contentModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span id="modalClose" class="close">&times;</span>
 
-  <!-- Content Details Modal -->
-  <div id="contentModal" class="modal" style="display:none;">
-    <div class="modal-content">
-      <span id="modalClose" class="close">&times;</span>
+        <div class="modal-image-container">
+          <img id="modalCover" src="" alt="" />
+          <button id="modalPlayBtn" class="play-btn"></button>
+        </div>
 
-      <div class="modal-image-container">
-        <img id="modalCover" src="" alt="">
-        <button id="modalPlayBtn" class="play-btn"></button>
+        <h2 id="modalTitle"></h2>
+        <button id="likeBtn" class="like-btn">♡</button>
+        <p id="modalDescription"></p>
+        <div id="modalExtra"></div>
+        <div id="modalEpisodes"></div>
+        <div id="modalSimilar"></div>
       </div>
-
-      <h2 id="modalTitle"></h2>
-      <p id="modalDescription"></p>
-      <div id="modalExtra"></div>
-      <div id="modalEpisodes"></div>
-      <div id="modalSimilar"></div>
     </div>
-  </div>
 
-  <script src="/js/show-content-by-genre.js"></script>
-  <script src="/js/content-details.js"></script>
-</body>
+    <script src="/js/show-content-by-genre.js"></script>
+    <script src="/js/content-details.js"></script>
+  </body>
 </html>
