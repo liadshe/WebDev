@@ -1,4 +1,3 @@
-// controllers/contentController.js
 const addContentService = require("../services/addContentService");
 const watchService = require("../services/watchService");
 const Episode = require("../models/Episode");

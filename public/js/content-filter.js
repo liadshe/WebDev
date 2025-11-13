@@ -25,7 +25,6 @@
 
   // Filter content based on type
   function filterContent(type) {
-    console.log('Filtering content by type:', type);
     
     const allCovers = document.querySelectorAll('.cover');
     const allGenreSections = document.querySelectorAll('.genre-section');
@@ -75,7 +74,6 @@
 
   // Show all content (remove filter)
   function showAllContent() {
-    console.log('Showing all content');
     
     const allCovers = document.querySelectorAll('.cover');
     const allGenreSections = document.querySelectorAll('.genre-section');

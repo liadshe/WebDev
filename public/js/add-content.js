@@ -52,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
         seriesSelect.appendChild(opt);
       });
     } catch (err) {
-      console.log('Error loading series:', err);
       seriesSelect.innerHTML = '<option value="">Error loading series</option>';
     }
   }

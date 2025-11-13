@@ -2,7 +2,6 @@
   let currentGenre = 'all';
 
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Genre filter initialized');
     
     const genreToggle = document.getElementById('genreToggle');
     const genreMenu = document.getElementById('genreMenu');
@@ -10,11 +9,8 @@
     
     // Exit if genre dropdown doesn't exist
     if (!genreToggle || !genreMenu || !genreDropdown) {
-      console.log('Genre dropdown not found - likely on a different page');
       return;
     }
-
-    console.log('Genre dropdown elements found - initializing...');
 
     // Initialize genre dropdown
     initializeGenreDropdown();
@@ -29,9 +25,7 @@
         
         const isOpen = genreMenu.classList.contains('show');
         genreMenu.classList.toggle('show');
-        
-        console.log('Genre dropdown toggled:', !isOpen ? 'opened' : 'closed');
-        
+                
         // Close sort menu if open
         const sortMenu = document.getElementById('sortMenu');
         if (sortMenu) {
@@ -64,15 +58,12 @@
         }
       });
 
-      console.log('Genre dropdown event listeners attached');
     }
 
     // Populate genre options from existing content
     function populateGenres() {
-      console.log('Populating genres from page content...');
       
       const genreSections = document.querySelectorAll('.genre-section');
-      console.log('Found', genreSections.length, 'genre sections');
       
       const genres = new Set();
 
@@ -97,9 +88,7 @@
         option.addEventListener('click', function(e) {
           e.preventDefault();
           
-          console.log('Genre clicked:', genre);
-          console.log('Navigating to: /genre/' + genre);
-          
+         
           // Close the menu
           genreMenu.classList.remove('show');
           
