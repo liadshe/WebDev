@@ -2,13 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title><%= content.title %> - Watch</title>
+    <title
+      data-series-title="<%= isEpisode ? seriesData.title : content.title %>"
+    >
+      <%= isEpisode ? seriesData.title : content.title %> - Watch
+    </title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/main.css" />
     <link rel="stylesheet" href="/css/watch.css" />
-  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
   </head>
 
   <body class="watch-page">
