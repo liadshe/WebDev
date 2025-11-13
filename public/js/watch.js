@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!video || !controls) return;
 
-    // Add "Next Episode" button 
+    // Add "Next Episode" button
     nextEpBtn.classList.add("nextEpisode");
     nextEpBtn.textContent = "Next ▶";
     nextEpBtn.style.display = "none";
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const contentId = cover.id;
     let allEpisodes = [];
 
-    // video play logic 
+    // video play logic
     const playTransition = () => {
       videoWrapper.classList.remove("hidden");
       cover.classList.add("playing");
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTimeDisplay();
     });
 
-    // Seek & fullscreen 
+    // Seek & fullscreen
     backward.addEventListener("click", () => {
       video.currentTime = Math.max(0, video.currentTime - 10);
       showControls();
@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showControls();
     });
 
-    // Volume 
+    // Volume
     let lastVolume = parseFloat(localStorage.getItem("lastVolume")) ?? 1.0;
     video.volume = lastVolume;
     volumeSlider.value = lastVolume;
@@ -207,13 +207,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // EPISODE SELECTOR + NEXT EPISODE
     const episodeSelector = document.getElementById("episodeSelector");
     const dropdown = episodeSelector?.querySelector(".episodes-dropdown");
-
+    const SERIES_TITLE = document.querySelector("title").dataset.seriesTitle;
     if (episodeSelector && dropdown) {
-      fetch(
-        `/api/contentDetails/${encodeURIComponent(
-          document.title.replace(" - Watch", "")
-        )}`
-      )
+      fetch(`/api/contentDetails/${encodeURIComponent(SERIES_TITLE)}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.type !== "series" || !data.episodes?.length) {
