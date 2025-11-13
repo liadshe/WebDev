@@ -62,57 +62,36 @@
 
     // Populate genre options from existing content
     function populateGenres() {
-      
-      const genreSections = document.querySelectorAll('.genre-section');
-      
-      const genres = new Set();
+    const menu = document.getElementById("genreMenu");
+    const genresData = menu.getAttribute("data-genres");
 
-      genreSections.forEach((section, index) => {
-        const genre = section.getAttribute('data-genre');
-        if (genre) {
-          genres.add(genre);
-        }
-      });
+    let genres = [];
+    try {
+        genres = JSON.parse(genresData);
+    } catch (err) {
+        console.error("Failed to parse genres:", err);
+        return;
+    }
 
-      // Sort genres alphabetically
-      const sortedGenres = Array.from(genres).sort();
+    // Remove old items except "All Genres"
+    const allOption = menu.querySelector('.genre-option[data-genre="all"]');
+    menu.innerHTML = "";
+    menu.appendChild(allOption);
 
-      // Add genre options to menu
-      sortedGenres.forEach(genre => {
-        const option = document.createElement('div');
-        option.className = 'genre-option';
-        option.setAttribute('data-genre', genre);
+    // Add all genres from server
+    genres.forEach(genre => {
+        const option = document.createElement("div");
+        option.className = "genre-option";
+        option.dataset.genre = genre;
         option.innerHTML = `<span>${genre}</span>`;
         
-        // IMPORTANT: Click handler to navigate to /genre/Action, /genre/Drama, etc.
-        option.addEventListener('click', function(e) {
-          e.preventDefault();
-          
-         
-          // Close the menu
-          genreMenu.classList.remove('show');
-          
-          // Navigate to the genre page
-          window.location.href = `/genre/${encodeURIComponent(genre)}`;
+        option.addEventListener("click", () => {
+            window.location.href = `/genre/${encodeURIComponent(genre)}`;
         });
-        
-        genreMenu.appendChild(option);
-      });
 
-      // Add click handler to "All Genres" option
-      const allOption = genreMenu.querySelector('.genre-option[data-genre="all"]');
-      if (allOption) {
-        allOption.addEventListener('click', function(e) {
-          e.preventDefault();          
-          // Close the menu
-          genreMenu.classList.remove('show');
-          
-          // Navigate back to main page showing all genres
-          window.location.href = '/main';
-        });
-      }
-
-    }
+        menu.appendChild(option);
+    });
+}
 
     // Export current genre for external use
     window.getCurrentGenre = function() { return currentGenre; };
