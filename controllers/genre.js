@@ -1,4 +1,6 @@
 const addContentService = require("../services/addContentService");
+const genreService = require("../services/genreService");
+const recommendationService = require("../services/recommendationService");
 
 // returns all content from specific genre
   async function getContentByGenre(req, res) {
@@ -27,8 +29,22 @@ async function renderGenrePage(req,res)
   const givengenre = req.params.genre;
   const user = req.session.user;  
   const profile =  { picture: 'default.jpg', name: 'User' }; // change when profile saved in session
+  const activeProfile = req.session.activeProfile;
+  // If no profile is selected or profile not found, use the first profile
+  if (!activeProfile && user.profiles && user.profiles.length > 0) {
+    activeProfile = user.profiles[0];
+  }
+  
+  const genres = await genreService.getAllGenres();
+  const popularInGenre = await recommendationService.getPopularContentByGenre(givengenre, 10);
 
-  res.render('genre', {user,profile,givengenre})
+  res.render('genre', {
+    user,
+    profile: activeProfile || { picture: 'default.jpg', name: 'User' },
+    givengenre,
+    allGenres: genres ,
+    popularInGenre: popularInGenre 
+  })
 
 }
 

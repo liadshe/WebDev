@@ -4,20 +4,69 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
-    <link rel="stylesheet" href="./style.css" />
-    <link rel="stylesheet" href="./main.css" />
-    <link rel="stylesheet" href="./settings.css" />
-    <link rel="stylesheet" href="./search.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/settings.css" />
+    <link rel="stylesheet" href="/css/search.css" />
    </head>
   <body class="main-page">
     <%- include('partials/header') %>
     <main>
       <h1>Hello, <%= user.username %></h1>
+    <!-- Most Popular Section -->
+      <% if ((typeof sortOption === 'undefined' || sortOption === 'default') && typeof mostPopular !== 'undefined' && mostPopular.length > 0) { %>
+        <section class="genre-section" data-genre="popular"> 
+          <h2>
+            Most Popular
+            <span style="font-size: 0.9rem; color: #aaa; font-weight: normal;"> - Trending Now</span>
+          </h2>
+
+          <div class="genre-row">
+            <% mostPopular.forEach(movie => { %>
+              <div class="cover popular-item" id="<%= movie._id %>" data-type="<%= movie.type %>">
+                <img
+                  src="<%= movie.coverImagePath %>"
+                  alt="<%= movie.title %>"
+                  class="cover-image"
+                />
+              </div>
+            <% }) %>
+          </div>
+        </section>
+      <% } %>
+
+      <!-- Personalized Recommendations Section -->
+      <% if ((typeof sortOption === 'undefined' || sortOption === 'default') && typeof personalizedRecommendations !== 'undefined' && personalizedRecommendations.length > 0) { %>
+        <section class="genre-section" data-genre="recommended"> 
+          <h2>
+            Recommended for You
+            <span style="font-size: 0.9rem; color: #aaa; font-weight: normal;"> - Based on your preferences</span>
+          </h2>
+
+          <div class="genre-row">
+            <% personalizedRecommendations.forEach(movie => { %>
+              <div class="cover recommended-item" id="<%= movie._id %>" data-type="<%= movie.type %>">
+                <img
+                  src="<%= movie.coverImagePath %>"
+                  alt="<%= movie.title %>"
+                  class="cover-image"
+                />
+              </div>
+            <% }) %>
+          </div>
+        </section>
+      <% } %>
+
 
       <% for (let genre in moviesByGenre) { %>
         <% if (moviesByGenre[genre].length > 0) { %>
           <section class="genre-section" data-genre="<%= genre %>"> 
-            <h2><%= genre %></h2>
+            <h2>
+              <%= genre %>
+              <% if (typeof sortOption !== 'undefined' && sortOption === 'newest') { %>
+                <span style="font-size: 0.9rem; color: #aaa; font-weight: normal;"> - 10 Newest</span>
+              <% } %>
+            </h2>
 
             <div class="genre-row" >
               <% moviesByGenre[genre].forEach(movie => { %>
@@ -60,10 +109,6 @@
 
     </main>
   <script src="/js/content-details.js"> </script>
-  <script src="/js/search.js"></script>
-  <script src="/js/genre-filter.js"></script>
-  <script src="/js/sort.js"></script>
   <script src="/js/content-filter.js"></script>
-  <script src="/js/profile-dropdown.js"></script>
   </body>
 </html>

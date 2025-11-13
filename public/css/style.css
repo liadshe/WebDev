@@ -9,7 +9,7 @@ body {
 
 /* Login Page */
 .login-page {
-  background: url("images/login-bg.jpg") no-repeat center center fixed;
+  background: url("../images/login-bg.jpg") no-repeat center center fixed;
   background-size: cover;
 }
 .login-box {
@@ -282,7 +282,6 @@ body {
   height: 50px;
   border-radius: 6px;
 }
-
 
 /* Hide the default "Powered by Google" text */
 .goog-logo-link {

@@ -1,9 +1,9 @@
 <style src="/public/style.css"></style>
 <header class="top-menu">
-    <link rel="stylesheet" href="./style.css" />
-    <link rel="stylesheet" href="./main.css" />
-    <link rel="stylesheet" href="./settings.css" />
-    <link rel="stylesheet" href="./search.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/settings.css" />
+    <link rel="stylesheet" href="/css/search.css" />
   <nav>
     <ul>
       <li class="logo">
@@ -11,20 +11,19 @@
           <img src="/images/Blanfix.png" alt="Logo" style="height: 30px; vertical-align: middle;">
         </a>
       </li>
-      <li><a href="main?type=all" class="active">Home</a></li>
-      <li><a href="main?type=series">TV Shows</a></li>
-      <li><a href="main?type=movies">Movies</a></li>
+      <li><a href="/main?type=all" class="active">Home</a></li>
+      <li><a href="/main?type=series">TV Shows</a></li>
+      <li><a href="/main?type=movies">Movies</a></li>
 
         <!-- Genre Dropdown Filter -->
       <li class="genre-dropdown" id="genreDropdown">
         <a href="#" id="genreToggle" style="display: flex; align-items: center;">
           Genres <span style="margin-left: 5px; font-size: 10px;">▼</span>
         </a>
-        <div class="genre-menu" id="genreMenu">
+        <div class="genre-menu" id="genreMenu" data-genres='<%= JSON.stringify(allGenres || []) %>'>
           <div class="genre-option active" data-genre="all">
             <span>All Genres</span>
           </div>
-          <!-- Genres will be populated dynamically by JavaScript -->
         </div>
       </li>
 
@@ -47,12 +46,16 @@
       <li class="right-icons">
           <!-- Sort Dropdown -->
           <div class="sort-dropdown" id="sortDropdown">
-          <img src="/images/sort.png" alt="Sort" id="sortIcon" style="height:25px; cursor: pointer;" title="Sort">
+          <div id="sortToggle" style="display: flex; align-items: center; cursor: pointer; color: white;">
+            Sort <span style="margin-left: 5px; font-size: 10px;"></span>
+          </div>
           <div class="sort-menu" id="sortMenu">
             <a href="#" class="sort-option active" data-sort="default">Default</a>
             <a href="#" class="sort-option" data-sort="a-z">A → Z</a>
-            <a href="#" class="sort-option" data-sort="z-a">Z → A</a>
+            <a href="#" class="sort-option" data-sort="newest">10 Newest</a>
           </div>
+        </div>
+
 
         <div class="search-container">
           <img src="/images/search.png" alt="Search" id="search-icon" style="height:25px; cursor: pointer;">
@@ -78,4 +81,9 @@
 </header>
     <script src="/js/translate.js"> </script>
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="/js/search.js"></script>
+    <script src="/js/genre-filter.js"></script>
+    <script src="/js/sort.js"></script>
+    <script src="/js/profile-dropdown.js"></script>
+
 

@@ -3,7 +3,6 @@
   let currentGenre = 'all';
 
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Genre filter initialized');
     
     const genreToggle = document.getElementById('genreToggle');
     const genreMenu = document.getElementById('genreMenu');
@@ -11,19 +10,14 @@
     
     // Exit if genre dropdown doesn't exist
     if (!genreToggle || !genreMenu || !genreDropdown) {
-      console.log('Genre dropdown not found - likely on a different page');
       return;
     }
 
-    console.log('Genre dropdown elements found - initializing...');
-
     // Initialize genre dropdown
     initializeGenreDropdown();
-    populateGenres();
+    populateGenresFromDB();
 
-    // ========================================
-    // GENRE DROPDOWN FUNCTIONS
-    // ========================================
+
     function initializeGenreDropdown() {
       // Toggle genre menu
       genreToggle.addEventListener('click', function(e) {
@@ -67,29 +61,37 @@
         }
       });
 
-      console.log('Genre dropdown event listeners attached');
     }
 
-    // Populate genre options from existing content
-    function populateGenres() {
-      console.log('Populating genres from page content...');
+    // Populate genre options from database (via data attribute)
+    function populateGenresFromDB() {
+      console.log('Populating genres from database...');
       
-      const genreSections = document.querySelectorAll('.genre-section');
-      console.log('Found', genreSections.length, 'genre sections');
+      // Get genres from data attribute
+      const genresData = genreMenu.getAttribute('data-genres');
       
-      const genres = new Set();
+      if (!genresData) {
+        console.warn('No genres data found in data-genres attribute');
+        return;
+      }
 
-      genreSections.forEach((section, index) => {
-        const genre = section.getAttribute('data-genre');
-        if (genre) {
-          genres.add(genre);
-          console.log(`  ${index + 1}. Found genre: "${genre}"`);
-        }
-      });
+      let genres = [];
+      try {
+        genres = JSON.parse(genresData);
+        console.log('Parsed genres from database:', genres);
+      } catch (e) {
+        console.error('Error parsing genres data:', e);
+        return;
+      }
+
+      if (!Array.isArray(genres) || genres.length === 0) {
+        console.warn('No genres available from database');
+        return;
+      }
 
       // Sort genres alphabetically
-      const sortedGenres = Array.from(genres).sort();
-      console.log('Total unique genres:', sortedGenres.length);
+      const sortedGenres = [...genres].sort();
+      console.log('Total genres from DB:', sortedGenres.length);
 
       // Add genre options to menu
       sortedGenres.forEach(genre => {
@@ -98,7 +100,7 @@
         option.setAttribute('data-genre', genre);
         option.innerHTML = `<span>${genre}</span>`;
         
-        // IMPORTANT: Click handler to navigate to /genre/Action, /genre/Drama, etc.
+        // Click handler to navigate to /genre/Action, /genre/Drama, etc.
         option.addEventListener('click', function(e) {
           e.preventDefault();
           
@@ -133,7 +135,7 @@
         console.log('"All Genres" option configured');
       }
 
-      console.log('✓ Genre dropdown populated with', sortedGenres.length, 'genres');
+      console.log('✓ Genre dropdown populated with', sortedGenres.length, 'genres from database');
     }
 
     // Export current genre for external use
