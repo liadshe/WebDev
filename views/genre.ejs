@@ -24,7 +24,12 @@
       <%= givengenre.charAt(0).toUpperCase() + givengenre.slice(1).toLowerCase() %> Content
     </h1>
 
-
+<div class="filter-controls" style="margin-bottom: 20px; display: flex; justify-content: flex-start; gap: 10px; margin-left: 20px;">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="watched">Watched</button>
+      <button class="filter-btn" data-filter="unwatched">Unwatched</button>
+    </div>
+    
         <!-- Popular in Genre Section -->
     <% if (typeof popularInGenre !== 'undefined' && popularInGenre.length > 0) { %>
       <section class="genre-section popular-section" style="margin-bottom: 40px;">
@@ -48,7 +53,7 @@
     <% } %>
 
 
-    <div id="movie-grid" class="movie-grid"></div>
+    <div id="movie-grid" class="movie-grid" ></div>
     <div id="loading">Loading...</div>
   </main>
 

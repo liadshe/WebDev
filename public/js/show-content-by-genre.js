@@ -11,6 +11,30 @@ document.addEventListener("DOMContentLoaded", () => {
   let loading = false;
   let allLoaded = false;
 
+
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelector(".filter-btn.active").classList.remove("active");
+        btn.classList.add("active");
+
+        const type = btn.dataset.filter;
+        filterMovies(type);
+    });
+});
+
+  function filterMovies(type) {
+      document.querySelectorAll(".cover").forEach(item => {
+          const watched = item.classList.contains("watched-item");
+
+          if (type === "all") {
+              item.style.display = "block";
+          } else if (type === "watched") {
+              item.style.display = watched ? "block" : "none";
+          } else if (type === "unwatched") {
+              item.style.display = watched ? "none" : "block";
+          }
+      });
+  }
   async function loadMovies() {
     if (loading || allLoaded) return;
     loading = true;
@@ -45,3 +69,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
