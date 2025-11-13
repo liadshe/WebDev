@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const controls = cover.querySelector(".controls");
     const playPause = cover.querySelector(".playPause");
     const backward = cover.querySelector(".backward");
+    const restartBtn = cover.querySelector(".restartBtn");
     const forward = cover.querySelector(".forward");
     const timeline = cover.querySelector(".timeline");
     const fullscreenBtn = cover.querySelector(".fullscreen");
@@ -151,6 +152,19 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!document.fullscreenElement) videoWrapper.requestFullscreen();
       else document.exitFullscreen();
       showControls();
+    });
+
+    // Restart video
+    restartBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      video.currentTime = 0; // jump to start
+
+      // If video was paused, force play to match Netflix behaviour
+      if (video.paused) {
+        video.play().catch(console.error);
+      }
+
+      showControls(); // keep controls visible
     });
 
     // Volume

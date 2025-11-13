@@ -29,7 +29,7 @@ body.watch-page {
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
 }
 
-/* 🔝 Header inside the video wrapper */
+/* Header inside the video wrapper */
 .video-header {
   position: absolute;
   top: 20px;
@@ -287,4 +287,25 @@ body.watch-page {
 
 .nextEpisode:hover {
   background: rgba(255, 255, 255, 0.15);
+}
+
+.restartBtn {
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.restartBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+.restartBtn:active {
+  transform: scale(0.95);
 }
