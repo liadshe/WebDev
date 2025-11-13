@@ -20,6 +20,19 @@ const getUserProfiles = async (_id) => {
     return user.profiles;
 }
 
+// not in use - only to support CRUD
+const deleteUser = async (id) => {
+  try {
+    const deleted = await User.findByIdAndDelete(id);
+    if (!deleted) throw new Error("User not found");
+    return deleted;
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw error;
+  }
+};
+
+
 module.exports = {
     getUserByUsername,
     getUserByEmail,
