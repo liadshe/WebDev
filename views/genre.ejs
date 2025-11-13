@@ -35,7 +35,7 @@
           <% popularInGenre.forEach(movie => { %>
             <div class="cover popular-genre-item" id="<%= movie._id %>" data-type="<%= movie.type %>">
               <img
-                src="<%= movie.coverImagePath %>"
+                src="/<%= movie.coverImagePath.replace(/^\/+/, '') %>"
                 alt="<%= movie.title %>"
                 class="cover-image"
               />
