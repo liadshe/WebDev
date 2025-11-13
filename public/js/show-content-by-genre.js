@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-  let genre = document.body.dataset.genre; // now it has the correct genre
-  genre = genre.charAt(0).toUpperCase() + genre.slice(1).toLowerCase()
+  let genre = document.body.dataset.genre; 
+  genre = genre
+  .split('-')
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+  .join('-');  
   let skip = 0;
   let loading = false;
   let allLoaded = false;

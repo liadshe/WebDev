@@ -5,7 +5,13 @@ const recommendationService = require("../services/recommendationService");
 // returns all content from specific genre
   async function getContentByGenre(req, res) {
   try {
-    const genre = req.params.genre;
+    let genre = req.params.genre;
+
+    genre = genre
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join('-');
+
     const skip = parseInt(req.query.skip) || 0;
     const limit = parseInt(process.env.CONTENT_LIMIT);
     let genreContent;
@@ -26,9 +32,13 @@ const recommendationService = require("../services/recommendationService");
 // render 
 async function renderGenrePage(req,res)
 {
-  const givengenre = req.params.genre;
+  let givengenre = req.params.genre;
+
+  givengenre = givengenre
+  .split('-')
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+  .join('-');
   const user = req.session.user;  
-  const profile =  { picture: 'default.jpg', name: 'User' }; // change when profile saved in session
   const activeProfile = req.session.activeProfile;
   // If no profile is selected or profile not found, use the first profile
   if (!activeProfile && user.profiles && user.profiles.length > 0) {
@@ -36,7 +46,7 @@ async function renderGenrePage(req,res)
   }
   
   const genres = await genreService.getAllGenres();
-  const popularInGenre = await recommendationService.getPopularContentByGenre(givengenre, 10);
+  const popularInGenre = await recommendationService.getPopularContentByGenre(givengenre);
 
   res.render('genre', {
     user,

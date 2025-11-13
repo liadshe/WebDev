@@ -18,10 +18,11 @@ async function renderAddContentPage(req, res) {
     if (!series) {
       console.log("No series found, using empty array");
     }
+
    res.render("content", {
       user: req.session.activeProfile.name,
       profile: req.session.activeProfile,
-      genres: genres || [],
+      allGenres: genres || [],
       series: series || [],
       success: req.query.success == "1",
       error: req.query.error == "1",

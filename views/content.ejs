@@ -63,8 +63,8 @@
   <div class="form-row movie-series-field">
     <label>Genre</label>
     <div class="checkbox-group">
-      <% if (Array.isArray(genres) && genres.length) { %>
-        <% genres.forEach(function(genre) { %>
+      <% if (Array.isArray(allGenres) && allGenres.length) { %>
+        <% allGenres.forEach(function(genre) { %>
           <label><input type="checkbox" name="genre" value="<%= genre %>"> <%= genre %></label>
         <% }); %>
       <% } else { %>

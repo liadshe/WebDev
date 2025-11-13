@@ -28,11 +28,18 @@ async function getContentByTitle(title)
     return content;
 }
 
-async function getContentByGenre(genres, skip = 0, limit = 10) {
+async function getContentByGenre(genres, skip , limit) {
   if (!Array.isArray(genres)) genres = [genres];
 
+  const normalizedGenres = genres.map(genre =>
+    genre
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join('-')
+  );
+
   const content = await Content.find({
-    genre: { $in: genres }
+    genre: { $in: normalizedGenres }
   })
     .skip(skip)
     .limit(limit)
