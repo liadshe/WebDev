@@ -130,4 +130,33 @@ const updateContent = async (id, updateData) => {
   }
 };
 
-module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, getContentByGenre,getNewestContentByGenre, getTypeById, getEpisodesBySeriesTitle, addContent, addEpisode, getAllContent, deleteContent, updateContent };
+
+// delete episode by ID -  not in used, but to support CRUD
+const deleteEpisode = async (id) => {
+  try {
+    const deleted = await Episode.findByIdAndDelete(id);
+    return deleted;
+  } catch (err) {
+    console.error("Error deleting episode:", err);
+    throw err;
+  }
+};
+
+// update episode by ID -  not in used, but to support CRUD
+const updateEpisode = async (id, updateData) => {
+  try {
+    const updated = await Episode.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true
+    });
+    return updated;
+  } catch (err) {
+    console.error("Error updating episode:", err);
+    throw err;
+  }
+};
+
+
+
+
+module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, getContentByGenre,getNewestContentByGenre, getTypeById, getEpisodesBySeriesTitle, addContent, addEpisode, getAllContent };

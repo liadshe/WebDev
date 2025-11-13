@@ -137,4 +137,5 @@ async function resetSeriesHistory(profileName, seriesId, userId) {
   return { message: `Reset ${result.deletedCount} episodes for series.` };
 }
 
+
 module.exports = { updateProgress, getProgress, getUserDailyWatch, getWatchHistoryPerContentByProfileID, hasFinishedSeries, resetSeriesHistory };
