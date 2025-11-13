@@ -1,5 +1,3 @@
-// controllers/searchController.js - CORRECTED VERSION WITH DEBUGGING
-
 const addContentService = require("../services/addContentService");
 
 // Make sure this function is exported correctly
@@ -49,10 +47,6 @@ async function searchContent(req, res) {
   }
 }
 
-// IMPORTANT: Make sure to export the function
 module.exports = { 
   searchContent 
 };
-
-// Alternative export if your app uses different syntax:
-// module.exports.searchContent = searchContent;

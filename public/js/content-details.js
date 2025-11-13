@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
       modalCover.alt = content.title;
       modalDescription.textContent = content.description || "No description available.";
 
-      // 🎬 Show Play button and watch progress only for MOVIES
+      // Show Play button and watch progress only for MOVIES
       if (content.type === "movie") {
         modalPlayBtn.style.display = "block";
 
@@ -62,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // 🎭 Cast, Genre, etc.
       const castLinks = (content.cast || [])
         .map((actor) => {
           const wikiUrl = `https://en.wikipedia.org/wiki/${encodeURIComponent(
@@ -80,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <strong>Cast:</strong> ${castLinks}
       `;
 
-      // 📺 EPISODES (Series only)
+      // episodes (Series only)
       if (content.type === "series") {
         let episodesHTML = '';
         if (content.hasFinished) {
@@ -187,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
         modalEpisodes.innerHTML = "";
       }
 
-      // 🎥 Similar Content
+      // similar content
       const oldSimilar = document.getElementById("modalSimilar");
       if (oldSimilar) oldSimilar.remove();
 
@@ -248,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (event.target === modal) modal.style.display = "none";
   };
 
-  // ▶ Play movie
+  // play movie
   modalPlayBtn.addEventListener("click", () => {
     if (!currentMovieId) return;
     modal.style.display = "none";
@@ -257,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 150);
   });
 
-  // ▶ Play episode
+  // play episode
   document.addEventListener("click", (event) => {
     const btn = event.target.closest(".episode-play-btn");
     if (!btn) return;

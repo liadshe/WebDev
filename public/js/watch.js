@@ -6,11 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  console.log(
-    "✅ Watch tracking initialized for user:",
-    window.CURRENT_USER_ID
-  );
-
   document.querySelectorAll(".cover").forEach((cover) => {
     const videoWrapper = cover.querySelector(".video-wrapper");
     const video = cover.querySelector(".cover-video");
@@ -27,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!video || !controls) return;
 
-    // === Add "Next Episode" button ===
+    // Add "Next Episode" button 
     nextEpBtn.classList.add("nextEpisode");
     nextEpBtn.textContent = "Next ▶";
     nextEpBtn.style.display = "none";
@@ -38,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const contentId = cover.id;
     let allEpisodes = [];
 
-    // === Video play logic ===
+    // video play logic 
     const playTransition = () => {
       videoWrapper.classList.remove("hidden");
       cover.classList.add("playing");
@@ -69,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTimer = null;
     });
 
-    // === Progress saving ===
+    // Progress saving
     let updateTimer;
     const sendProgress = async () => {
       if (!video.duration) return;
@@ -86,12 +81,12 @@ document.addEventListener("DOMContentLoaded", () => {
           }),
         });
       } catch (err) {
-        console.error("❌ Error saving progress:", err);
+        console.error("Error saving progress:", err);
       }
     };
     window.addEventListener("beforeunload", sendProgress);
 
-    // === Resume from saved progress ===
+    // Resume from saved progress
     const loadProgress = async () => {
       try {
         const res = await fetch(
@@ -107,18 +102,17 @@ document.addEventListener("DOMContentLoaded", () => {
           const setWhenReady = () => {
             if (video.readyState >= 1 && video.duration > 0) {
               video.currentTime = resume;
-              console.log(`✅ Resumed at ${resume}s`);
             } else setTimeout(setWhenReady, 150);
           };
           setWhenReady();
         }
       } catch (err) {
-        console.error("❌ Error loading progress:", err);
+        console.error("error loading progress:", err);
       }
     };
     video.addEventListener("loadedmetadata", loadProgress);
 
-    // === Time formatting & controls ===
+    // Time formatting & controls
     const fmt = (s) => {
       const m = Math.floor(s / 60);
       const sec = Math.floor(s % 60);
@@ -143,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateTimeDisplay();
     });
 
-    // === Seek & fullscreen ===
+    // Seek & fullscreen 
     backward.addEventListener("click", () => {
       video.currentTime = Math.max(0, video.currentTime - 10);
       showControls();
@@ -159,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showControls();
     });
 
-    // === Volume ===
+    // Volume 
     let lastVolume = parseFloat(localStorage.getItem("lastVolume")) ?? 1.0;
     video.volume = lastVolume;
     volumeSlider.value = lastVolume;
@@ -199,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("lastVolume", val);
     });
 
-    // === Show / Hide controls ===
+    // Show / Hide controls
     let controlsTimeout;
     const showControls = () => {
       controls.classList.add("show");
@@ -210,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     cover.addEventListener("mousemove", showControls);
 
-    // === EPISODE SELECTOR + NEXT EPISODE ===
+    // EPISODE SELECTOR + NEXT EPISODE
     const episodeSelector = document.getElementById("episodeSelector");
     const dropdown = episodeSelector?.querySelector(".episodes-dropdown");
 
@@ -237,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
           nextEpBtn.style.display = "inline-block";
           episodeSelector.classList.remove("hidden");
 
-          // === build dropdown ===
+          // build dropdown
           const seasons = {};
           data.episodes.forEach((ep) => {
             const s = ep.seasonNumber || 1;
@@ -267,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
             )
             .join("");
 
-          // === click episode ===
+          // click episode
           dropdown.addEventListener("click", (e) => {
             const btn = e.target.closest("button[data-path]");
             if (!btn) return;
@@ -294,14 +288,14 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    // === Helper to play episode ===
+    // Helper to play episode
     const playEpisode = (path) => {
       video.src = path;
       video.currentTime = 0;
       playTransition();
     };
 
-    // === Next episode logic ===
+    // Next episode logic
     nextEpBtn.addEventListener("click", () => {
       if (!allEpisodes.length) return;
       const currentSrc = video.src.split("/").pop();
@@ -310,10 +304,9 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       const next = allEpisodes[currentIndex + 1];
       if (!next) {
-        alert("🎉 You've reached the last episode!");
+        alert("You've reached the last episode!");
         return;
       }
-      console.log("➡️ Playing next episode:", next.title);
       playEpisode(`/${next.videoPath}`);
     });
 

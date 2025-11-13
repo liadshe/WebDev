@@ -28,7 +28,7 @@ async function getContentByTitle(title)
     return content;
 }
 
-async function getContentByGenre(genres, skip , limit) {
+async function getContentByGenre(genres, skip, limit) {
   if (!Array.isArray(genres)) genres = [genres];
 
   const normalizedGenres = genres.map(genre =>
@@ -104,4 +104,30 @@ async function getTypeById(contentId)
     const content = await Content.findById(contentId).lean();
     return content.type;
 }
-module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, getContentByGenre,getNewestContentByGenre, getTypeById, getEpisodesBySeriesTitle, addContent, addEpisode, getAllContent };
+
+// delete content by ID - not in used, but to support CRUD
+const deleteContent = async (id) => {
+  try {
+    const deleted = await Content.findByIdAndDelete(id);
+    return deleted;
+  } catch (err) {
+    console.error("Error deleting content:", err);
+    throw err;
+  }
+};
+
+// update Content by ID - not in used, but to suppot CRUD
+const updateContent = async (id, updateData) => {
+  try {
+    const updated = await Content.findByIdAndUpdate(id, updateData, {
+      new: true, // return the updated document
+      runValidators: true // ensure schema validation
+    });
+    return updated;
+  } catch (err) {
+    console.error("Error updating content:", err);
+    throw err;
+  }
+};
+
+module.exports = { getAllGenres, getAllSeries,getContentByTitle, getSeriesByTitle, getContentByGenre,getNewestContentByGenre, getTypeById, getEpisodesBySeriesTitle, addContent, addEpisode, getAllContent, deleteContent, updateContent };
