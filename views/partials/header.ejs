@@ -20,7 +20,8 @@
         <a href="#" id="genreToggle" style="display: flex; align-items: center;">
           Genres <span style="margin-left: 5px; font-size: 10px;">▼</span>
         </a>
-        <div class="genre-menu" id="genreMenu" data-genres='<%= JSON.stringify(allGenres || []) %>'>
+        <%= console.log(`found genres ${allGenres}`) %>
+        <div class="genre-menu" id="genreMenu" data-genres='<%= JSON.stringify(allGenres) %>'>
           <div class="genre-option active" data-genre="all">
             <span>All Genres</span>
           </div>

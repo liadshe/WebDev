@@ -22,8 +22,8 @@ async function renderAddContentPage(req, res) {
    res.render("content", {
       user: req.session.activeProfile.name,
       profile: req.session.activeProfile,
-      allGenres: genres || [],
-      series: series || [],
+      allGenres: genres,
+      series: series,
       success: req.query.success == "1",
       error: req.query.error == "1",
     });
