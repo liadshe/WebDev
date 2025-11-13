@@ -22,7 +22,6 @@ async function renderWatchPage(req, res) {
       seriesData = await Content.findById(content.series).lean();
     }
 
-    console.log("%%%", content);
     const user = req.session.user;
     const activeProfile = req.session.activeProfile || {
       name: "Default Profile",

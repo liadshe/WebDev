@@ -25,7 +25,7 @@ const watchService = require("../services/watchService");
      genreContent = await addContentService.getContentByGenre(genre, skip, limit);
     }
 
-    const profileName = req.session.activeProfile;
+    const profileName = req.session.activeProfile.name;
     const userId = req.session.user._id;
 
     for (let movie of genreContent) {
