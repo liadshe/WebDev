@@ -154,9 +154,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Volume
-    let lastVolume = parseFloat(localStorage.getItem("lastVolume")) ?? 1.0;
+    let stored = localStorage.getItem("lastVolume");
+    let lastVolume = parseFloat(stored);
+
+    if (isNaN(lastVolume) || lastVolume < 0 || lastVolume > 1) {
+      lastVolume = 1.0; // reset to max volume
+      localStorage.setItem("lastVolume", "1.0");
+    }
+
     video.volume = lastVolume;
     volumeSlider.value = lastVolume;
+
     const paintVolumeBar = () => {
       const vol = video.muted ? 0 : video.volume;
       const pct = Math.round(vol * 100);
