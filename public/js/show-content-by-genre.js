@@ -1,9 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   let genre = document.body.dataset.genre; 
+  
+  // normelize genre name
   genre = genre
   .split('-')
   .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-  .join('-');  
+  .join('-'); 
+   
   let skip = 0;
   let loading = false;
   let allLoaded = false;

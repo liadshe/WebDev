@@ -5,7 +5,7 @@ const { renderProfilesPage, setActiveProfile } = require("../../controllers/prof
 // Render the profiles page
 router.get("/", renderProfilesPage);
 
-// 🆕 Route for selecting a profile (sets session.activeProfile)
+// Route for selecting a profile (sets session.activeProfile)
 router.get("/set/:profileId", setActiveProfile);
 
 module.exports = router;
