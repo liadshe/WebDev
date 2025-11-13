@@ -1,6 +1,8 @@
 const addContentService = require("../services/addContentService");
 const genreService = require("../services/genreService");
 const recommendationService = require("../services/recommendationService");
+const watchService = require("../services/watchService"); 
+
 
 // returns all content from specific genre
   async function getContentByGenre(req, res) {
@@ -16,6 +18,21 @@ const recommendationService = require("../services/recommendationService");
     else{
      genreContent = await addContentService.getContentByGenre(genre, skip, limit);
     }
+
+    const profileName = req.session.activeProfile;
+    const userId = req.session.user._id;
+
+    for (let movie of genreContent) {
+      const history = await watchService.getWatchHistoryPerContentByProfileID(
+        movie._id,
+        userId,
+        profileName
+      );
+
+      // Mark as watched only if finished flag true
+      movie.watched = history.length > 0 && history[0].finished === true;
+    }
+
     res.json(genreContent);
   } catch (err) {
     console.error(err);
