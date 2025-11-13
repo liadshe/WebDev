@@ -1,7 +1,6 @@
 .genre-section {
   margin: 20px 0;
   padding-left: 20px; /* keeps everything aligned left */
-
 }
 
 .genre-section h2 {
@@ -154,7 +153,6 @@
   border-radius: 10px;
   padding: 12px 16px;
   line-height: 1.5;
-
 }
 
 #modalExtra a {
@@ -184,7 +182,7 @@
 
 /* ===== CENTERED PLAY BUTTON ===== */
 .play-btn {
-   position: absolute;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -204,7 +202,7 @@
 }
 
 .play-btn:hover {
-   transform: translate(-50%, -50%) scale(1.1);
+  transform: translate(-50%, -50%) scale(1.1);
   background-color: #ff0a16;
 }
 
@@ -219,7 +217,6 @@
   border-bottom: 10px solid transparent;
 }
 
-
 /* Responsive */
 @media (max-width: 600px) {
   .modal-image-container {
@@ -231,7 +228,7 @@
     font-size: 1.6rem;
   }
 }
-  
+
 /* Profile Dropdown Styles */
 .profile-dropdown {
   position: relative;
@@ -254,7 +251,7 @@
   top: 45px;
   background-color: rgba(0, 0, 0, 0.95);
   min-width: 180px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
   border: 1px solid #333;
   z-index: 1000;
@@ -326,7 +323,7 @@
   top: 45px;
   background-color: rgba(0, 0, 0, 0.95);
   min-width: 180px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
   border: 1px solid #333;
   z-index: 1000;
@@ -383,7 +380,7 @@
   min-width: 200px;
   max-height: 400px;
   overflow-y: auto;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
   border: 1px solid #333;
   z-index: 1000;
@@ -427,59 +424,59 @@
   background: rgba(0, 0, 0, 0.3);
 }
 
- #modalEpisodes {
-    margin-top: 1rem;
-    border-top: 1px solid #ccc;
-    padding-top: 0.5rem;
-  }
+#modalEpisodes {
+  margin-top: 1rem;
+  border-top: 1px solid #ccc;
+  padding-top: 0.5rem;
+}
 
-  .episodes-container {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    scroll-behavior: smooth;
-  }
+.episodes-container {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-behavior: smooth;
+}
 
-  .episodes-container::-webkit-scrollbar {
-    height: 8px;
-  }
+.episodes-container::-webkit-scrollbar {
+  height: 8px;
+}
 
-  .episodes-container::-webkit-scrollbar-thumb {
-    background-color: #aaa;
-    border-radius: 4px;
-  }
+.episodes-container::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 4px;
+}
 
-  .episode-card {
-    flex: 0 0 auto;
-    background: #f5f5f5;
-    border-radius: 10px;
-    padding: 0.75rem;
-    min-width: 120px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease;
-  }
+.episode-card {
+  flex: 0 0 auto;
+  background: #f5f5f5;
+  border-radius: 10px;
+  padding: 0.75rem;
+  min-width: 120px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
 
-  .episode-card:hover {
-    transform: scale(1.05);
-    background: #eaeaea;
-  }
+.episode-card:hover {
+  transform: scale(1.05);
+  background: #eaeaea;
+}
 
-  .episode-number {
-    font-weight: bold;
-    color: #333;
-  }
+.episode-number {
+  font-weight: bold;
+  color: #333;
+}
 
-  .episode-title {
-    font-size: 0.9rem;
-    margin-top: 0.3rem;
-  }
+.episode-title {
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
 
-  .episode-duration {
-    font-size: 0.8rem;
-    color: #777;
-  }
+.episode-duration {
+  font-size: 0.8rem;
+  color: #777;
+}
 /* ===== SIMILAR CONTENT (matches episodes style) ===== */
 #modalSimilar h3 {
   margin-top: 1rem;
@@ -561,7 +558,6 @@
   color: white;
 }
 
-
 .episode-card {
   position: relative;
   background-color: #1a1a1a;
@@ -576,7 +572,7 @@
 
 .episode-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 8px rgba(255,255,255,0.2);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
 }
 
 .episode-play-btn {
@@ -613,7 +609,6 @@
   transform: scale(1.05);
 }
 
-
 .progress-bar {
   background: #333;
   border-radius: 6px;
@@ -628,3 +623,19 @@
   transition: width 0.3s ease;
 }
 
+.like-btn {
+  font-size: 32px;
+  color: white;
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.like-btn.liked {
+  color: red;
+  transform: scale(1.2);
+}
+.like-btn:hover {
+  transform: scale(1.1);
+}
