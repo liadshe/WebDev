@@ -104,12 +104,6 @@ const updateGenre = async (id, newName) => {
   }
 };
 
-
-
-
-
-
-
 module.exports = {
     getAllGenres,
     getUserGenrePopularity,

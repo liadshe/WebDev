@@ -1,4 +1,3 @@
-// Profile Dropdown Menu - Click to toggle functionality
 (function() {
   document.addEventListener('DOMContentLoaded', function() {
     const profileIcon = document.getElementById('profileIcon');
@@ -15,7 +14,6 @@
     profileIcon.addEventListener('click', function(e) {
       e.stopPropagation(); // Prevent event from bubbling up
       dropdownMenu.classList.toggle('show');
-      console.log('Profile dropdown toggled:', dropdownMenu.classList.contains('show'));
     });
 
     // Close dropdown when clicking outside
@@ -23,7 +21,6 @@
       if (!profileDropdown.contains(e.target)) {
         if (dropdownMenu.classList.contains('show')) {
           dropdownMenu.classList.remove('show');
-          console.log('Profile dropdown closed - clicked outside');
         }
       }
     });
@@ -37,7 +34,6 @@
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && dropdownMenu.classList.contains('show')) {
         dropdownMenu.classList.remove('show');
-        console.log('Profile dropdown closed - Escape key pressed');
       }
     });
 
@@ -46,7 +42,6 @@
     dropdownLinks.forEach(link => {
       link.addEventListener('click', function() {
         // Dropdown will close automatically when navigating
-        console.log('Navigating to:', this.getAttribute('href'));
       });
     });
   });

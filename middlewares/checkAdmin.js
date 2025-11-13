@@ -1,7 +1,7 @@
 function checkAdmin(req, res, next) {
   try {
     if (!req.session.user || req.session.user.username !== "admin") {
-      console.log(`user ${req.session.user.username} not permitted`); // convert to real log
+
       return res
         .status(403)
         .render("forbidden", { message: "Access denied: Admins only" });

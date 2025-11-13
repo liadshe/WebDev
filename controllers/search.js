@@ -3,13 +3,11 @@ const addContentService = require("../services/addContentService");
 // Make sure this function is exported correctly
 async function searchContent(req, res) {
   try {
-    console.log("Search route hit with query:", req.query.q);
     
     const query = req.query.q;
     
     // Validate query
     if (!query || query.trim().length < 2) {
-      console.log("Query too short or empty");
       return res.json({ results: [] });
     }
 

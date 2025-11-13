@@ -13,10 +13,10 @@ async function renderAddContentPage(req, res) {
     const genres = await addContentService.getAllGenres();
     const series = await addContentService.getAllSeries();
     if (!genres) {
-      console.log("No genres found, using empty array");
+      console.error("No genres found, using empty array");
     }
     if (!series) {
-      console.log("No series found, using empty array");
+      console.error("No series found, using empty array");
     }
 
    res.render("content", {

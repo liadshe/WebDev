@@ -44,7 +44,6 @@ async function handleLogin(req, res) {
       username: user.username,
       email: user.email,
     };
-    console.log("######Session created for user:", user);
     req.session.activeProfile = user.activeProfile;
 
     await logService.createLog({

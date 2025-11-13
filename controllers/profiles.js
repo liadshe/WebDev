@@ -5,7 +5,6 @@ const genreService = require("../services/genreService");
 async function renderProfilesPage(req, res) {
   // Check if user is logged in
   if (!req.session.user) {
-    console.log("User not logged in, redirecting to /login");
     return res.redirect("/login");
   }
   const user = await loginService.getUserByEmail({
@@ -175,7 +174,7 @@ async function setActiveProfile(req, res) {
     const profile = user.profiles.id(profileId);
     if (!profile) return res.status(404).send("Profile not found");
 
-    // ✅ Save the selected profile in the session
+    // Save the selected profile in the session
     req.session.activeProfile = {
       _id: profile._id,
       name: profile.name,
@@ -183,12 +182,10 @@ async function setActiveProfile(req, res) {
     };
 
     await req.session.save();
-    console.log("✅ Active profile set:", req.session.activeProfile);
-
     // redirect wherever you want after selection
     res.redirect("/main");
   } catch (err) {
-    console.error("❌ Error setting active profile:", err);
+    console.error("Error setting active profile:", err);
     res.status(500).send("Server error");
   }
 }

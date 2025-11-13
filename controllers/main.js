@@ -7,7 +7,6 @@ async function renderMainPage(req, res) {
   try {
     // Check if user is logged in
     if (!req.session.user) {
-      console.log("User not logged in, redirecting to /login");
       return res.redirect("/login");
     }
 
@@ -15,7 +14,6 @@ async function renderMainPage(req, res) {
     
     const user = await loginService.getUserById(req.session.user._id);
     if (!user) {
-      console.log("User not found, redirecting to /login");
       return res.redirect("/login");
     }
     // Fetch genres from the DB
