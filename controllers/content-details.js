@@ -1,6 +1,7 @@
 const addContentService = require("../services/addContentService");
 const watchService = require("../services/watchService");
 const Episode = require("../models/Episode");
+const User = require("../models/User");
 
 async function getContentDetailsByTitle(req, res) {
   try {
@@ -70,6 +71,14 @@ async function getContentDetailsByTitle(req, res) {
         ? await watchService.hasFinishedSeries(profile, content._id, userId)
         : false;
 
+      // Determine if liked
+      let isLiked = false;
+      if (userId && profile) {
+        const user = await User.findById(userId);
+        const prof = user?.profiles?.find((p) => p.name === profile);
+        if (prof) isLiked = prof.likedContent.includes(content._id);
+      }
+
       return res.json({
         ...content,
         type: "series",
@@ -77,6 +86,7 @@ async function getContentDetailsByTitle(req, res) {
         history: episodeHistories,
         similarFromSameGenre,
         hasFinished,
+        isLiked,
       });
     }
 
@@ -95,11 +105,20 @@ async function getContentDetailsByTitle(req, res) {
       }
     }
 
+    // Determine if liked
+    let isLiked = false;
+    if (userId && profile) {
+      const user = await User.findById(userId);
+      const prof = user?.profiles?.find((p) => p.name === profile);
+      if (prof) isLiked = prof.likedContent.includes(content._id);
+    }
+
     return res.json({
       ...content,
       type: "movie",
       history,
       similarFromSameGenre,
+      isLiked,
     });
   } catch (err) {
     console.error("Error in getContentDetailsByTitle:", err);

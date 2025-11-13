@@ -20,6 +20,7 @@ const watchApiRouter = require("./routes/api/watch");
 const statisticsApiRouter = require("./routes/api/statistics");
 const contentDetailsApiRouter = require("./routes/api/content-details");
 const genreApiRouter = require("./routes/api/genre");
+const likesApiRouter = require("./routes/api/likes");
 
 dotenv.config();
 const app = express();
@@ -70,6 +71,7 @@ app.use("/api/statistics", statisticsApiRouter);
 app.use("/api/watch", watchApiRouter);
 app.use("/api/contentDetails", contentDetailsApiRouter);
 app.use("/api/genre", genreApiRouter);
+app.use("/api/likes", likesApiRouter);
 
 const PORT = parseInt(process.env.PORT);
 app.listen(PORT, () => {

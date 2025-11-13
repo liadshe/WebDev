@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalExtra = document.getElementById("modalExtra");
   const modalClose = document.getElementById("modalClose");
   const modalPlayBtn = document.getElementById("modalPlayBtn");
+  const likeBtn = document.getElementById("likeBtn");
   const watchStatusContainer = document.getElementById("modalWatchStatus");
   let currentMovieId = null;
 
@@ -18,15 +19,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function renderModalContent(title) {
     try {
-      const res = await fetch(`/api/contentDetails/${encodeURIComponent(title)}`);
+      const res = await fetch(
+        `/api/contentDetails/${encodeURIComponent(title)}`
+      );
       if (!res.ok) throw new Error("Content not found");
       const content = await res.json();
 
       currentMovieId = content._id;
+      if (content.isLiked) {
+        likeBtn.classList.add("liked");
+      } else {
+        likeBtn.classList.remove("liked");
+      }
       modalTitle.textContent = content.title;
       modalCover.src = `/${content.coverImagePath}`;
       modalCover.alt = content.title;
-      modalDescription.textContent = content.description || "No description available.";
+      modalDescription.textContent =
+        content.description || "No description available.";
 
       // Show Play button and watch progress only for MOVIES
       if (content.type === "movie") {
@@ -81,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // episodes (Series only)
       if (content.type === "series") {
-        let episodesHTML = '';
+        let episodesHTML = "";
         if (content.hasFinished) {
           episodesHTML += `
             <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -115,13 +124,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
               return `
                 <div class="episode-card" data-episode-id="${ep.episodeId}">
-                  <div class="episode-number">S${ep.seasonNumber || "?"}:E${ep.episodeNumber || "?"}</div>
-                  <div class="episode-title">${ep.title || "Untitled Episode"}</div>
+                  <div class="episode-number">S${ep.seasonNumber || "?"}:E${
+                ep.episodeNumber || "?"
+              }</div>
+                  <div class="episode-title">${
+                    ep.title || "Untitled Episode"
+                  }</div>
                   <div class="episode-status">${statusText}</div>
                   ${progressHTML}
                   ${
                     ep.durationSeconds
-                      ? `<div class="episode-duration">${Math.round(ep.durationSeconds)} seconds</div>`
+                      ? `<div class="episode-duration">${Math.round(
+                          ep.durationSeconds
+                        )} seconds</div>`
                       : ""
                   }
                   <button class="episode-play-btn">▶ Play</button>
@@ -138,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           `;
         }
-        
+
         modalEpisodes.innerHTML = episodesHTML;
 
         if (content.hasFinished) {
@@ -153,10 +168,10 @@ document.addEventListener("DOMContentLoaded", () => {
               if (res.ok) {
                 // Find the first episode (Season 1, Episode 1)
                 const firstEpisode = content.history
-                  .map(ep => ({
+                  .map((ep) => ({
                     episodeId: ep.episodeId,
                     seasonNumber: ep.seasonNumber,
-                    episodeNumber: ep.episodeNumber
+                    episodeNumber: ep.episodeNumber,
                   }))
                   .sort((a, b) => {
                     if (a.seasonNumber !== b.seasonNumber) {
@@ -190,7 +205,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const oldSimilar = document.getElementById("modalSimilar");
       if (oldSimilar) oldSimilar.remove();
 
-      if (content.similarFromSameGenre && content.similarFromSameGenre.length > 0) {
+      if (
+        content.similarFromSameGenre &&
+        content.similarFromSameGenre.length > 0
+      ) {
         const modalSimilar = document.createElement("div");
         modalSimilar.id = "modalSimilar";
 
@@ -255,6 +273,29 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = `/watch/${currentMovieId}`;
     }, 150);
   });
+
+  // Like / Unlike
+  likeBtn.onclick = async () => {
+    if (!currentMovieId) return;
+
+    try {
+      const res = await fetch("/api/likes/toggle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contentId: currentMovieId }),
+      });
+
+      const data = await res.json();
+
+      if (data.liked) {
+        likeBtn.classList.add("liked");
+      } else {
+        likeBtn.classList.remove("liked");
+      }
+    } catch (err) {
+      console.error("Error toggling like:", err);
+    }
+  };
 
   // play episode
   document.addEventListener("click", (event) => {
